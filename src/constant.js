@@ -1,0 +1,1 @@
+export default MAP_API_KEY = AIzaSyA98Ne9CIOFbqeXZ_hbxhWkIUMDX1r4T6k
