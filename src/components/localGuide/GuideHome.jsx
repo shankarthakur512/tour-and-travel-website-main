@@ -8,15 +8,13 @@ import Address from "./Address";
 const GuideHome = () => {
  const [setUp , setSetUp] = useState(false)
 
+
+
   return (
     <>
-      {!setUp ? (
-       <GuideHomePage setSetup={setSetUp} />
-      ) : (
-          <Address />
-          
-      )}
-    </>
+       
+   <GuideHomePage setSetup={setSetUp} />
+   </>
   );
 };
 

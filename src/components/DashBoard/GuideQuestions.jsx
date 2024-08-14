@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast, ToastContainer } from 'react-toastify';
+import { addGuide } from '../../Redux/GuideSlice';
 
 const languagesList = [
   'English', 'Hindi', 'Punjabi', 'Spanish', 'French', 
   'German', 'Mandarin', 'Japanese', 'Korean', 'Italian',
-  
 ];
 
-const GuideQuestions = ({ imageCaptured ,setProfileComp}) => {
+const GuideQuestions = ({ imageCaptured, setProfileComp, setGuideData , image}) => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [isAccepted, setIsAccepted] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLanguages, setSelectedLanguages] = useState([]);
+   const dispatch = useDispatch()
 
+  const GuideData  = useSelector((state) => state.Guide.userData);
   const handleCheckboxChange = () => {
     setIsAccepted(!isAccepted);
   };
@@ -39,8 +43,11 @@ const GuideQuestions = ({ imageCaptured ,setProfileComp}) => {
   const onSubmit = (data) => {
     if (isAccepted && imageCaptured) {
       console.log('Form Submitted:', data, selectedLanguages);
+      setGuideData({...data , Languages : selectedLanguages , Photo : image})
+      // dispatch(addGuide({...GuideData , data , languages : selectedLanguages}))
+      setProfileComp(false);
     } else {
-      alert('Please accept the terms and conditions and ensure all fields are filled.');
+      toast.error('Please accept the terms and conditions and ensure all fields are filled.');
     }
   };
 
@@ -97,6 +104,7 @@ const GuideQuestions = ({ imageCaptured ,setProfileComp}) => {
               <div key={index} className="bg-primary text-white px-3 py-1 rounded-full mr-2 mb-2 flex items-center">
                 {language}
                 <button
+                  type="button"
                   className="ml-2 text-red-500 hover:text-red-700"
                   onClick={() => handleRemoveLanguage(language)}
                 >
@@ -136,12 +144,11 @@ const GuideQuestions = ({ imageCaptured ,setProfileComp}) => {
           type="submit"
           className={`px-4 py-2 rounded ${isAccepted && imageCaptured ? 'bg-gradient-to-r from-primary to-secondary text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
           disabled={!isAccepted || !imageCaptured}
-      onClick={()=>{setProfileComp(false)}}
-      
-      >
+        >
           Submit 
         </button>
       </form>
+      <ToastContainer />
     </div>
   );
 };

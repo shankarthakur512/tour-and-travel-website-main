@@ -8,7 +8,7 @@ import GuideQuestions from "./GuideQuestions";
 
 
 
-function CompleteProfile ({setProfileComp}) {
+function CompleteProfile ({setProfileComp , GuideData ,setGuideData }) {
     const [image , setImage] = useState(null);
     const [showCaptureImage , setShowCaptureImage] = useState(false);
     const  [imageCaptured , setImageCaptured] = useState(false);
@@ -16,8 +16,7 @@ function CompleteProfile ({setProfileComp}) {
         if(image){
         setImageCaptured(!imageCaptured)
         }
-        
-    },[])
+      },[])
     return (
         <div className="  px-36 p-10">
        {!showCaptureImage ?( 
@@ -43,7 +42,7 @@ function CompleteProfile ({setProfileComp}) {
      <img  src={image}  alt="nothing" className="rounded-full h-40 w-40"/>
      </div> : <></>}
           <div className=" mt-5">
-        <GuideQuestions setProfileComp={setProfileComp}   imageCaptured={imageCaptured}/>
+        <GuideQuestions setGuideData={setGuideData}  setProfileComp={setProfileComp}   imageCaptured={imageCaptured} image={image}/>
          </div>
           </div>
        

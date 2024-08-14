@@ -16,7 +16,7 @@ const axiosInstance = axios.create({
   },
 });
 
-function Address() {
+function Address({ setVerifyAddress,setGuideAddress}) {
   const [setUp, setSetUp] = useState(false);
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
@@ -24,20 +24,12 @@ function Address() {
   const [cities, setCities] = useState([]);
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
-  const userName = useSelector((state)=> state.auth.userData.fullname)
 const dispatch = useDispatch();
   const handleForm = (data) => {
     console.log(data);
-
-    dispatch(addGuide({ newGuide : true   ,userData :{address : data.street,
-      country : data.country,
-      city : data.city,
-      userName }
-       
-    }))
-     navigate('/dashboard')
-
-  };
+   setGuideAddress({...data})
+   setVerifyAddress(false);
+ };
 
   useEffect(() => {
     const fetchCountriesAndCities = async () => {

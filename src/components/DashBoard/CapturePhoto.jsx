@@ -24,14 +24,22 @@ useEffect(()=>{
     stream?.getTracks().forEach((track) => track.stop());
   };
 },[])
-const CapturePhoto =async ()=>{
+const CapturePhoto = () => {
   const canvas = document.createElement("canvas");
-  canvas.getContext("2d").drawImage(videoref.current,0,0,300,150)
-   setImage(canvas.toDataURL("image/jpeg"))
-   setImageCaptured(true);
-  setShowCaptureImage(false)
+  const context = canvas.getContext("2d");
+  canvas.width = videoref.current.videoWidth;
+  canvas.height = videoref.current.videoHeight;
+  context.drawImage(videoref.current, 0, 0, canvas.width, canvas.height);
 
-}
+  canvas.toBlob((blob) => {
+    if (blob) {
+      const file = new File([blob], "photo.jpg", { type: "image/jpeg" });
+      setImage(file);
+      setImageCaptured(true);
+      setShowCaptureImage(false);
+    }
+  }, "image/jpeg");
+};
   return (
 
     <div className="top-1/4 gap-3 rounded-lg pt-2 flex flex-col md:flex-row items-center justify-center">

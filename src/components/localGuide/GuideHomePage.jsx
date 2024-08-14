@@ -2,6 +2,7 @@ import React from "react";
 import { IoLocationOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import WorkwithUs from "./Workwithus";
 
 function GuideHomePage ({setSetup}){
     const status = useSelector((state) => state.auth.status);
@@ -9,7 +10,7 @@ function GuideHomePage ({setSetup}){
 
   const handleCreateAccount = () => {
     if (status) {
-      setSetup(true);
+     navigate('/dashboard')
     } else {
       navigate('/login');
     }
@@ -34,11 +35,7 @@ function GuideHomePage ({setSetup}){
             </button>
           </div>
         </div>
-        <div className="mt-20 h-[70vh] bg-secondary pt-10">
-          <div className="text-5xl flex font-semibold text-white justify-center">
-            Why work with Travellogo <IoLocationOutline />?
-          </div>
-        </div>
+     <WorkwithUs />
         <div className="flex flex-col justify-center">
         <div className=" flex justify-center">
           <div className="flex flex-col  p-4">
