@@ -5,43 +5,33 @@ import { NavbarLinks } from "./Navbar";
 import { useSelector } from "react-redux";
 
 const ResponsiveMenu = ({ showMenu, setShowMenu }) => {
-  let fullName = useSelector((state)=> state.auth.userData);
-  if(!fullName) fullName = 'User';
+  const userData = useSelector((state) => state.auth.userData) || { fullname: 'User' };
+
   return (
     <div
       className={`${
         showMenu ? "left-0" : "-left-[100%]"
-      } fixed bottom-0 top-0 z-20 flex h-screen w-[75%] flex-col justify-between bg-white dark:bg-gray-900 dark:text-white px-8 pb-6 pt-16 text-black transition-all duration-200 md:hidden rounded-r-xl shadow-md`}
+      } fixed bottom-0 top-0 z-20 h-screen w-[75%] flex flex-col bg-white text-black transition-all duration-300 rounded-r-xl shadow-lg p-6`}
     >
-      <div className="card">
-        <div className="flex items-center justify-start gap-3">
-          <FaUserCircle size={50} />
-          <div>
-            <h1>{fullName.fullname}</h1>
-            <h1 className="text-sm text-slate-500">Premium user</h1>
-          </div>
+      <div className="flex items-center gap-3">
+        <FaUserCircle size={40} />
+        <div>
+          <h1 className="text-xl font-semibold">{userData.fullname}</h1>
+          <p className="text-sm text-gray-500">Premium user</p>
         </div>
-        <nav className="mt-12">
-          <ul className="space-y-4 text-xl">
-            {NavbarLinks.map((data) => (
-              <li>
-                <Link
-                  to={data.link}
-                  onClick={() => setShowMenu(false)}
-                  className="mb-5 inline-block"
-                >
-                  {data.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
       </div>
-      <div className="footer">
-        <h1>
-          Made with ❤ by <a href="https://dilshad-ahmed.github.io/">shankar Thakur</a>{" "}
-        </h1>
-      </div>
+
+      <nav className="mt-10">
+        <ul className="space-y-4 text-lg">
+          {NavbarLinks.map((data) => (
+            <li key={data.name}>
+              <Link to={data.link} onClick={() => setShowMenu(false)}>
+                {data.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
   );
 };

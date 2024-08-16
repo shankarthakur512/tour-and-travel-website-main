@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import DashboardNav from './DashboardNav';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IoIosNotificationsOutline } from "react-icons/io";
 import Footer from '../Footer/Footer';
 import Guidelines from '../Guidlines/Guideline.jsx'; // Fixed the import path
@@ -9,6 +9,7 @@ import CompleteProfile from "./CompleteProfile.jsx";
 import Address from '../localGuide/Address.jsx';
 import axios from 'axios';
 import { registerGuide } from '../../Apihandle/LocalGuide.js';
+import { addGuide } from '../../Redux/GuideSlice.js';
  // Import the Address component
 
 const GuideDashboard = () => {
@@ -19,7 +20,7 @@ const GuideDashboard = () => {
   const [GuideAddress ,  setGuideAddress] =  useState(null)
   const [GuideInfo , setGuideInfo] = useState(null)
   const userData = useSelector((state) => state.auth.userData);
-
+ const dispatch = useDispatch();
 
 //Sending LocalGuideInfo to Backend
 useEffect(() => {
@@ -48,6 +49,7 @@ useEffect(() => {
         });
   
         console.log('Guide registered successfully:', data);
+        dispatch(addGuide({userData : data.guide}))
       } catch (error) {
         console.error('Error registering guide:', error);
       }
@@ -98,7 +100,7 @@ useEffect(() => {
               <div className="flex flex-col md:flex-row p-5 justify-between">
                 <div className="mb-6 md:mb-0 ml-2 gap-10">
                   <span className="text-2xl font-serif">Welcome, {userData ? userData.fullname : 'User'}!</span>
-                  <div className='flex flex-col gap-10 md:flex-row '>
+                  {<div className='flex flex-col gap-10 md:flex-row '>
                   { !GuideInfo ? <div className="mt-6 border p-5 w-64 rounded-md cursor-pointer" onClick={handleVerification}>
                       <h1 className="text-xl font-serif">Verify your Account</h1>
                       <span className="text-xs">Verify your email, mobile number</span>
@@ -117,11 +119,9 @@ useEffect(() => {
                       <span className={`text-xs text-secondary`}>Your Adress get Verified</span>
                       </div>
 }                  </div>
-                  </div>
+                  </div> }
                 </div>
-                <div>
-                  <IoIosNotificationsOutline size={30} />
-                </div>
+                
               </div>
               <div className='p-5 mt-5 gap-5'>
                 <div className="flex gap-5">

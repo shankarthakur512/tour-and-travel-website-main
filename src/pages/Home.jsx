@@ -6,16 +6,19 @@ import Places from "../components/Places/Places";
 import Testimonial from "../components/Testimonial/Testimonial";
 import Banner from "../components/Banner/Banner";
 import BannerPic from "../components/BannerPic/BannerPic";
-import BannerImg from "../assets/cover-women.jpg";
-import Banner2 from "../assets/travel-cover2.jpg";
+import BannerImg from "../assets/places/Banner1.jpg";
+import Banner2 from "../assets/places/Banner2.jpg";
 import OrderPopup from "../components/OrderPopup/OrderPopup";
 import SignUp from "../components/registerUser/registerUser";
+import BannerPic2 from "../components/BannerPic/BannerPic2";
 const Home = () => {
   const [orderPopup, setOrderPopup] = React.useState(false);
   const handleOrderPopup = () => {
     setOrderPopup(!orderPopup);
   };
-  
+  const title = "Discover the Beauty of the Himalayas";
+  const description =
+    "Join us on an unforgettable journey to the majestic Himalayas. Experience breathtaking views, serene landscapes, and a rich cultural heritage like never before.";
   return (
     <>
       <div>
@@ -31,10 +34,10 @@ const Home = () => {
           <Hero />
         </div>
         <Places handleOrderPopup={handleOrderPopup} />
-        <BannerPic img={BannerImg} />
+        <BannerPic img={BannerImg} title={title} description ={description} />
         <BlogsComp />
         <Banner />
-        <BannerPic img={Banner2} />
+        <BannerPic2 img={Banner2}  />
         <Testimonial />
         <OrderPopup orderPopup={orderPopup} setOrderPopup={setOrderPopup} />
       </div>

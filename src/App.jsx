@@ -10,8 +10,10 @@ import Localguide from "./pages/Localguide";
 import BlogsDetails from "./pages/BlogsDetails";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import SignIn from "./components/Authentication/SignIn";
+//  from "./components/Authentication/SignIn";
 import GuideDashboard from "./components/DashBoard/GuideDashboard";
+import TourPackageCreation from "./components/TourPackage/TourPackegeMain";
+import AuthForm from "./components/Authentication/Authform";
 
 const App = () => {
   React.useEffect(() => {
@@ -35,8 +37,10 @@ const App = () => {
             <Route path="about" element={<About />} />
             <Route path="*" element={<NoPage />} />
           </Route>
-          <Route path="/login" element={<SignIn />} />
+          <Route path="/login" element={<AuthForm />} />
           <Route path="/dashboard" element={<GuideDashboard />} />
+          <Route path="/tourPackage" element={<TourPackageCreation />} />
+
         </Routes>
       </BrowserRouter>
     </>

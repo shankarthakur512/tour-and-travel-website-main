@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaBars, FaUser, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { FaBars, FaUser, FaCog, FaSignOutAlt, FaBell } from 'react-icons/fa';
 
 const DashboardNav = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -9,11 +9,24 @@ const DashboardNav = () => {
   };
 
   return (
-    <div className="relative   flex justify-between items-center p-4">
-      <div className="text-xl font-semi-bold">My Logo</div>
-      <div className="cursor-pointer p-2 border rounded-full" onClick={toggleMenu}>
-        <FaBars size={20} />
+    <div className="relative flex justify-between items-center p-4 bg-white shadow-md">
+      {/* Logo Section */}
+      <div className="text-xl font-semibold">My Logo</div>
+
+      {/* Icons Section */}
+      <div className="flex items-center gap-4">
+        {/* Bell Icon */}
+        <div className="cursor-pointer p-2 rounded-full hover:bg-gray-100">
+          <FaBell size={20} />
+        </div>
+
+        {/* Menu Toggle */}
+        <div className="cursor-pointer p-2 border rounded-full hover:bg-gray-100" onClick={toggleMenu}>
+          <FaBars size={20} />
+        </div>
       </div>
+
+      {/* Dropdown Menu */}
       {menuOpen && (
         <div className="absolute right-0 top-16 bg-white text-black w-48 shadow-md rounded-md">
           <div className="flex items-center p-4 hover:bg-gray-100 cursor-pointer">
@@ -23,7 +36,7 @@ const DashboardNav = () => {
             <FaCog className="mr-2" /> Settings
           </div>
           <div className="flex items-center p-4 hover:bg-gray-100 cursor-pointer">
-            <FaSignOutAlt className="mr-2" /> Profile
+            <FaSignOutAlt className="mr-2" /> Sign Out
           </div>
         </div>
       )}

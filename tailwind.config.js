@@ -6,7 +6,7 @@ export default {
     extend: {
       backgroundImage :{
          "local-guide-bg" : "url('/guideimage.jpg')",
-         "login-page-bg" : "url('/signInbg.jpeg')"
+         "login-page-bg" : "url('/signInbg.jpg')"
       },
       colors: {
         // primary: "#00c3c7",

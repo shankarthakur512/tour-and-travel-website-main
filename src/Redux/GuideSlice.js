@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
 newGuide : false,
-   userData: null
+userData: null
 }
 
 const GuideSlice = createSlice({
