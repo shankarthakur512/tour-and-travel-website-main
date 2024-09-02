@@ -33,7 +33,7 @@ const Navbar = ({ handleSignUpPopup }) => {
 
   const status = useSelector((state) => state.auth.status);
   const userData = useSelector((state) => state.auth.userData);
-
+ console.log(userData)
   return (
     <>
       <nav className="fixed top-0 right-0 w-full z-50 bg-white/70 backdrop-blur-sm text-black shadow-md">
@@ -80,7 +80,7 @@ const Navbar = ({ handleSignUpPopup }) => {
               ) : (
                 <div className="relative">
                   <img
-                    src={userData?.avatar || "/default-avatar.png"}
+                    src={`/${userData?.avatar}` || "/default-avatar.png"}
                     alt="User Avatar"
                     className="w-10 h-10 rounded-full cursor-pointer"
                     onClick={() => setShowUserMenu(!showUserMenu)}

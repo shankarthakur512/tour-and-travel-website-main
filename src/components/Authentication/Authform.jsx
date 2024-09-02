@@ -1,12 +1,16 @@
 import React, { useState , useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/logo.png";
+import 'react-toastify/dist/ReactToastify.css';
 import { FaApple, FaFacebook, FaGoogle, FaInstagramSquare, FaTwitter } from "react-icons/fa";
 import axios from "axios";
 import "./QuotesSlider.css"; 
-import { loginUser } from "../../Apihandle/user";
+import { CheckUser, loginUser } from "../../Apihandle/user";
 import { useDispatch } from "react-redux";
 import { login } from "../../Redux/authslice";
+import { Bounce, toast, ToastContainer } from "react-toastify";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { firebaseAuth } from "../../firebase/firebaseconf";
 
 function AuthForm() {
   const [email, setEmail] = useState("");
@@ -41,6 +45,40 @@ function AuthForm() {
     }
   };
 
+  const handleGmailLogin = async (e) =>
+  {
+    e.preventDefault();
+    try {
+      const provider = new GoogleAuthProvider();
+      const {user} = await signInWithPopup(firebaseAuth , provider);
+      const email = user.email;
+      if (email) {
+          const {data} = await axios.post(CheckUser,{email});
+          if(!data.success){
+            toast.error("No any account .", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              transition: Bounce,
+            });
+              // setEmail(user.email);
+              // setFullname(user.displayName);
+              // setRegister(true);
+          } else {
+              dispatch(login({userData  : data.data}));
+              navigate('/')
+          }
+      } 
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <nav className="fixed top-0 right-0 w-full z-50 bg-white text-black shadow-md">
@@ -59,6 +97,19 @@ function AuthForm() {
       </nav>
 
       <div className="bg-login-page-bg h-[100vh] bg-cover flex justify-center items-center">
+      <ToastContainer  
+                     position="bottom-right"
+                     autoClose={5000}
+                     hideProgressBar={false}
+                     newestOnTop={false}
+                     closeOnClick
+                     rtl={false}
+                     pauseOnFocusLoss
+                     draggable
+                     pauseOnHover
+                     theme="light"
+                     transition={Bounce}
+                    />
         <div className="flex mt-20  w-full max-w-5xl shadow-lg rounded-lg overflow-hidden">
         <div className="w-full bg-primary opacity-70 text-white flex flex-col justify-center p-10 relative overflow-hidden">
       <h2 className="text-5xl opacity-100 font-semibold mb-4">Travel The World</h2>
@@ -105,7 +156,7 @@ function AuthForm() {
               <div className="flex gap-4">
                 <FaApple className="text-2xl cursor-pointer" />
                 <FaFacebook className="text-2xl cursor-pointer" />
-                <FaGoogle className="text-2xl cursor-pointer" />
+                <FaGoogle onClick={(e)=>handleGmailLogin(e)} className="text-2xl cursor-pointer" />
               </div>
             </div>
 

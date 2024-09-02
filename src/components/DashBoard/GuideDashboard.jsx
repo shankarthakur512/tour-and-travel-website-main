@@ -8,8 +8,10 @@ import Verification from './GuideVerification';
 import CompleteProfile from "./CompleteProfile.jsx";
 import Address from '../localGuide/Address.jsx';
 import axios from 'axios';
-import { registerGuide } from '../../Apihandle/LocalGuide.js';
+import { findGuideByUserId, registerGuide } from '../../Apihandle/LocalGuide.js';
 import { addGuide } from '../../Redux/GuideSlice.js';
+import { useNavigate } from 'react-router-dom';
+import TripDashboard from './TripDashboard.jsx';
  // Import the Address component
 
 const GuideDashboard = () => {
@@ -19,9 +21,11 @@ const GuideDashboard = () => {
   const [GuideData, setGuideData] = useState(null);
   const [GuideAddress ,  setGuideAddress] =  useState(null)
   const [GuideInfo , setGuideInfo] = useState(null)
+  const [GuideRegisterd , setGuideRegisterd] = useState(false)
   const userData = useSelector((state) => state.auth.userData);
+  const GuideuserData = useSelector((state) => state.Guide.userData);
  const dispatch = useDispatch();
-
+const navigate = useNavigate();
 //Sending LocalGuideInfo to Backend
 useEffect(() => {
   const RegisterGuide = async () => {
@@ -37,6 +41,7 @@ useEffect(() => {
         formData.append('mobileNo', GuideInfo.mobile);
         formData.append('email', GuideInfo.email);
         formData.append('Govt_ID', GuideInfo.aadhaar);
+        formData.append('languages', GuideData.Languages);
   
         if (GuideData.Photo) {
           formData.append('Photo', GuideData.Photo);
@@ -50,6 +55,7 @@ useEffect(() => {
   
         console.log('Guide registered successfully:', data);
         dispatch(addGuide({userData : data.guide}))
+        setGuideRegisterd(true)
       } catch (error) {
         console.error('Error registering guide:', error);
       }
@@ -79,17 +85,25 @@ useEffect(() => {
   }
 
   useEffect(() => {
-    console.log(userData);
-    console.log(GuideAddress);
-    console.log(GuideData);
-    console.log(GuideInfo)
+    if(!userData) {
+      navigate('/login')
+
+    }else{
+     if(GuideuserData){
+      setGuideRegisterd(true);
+     }
+    }
+    // console.log(userData);
+    // console.log(GuideAddress);
+    // console.log(GuideData);
+    // console.log(GuideInfo)
   });
 
   return (
     <div className="container mx-auto p-5">
-      <div className="border-b-4 mb-5">
-        <DashboardNav />
-      </div>
+     <div className="sticky top-0 z-50 bg-white shadow-lg">
+  <DashboardNav />
+</div>
 
       {!verifyAddress ? (
         !verification ? (
@@ -100,7 +114,7 @@ useEffect(() => {
               <div className="flex flex-col md:flex-row p-5 justify-between">
                 <div className="mb-6 md:mb-0 ml-2 gap-10">
                   <span className="text-2xl font-serif">Welcome, {userData ? userData.fullname : 'User'}!</span>
-                  {<div className='flex flex-col gap-10 md:flex-row '>
+                  {!GuideRegisterd ?<div className='flex flex-col gap-10 md:flex-row '>
                   { !GuideInfo ? <div className="mt-6 border p-5 w-64 rounded-md cursor-pointer" onClick={handleVerification}>
                       <h1 className="text-xl font-serif">Verify your Account</h1>
                       <span className="text-xs">Verify your email, mobile number</span>
@@ -119,7 +133,7 @@ useEffect(() => {
                       <span className={`text-xs text-secondary`}>Your Adress get Verified</span>
                       </div>
 }                  </div>
-                  </div> }
+                  </div> : <TripDashboard /> }
                 </div>
                 
               </div>

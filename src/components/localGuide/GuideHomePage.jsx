@@ -1,13 +1,18 @@
-import React from "react";
+import React ,{useEffect} from "react";
 import { IoLocationOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import WorkwithUs from "./Workwithus";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addGuide } from "../../Redux/GuideSlice";
+import { findGuideByUserId } from "../../Apihandle/LocalGuide";
 
 function GuideHomePage({ setSetup }) {
   const status = useSelector((state) => state.auth.status);
+  const userData = useSelector((state) => state.auth.userData);
   const navigate = useNavigate();
-
+ const dispatch  = useDispatch();
   const handleCreateAccount = () => {
     if (status) {
       navigate("/dashboard");
@@ -15,6 +20,22 @@ function GuideHomePage({ setSetup }) {
       navigate("/login");
     }
   };
+
+  useEffect(() => {
+    if(!userData) {
+      navigate('/login')
+
+    }else{
+      const FindGuide = async () =>
+      {
+        const {data} = await axios.post(findGuideByUserId , {user : userData._id})
+        if(data){
+          dispatch(addGuide({userData : data.guide}))
+          navigate('/dashboard')
+        }
+      }
+      FindGuide();
+    } },[userData])
 
   return (
     <div className="h-full w-full ">

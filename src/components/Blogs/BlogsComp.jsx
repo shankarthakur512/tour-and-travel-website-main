@@ -43,8 +43,8 @@ const BlogsComp = () => {
       Our Latest Blogs
     </h1>
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      {BlogsData.map((item) => (
-        <BlogCard key={item.id} {...item} />
+      {BlogsData.map((item , index) => (
+        <BlogCard key={index} {...item} />
       ))}
     </div>
   </section>
