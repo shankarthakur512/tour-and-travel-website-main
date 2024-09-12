@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import Logo from "../../assets/logo.png";
 import { FaBars, FaUser, FaCog, FaSignOutAlt, FaBell } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const DashboardNav = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -10,8 +12,12 @@ const DashboardNav = () => {
 
   return (
     <div className="relative flex justify-between items-center p-4 bg-white shadow-md">
-      {/* Logo Section */}
-      <div className="text-xl font-semibold">My Logo</div>
+       <div className="flex items-center gap-4 font-bold text-2xl">
+              <Link to={"/"} onClick={() => window.scrollTo(0, 0)}>
+                <img src={Logo} alt="" className="h-12" />
+              </Link>
+            </div>
+
 
       {/* Icons Section */}
       <div className="flex items-center gap-4">

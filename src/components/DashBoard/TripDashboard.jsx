@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FindTripsByLocalGuide } from "../../Apihandle/Trips";
 import { addTrip } from "../../Redux/Tripslice";
+import { FaTrashAlt, FaStopCircle, FaPlusCircle } from "react-icons/fa"; // Import icons from react-icons
 
 function TripDashboard() {
   const GuideData = useSelector((state) => state.Guide?.userData);
@@ -15,7 +16,6 @@ function TripDashboard() {
     if (trips.length === 0 && GuideData) {
       const fetchTrips = async () => {
         try {
-          console.log(GuideData._id);
           const { data } = await axios.get(`${FindTripsByLocalGuide}/${GuideData._id}`);
           data.trips.forEach((tripData) => {
             dispatch(addTrip({ tripData }));
@@ -27,7 +27,7 @@ function TripDashboard() {
 
       fetchTrips();
     }
-  }, [trips, GuideData, dispatch]);
+  }, [GuideData, trips.length, dispatch]);
 
   const handleCancelTour = (tripId) => {
     console.log("Cancel Tour", tripId);
@@ -40,70 +40,75 @@ function TripDashboard() {
   };
 
   return (
-    <div className="container mx-auto p-5">
+    <div className="container mx-auto p-5 font-poppins">
       {trips.length === 0 ? (
-        <div className="flex text-center mt-10 gap-10">
-          <div className="flex flex-col">
-            <h1 className="text-3xl font-serif font-bold">Want to start your Trip Hosting?</h1>
-            <p className="text-xl text-gray-600">Manage your trips and create new packages.</p>
-          </div>
+        <div className="flex flex-col items-center text-center mt-10 gap-6">
+          <h1 className="text-4xl font-bold text-primary font-serif">Start Hosting Your Trips!</h1>
+          <p className="text-lg text-gray-600 max-w-md">
+            Manage your trips, create new packages, and attract more tourists by creating unique experiences.
+          </p>
           <button
             onClick={() => navigate("/tourPackage")}
-            className="px-8 py-3 bg-primary text-white rounded-full shadow-lg hover:bg-primary-dark transition-all"
+            className="px-8 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
           >
-            Create Your First Trip
+            <FaPlusCircle /> Create Your First Trip
           </button>
         </div>
       ) : (
         <div className="mt-10">
-          <div className="flex justify-between items-center mb-5">
-            <h1 className="text-3xl font-serif font-bold">Your Trips</h1>
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-3xl font-serif font-bold text-primary">Your Hosted Trips</h1>
             <button
               onClick={() => navigate("/tourPackage")}
-              className="px-6 py-2 bg-green-500 text-white rounded-full shadow-md hover:bg-green-600 transition-all"
+              className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-full shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
             >
-              Create New Tour
+              <FaPlusCircle /> Create New Tour
             </button>
           </div>
-          <div className="overflow-x-auto h-96 overflow-y-auto shadow-md rounded-lg">
-            <table className="min-w-full bg-white rounded-lg overflow-hidden">
-              <thead className="bg-primary text-white sticky top-0">
-                <tr>
-                  <th className="w-1/4 py-3 px-4 text-left">Trip Name</th>
-                  <th className="w-1/4 py-3 px-4 text-left">Hotel Name</th>
-                  <th className="w-1/4 py-3 px-4 text-left">Description</th>
-                  <th className="w-1/4 py-3 px-4 text-left">Duration (days)</th>
-                  <th className="w-1/4 py-3 px-4 text-left">Type</th>
-                  <th className="w-1/4 py-3 px-4 text-left">Status</th>
-                  <th className="w-1/4 py-3 px-4 text-left">Actions</th>
+
+          {/* Tabular format for displaying trips */}
+          <div className="overflow-scroll h-[60vh]">
+            <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+              <thead>
+                <tr className="bg-gradient-to-r from-primary to-secondary text-white">
+                  <th className="py-3 px-4 text-left text-sm font-semibold">Trip Name</th>
+                  <th className="py-3 px-4 text-left text-sm font-semibold">Hotel Name</th>
+                  <th className="py-3 px-4 text-left text-sm font-semibold">Description</th>
+                  <th className="py-3 px-4 text-left text-sm font-semibold">Duration (days)</th>
+                  <th className="py-3 px-4 text-left text-sm font-semibold">Type</th>
+                  <th className="py-3 px-4 text-left text-sm font-semibold">Actions</th>
                 </tr>
               </thead>
+             
               <tbody>
                 {trips.map((trip) => (
-                  <tr key={trip.id} className="hover:bg-gray-100 transition-all">
-                    <td className="py-3 px-4 border-b">{trip.name || "Nothing"}</td>
-                    <td className="py-3 px-4 border-b">{trip.hotelName || "N/A"}</td>
-                    <td className="py-3 px-4 border-b">{trip.description}</td>
-                    <td className="py-3 px-4 border-b">{trip.duration}</td>
-                    <td className="py-3 px-4 border-b">{trip.type}</td>
-                    <td className="py-3 px-4 border-b">{trip.status || "Upcoming"}</td>
-                    <td className="py-3 px-4 border-b flex gap-2">
+                  <tr
+                    key={trip.id}
+                    className="hover:bg-gray-100 transition-all duration-200 border-b border-gray-100"
+                  >
+                    <td className="py-3 px-4 text-sm text-gray-700">{trip.name || "Trip Name"}</td>
+                    <td className="py-3 px-4 text-sm text-gray-700">{trip.hotelName || "N/A"}</td>
+                    <td className="py-3 px-4 text-sm text-gray-700">{trip.description}</td>
+                    <td className="py-3 px-4 text-sm text-gray-700">{trip.duration} days</td>
+                    <td className="py-3 px-4 text-sm text-gray-700">{trip.type}</td>
+                    <td className="py-3 px-4 flex items-center gap-2">
                       <button
                         onClick={() => handleCancelTour(trip.id)}
-                        className="px-4 py-2 bg-red-500 text-white rounded-full shadow-sm hover:bg-red-600 transition-all"
+                        className="px-3 py-1 bg-red-500 text-white text-xs rounded-full hover:bg-red-600 transition-all duration-200 flex items-center gap-1"
                       >
-                        Cancel Tour
+                        <FaTrashAlt /> Cancel
                       </button>
                       <button
                         onClick={() => handleStopBooking(trip.id)}
-                        className="px-4 py-2 bg-yellow-500 text-white rounded-full shadow-sm hover:bg-yellow-600 transition-all"
+                        className="px-3 py-1 bg-yellow-500 text-white text-xs rounded-full hover:bg-yellow-600 transition-all duration-200 flex items-center gap-1"
                       >
-                        Stop Taking Booking
+                        <FaStopCircle /> Stop Booking
                       </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
+             
             </table>
           </div>
         </div>

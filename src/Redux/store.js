@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from './authslice'
-import GuideReducer from './GuideSlice'
-import TripReducer from './Tripslice'
+import { guideReducer, searchedGuidesReducer } from './GuideSlice.js'
+import {tripReducer , tripsArrayReducer} from './Tripslice'
 export default configureStore({
   reducer: {
   auth : authReducer,
-  Guide : GuideReducer,
-  Trips : TripReducer
+  Guide : guideReducer,
+  searchedGuides: searchedGuidesReducer,
+  Trips : tripReducer,
+  TripsArray : tripsArrayReducer
   },
 })

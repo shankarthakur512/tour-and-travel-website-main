@@ -1,11 +1,41 @@
+import axios from "axios";
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate } from "react-router-dom";
+import { FindTripsByLocation } from "../../Apihandle/Trips";
+import { useDispatch } from "react-redux";
+import { setTripsArray } from "../../Redux/Tripslice";
+import { findGuideByCity } from "../../Apihandle/LocalGuide";
+import { addSearchedGuide } from "../../Redux/GuideSlice";
 
 const Hero = () => {
   const [priceValue, setPriceValue] = useState(30);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+const [destination , setDestination] = useState("")
+
+const dispatch = useDispatch();
+const navigate = useNavigate();
+
+const handleSearch = async (e) =>{
+e.preventDefault();
+try {
+const data = await axios.post(FindTripsByLocation , {location : destination})
+const res = await axios.post(findGuideByCity , {city : destination})
+const trips = data.data.trips
+console.log(data.data.trips)
+dispatch(setTripsArray({ trips }))
+// console.log(data);
+// console.log(res);
+const guides = res.data.guides
+dispatch(addSearchedGuide({guides}))
+navigate('/search')
+
+} catch (error) {
+  console.log(error)
+}
+}
 
   return (
     <div className="relative h-screen">
@@ -45,6 +75,8 @@ const Hero = () => {
                 </label>
                 <input
                   type="text"
+                  value={destination}
+                  onChange={(e)=>{setDestination(e.target.value)}}
                   name="destination"
                   id="destination"
                   placeholder="Enter your destination"
@@ -116,7 +148,9 @@ const Hero = () => {
             </div>
 
             {/* Search Button */}
-            <button className="bg-gradient-to-r from-teal-500 to-blue-500 text-white hover:scale-105 px-5 py-3 rounded-full duration-200 shadow-md absolute -bottom-6 left-1/2 transform -translate-x-1/2">
+            <button className="bg-gradient-to-r from-teal-500 to-blue-500 text-white hover:scale-105 px-5 py-3 rounded-full duration-200 shadow-md absolute -bottom-6 left-1/2 transform -translate-x-1/2"
+            onClick={handleSearch}
+            >
               Search Now
             </button>
           </div>

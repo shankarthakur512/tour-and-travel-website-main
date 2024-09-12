@@ -21,6 +21,28 @@ const TripSlice = createSlice({
   }
 });
 
-export const { addTrip, removeTrip } = TripSlice.actions;
 
-export default TripSlice.reducer;
+
+const tripsArrayInitialState = {
+  tripsArray: [], 
+};
+
+const TripsArraySlice = createSlice({
+  name: "TripsArray",
+  initialState: tripsArrayInitialState,
+  reducers: {
+    setTripsArray: (state, action) => {
+      console.log(action.payload.trips)
+      state.tripsArray = action.payload.trips;
+    },
+    clearTripsArray: (state) => {
+      state.tripsArray = [];
+    },
+  },
+});
+
+export const { addTrip, removeTrip } = TripSlice.actions;
+export const { setTripsArray, clearTripsArray } = TripsArraySlice.actions;
+
+export const tripReducer = TripSlice.reducer;
+export const tripsArrayReducer = TripsArraySlice.reducer;

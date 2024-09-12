@@ -48,7 +48,7 @@ const TourPackageCreation = () => {
       const formData = new FormData();
       formData.append('createdBy', GuideData._id);
       formData.append('tripName', data.tripName);
-      formData.append('location', data.location);
+      formData.append('Location', data.location);
       formData.append('type', data.tourType);
       formData.append('hotel', data.hotel);
       formData.append('hotelRating', hotelRating);

@@ -14,6 +14,7 @@ import "aos/dist/aos.css";
 import GuideDashboard from "./components/DashBoard/GuideDashboard";
 import TourPackageCreation from "./components/TourPackage/TourPackegeMain";
 import AuthForm from "./components/Authentication/Authform";
+import Search from "./pages/Search";
 
 const App = () => {
   React.useEffect(() => {
@@ -40,7 +41,7 @@ const App = () => {
           <Route path="/login" element={<AuthForm />} />
           <Route path="/dashboard" element={<GuideDashboard />} />
           <Route path="/tourPackage" element={<TourPackageCreation />} />
-
+          <Route path="/search" element ={<Search />} />
         </Routes>
       </BrowserRouter>
     </>
