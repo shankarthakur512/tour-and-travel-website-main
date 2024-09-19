@@ -13,6 +13,7 @@ import OrderPopup from "../components/OrderPopup/OrderPopup";
 import BannerPic2 from "../components/BannerPic/BannerPic2";
 import { FiMic } from "react-icons/fi";
 import { FaPaperPlane } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 
 const Home = () => {
   const [orderPopup, setOrderPopup] = useState(false);
@@ -20,6 +21,7 @@ const Home = () => {
   const [message, setMessage] = useState(""); // State for the chat input
   const [chatMessages, setChatMessages] = useState([]); // State to manage chat messages
   const [isLoading, setIsLoading] = useState(false); // State to show loading
+   const dispatch = useDispatch();
 
   const handleOrderPopup = () => {
     setOrderPopup(!orderPopup);

@@ -8,6 +8,7 @@ import NoPage from "./pages/NoPage";
 import About from "./pages/About";
 import Localguide from "./pages/Localguide";
 import BlogsDetails from "./pages/BlogsDetails";
+import GuidePage from "./pages/guidePage.jsx";
 import AOS from "aos";
 import "aos/dist/aos.css";
 //  from "./components/Authentication/SignIn";
@@ -15,6 +16,7 @@ import GuideDashboard from "./components/DashBoard/GuideDashboard";
 import TourPackageCreation from "./components/TourPackage/TourPackegeMain";
 import AuthForm from "./components/Authentication/Authform";
 import Search from "./pages/Search";
+import TourPage from "./pages/TourPage.jsx";
 
 const App = () => {
   React.useEffect(() => {
@@ -42,6 +44,8 @@ const App = () => {
           <Route path="/dashboard" element={<GuideDashboard />} />
           <Route path="/tourPackage" element={<TourPackageCreation />} />
           <Route path="/search" element ={<Search />} />
+          <Route path="/search/:guideId" element={<GuidePage />} />
+          <Route path="/search/Tour/:TripId" element={<TourPage />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -3,7 +3,9 @@ import Logo from "../../assets/logo.png";
 import { FaBars, FaUser, FaCog, FaSignOutAlt, FaBell } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-const DashboardNav = () => {
+const DashboardNav = (
+  {notify,setNotify}
+) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -23,12 +25,12 @@ const DashboardNav = () => {
       <div className="flex items-center gap-4">
         {/* Bell Icon */}
         <div className="cursor-pointer p-2 rounded-full hover:bg-gray-100">
-          <FaBell size={20} />
+          <FaBell size={20} onClick={()=>{setNotify(!notify)}}/>
         </div>
 
         {/* Menu Toggle */}
         <div className="cursor-pointer p-2 border rounded-full hover:bg-gray-100" onClick={toggleMenu}>
-          <FaBars size={20} />
+          <FaBars size={20}  />
         </div>
       </div>
 
