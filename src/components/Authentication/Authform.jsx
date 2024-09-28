@@ -9,7 +9,7 @@ import { CheckUser, loginUser } from "../../Apihandle/user";
 import { useDispatch } from "react-redux";
 import { login } from "../../Redux/authslice";
 import { Bounce, toast, ToastContainer } from "react-toastify";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup , getAuth } from "firebase/auth";
 import { firebaseAuth } from "../../firebase/firebaseconf";
 
 function AuthForm() {
@@ -18,6 +18,31 @@ function AuthForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
+
+const auth = getAuth();
+
+useEffect(() => {
+  const auth = getAuth();
+
+  const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const email = user.email;
+
+      if (email) {
+        const { data } = await axios.post(CheckUser, { email });
+        if (data) {
+          dispatch(login({ userData: data.data }));
+
+          const previousRoute = location.state?.from || '/';
+          navigate(previousRoute);  
+        }
+      }
+    }
+  });
+
+  // Cleanup subscription on component unmount
+  return () => unsubscribe();
+}, [auth, dispatch, location, navigate]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {

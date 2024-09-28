@@ -23,10 +23,11 @@ const GuideChatComponent = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* People Section */}
       <div className="w-1/3 bg-white p-5 border-r">
         <h2 className="text-2xl font-bold mb-4">People</h2>
-        <ul className="space-y-4">
+
+     {people.length ?<ul className="space-y-4">
+          
           {people.map((person) => (
             <li
               key={person.id}
@@ -38,7 +39,7 @@ const GuideChatComponent = () => {
               {person.name}
             </li>
           ))}
-        </ul>
+        </ul> : <h2 className='mt-10  '>No any Queries initiated </h2>}
       </div>
 
     

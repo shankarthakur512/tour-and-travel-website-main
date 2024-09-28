@@ -45,7 +45,7 @@ const App = () => {
           <Route path="/tourPackage" element={<TourPackageCreation />} />
           <Route path="/search" element ={<Search />} />
           <Route path="/search/:guideId" element={<GuidePage />} />
-          <Route path="/search/Tour/:TripId" element={<TourPage />} />
+          <Route path="/search/tour/:TripId" element={<TourPage />} />
         </Routes>
       </BrowserRouter>
     </>

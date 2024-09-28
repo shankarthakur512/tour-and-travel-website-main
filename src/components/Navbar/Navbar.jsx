@@ -5,7 +5,9 @@ import { FaCaretDown } from "react-icons/fa";
 import ResponsiveMenu from "./ResponsiveMenu";
 import { HiMenuAlt3, HiMenuAlt1 } from "react-icons/hi";
 import { useSelector } from "react-redux";
-import { VscAccount } from "react-icons/vsc";
+import FounderImage from "../../assets/founder.jpg"
+import ProfileImage from "./profile.png"
+// import { VscAccount } from "";
 import UserMenu from "./Usermenu";
 import QueryModal from "./QueryModel"; // New component for the query modal
 
@@ -13,7 +15,7 @@ export const NavbarLinks = [
   { name: "Home", link: "/" },
   { name: "About", link: "/about" },
   { name: "Blogs", link: "/blogs" },
-  { name: "Buddy", link: "/local-guide" },
+  { name: "Guide", link: "/local-guide" },
 ];
 
 const DropdownLinks = [
@@ -33,7 +35,7 @@ const Navbar = ({ handleSignUpPopup }) => {
 
   const status = useSelector((state) => state.auth.status);
   const userData = useSelector((state) => state.auth.userData);
- console.log(userData)
+//  console.log(userData.avatar)
   return (
     <>
       <nav className="fixed top-0 right-0 w-full z-50 bg-white/70 backdrop-blur-sm text-black shadow-md">
@@ -80,7 +82,7 @@ const Navbar = ({ handleSignUpPopup }) => {
               ) : (
                 <div className="relative">
                   <img
-                    src={`/${userData?.avatar}` || "/default-avatar.png"}
+                    src={ProfileImage || "/default-avatar.png"}
                     alt="User Avatar"
                     className="w-10 h-10 rounded-full cursor-pointer"
                     onClick={() => setShowUserMenu(!showUserMenu)}

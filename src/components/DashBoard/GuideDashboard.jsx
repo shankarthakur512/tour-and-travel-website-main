@@ -17,6 +17,9 @@ import TripDashboard from './TripDashboard.jsx';
 import { FaUserCheck, FaUserEdit, FaMapMarkerAlt } from 'react-icons/fa'; // Import icons
 import ChatComponent from '../others/Chat.jsx';
 import GuideChatComponent from '../others/guideChat.jsx';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { login } from '../../Redux/authslice.js';
+import { CheckUser } from '../../Apihandle/user.js';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const GuideDashboard = () => {
@@ -36,10 +39,36 @@ const GuideDashboard = () => {
   const incomeData = {
     labels: ['Calls', 'Chats', 'Trips'],
     datasets: [{
-      data: [1200, 500, 3000], // Example income data
+      data: [10, 100, 1000], 
       backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
     }],
   };
+
+
+  // useEffect(() => {
+  //   const auth = getAuth();
+  
+  //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
+  //     if (user) {
+  //       const email = user.email;
+  
+  //       if (email) {
+  //         const { data } = await axios.post(CheckUser, { email });
+  //         if (data) {
+  //           dispatch(login({ userData: data.data }));
+  
+  //           // const previousRoute = location.state?.from || '/';
+  //           // navigate(previousRoute);  
+  //         }
+  //       }
+  //     }
+  //   });
+  
+  //   // Cleanup subscription on component unmount
+  //   return () => unsubscribe();
+  // }, [auth, dispatch, location, navigate]);
+
+
 
 
   useEffect(() => {
@@ -97,7 +126,26 @@ const GuideDashboard = () => {
 
   useEffect(() => {
     if (!userData) {
-      navigate('/login');
+      // const auth = getAuth();
+      //   console.log("here")
+      // onAuthStateChanged(auth, async (user) => {
+      //     if (user) {
+      //       console.log(user)
+      //       const email = user.email;
+      
+      //       if (email) {
+      //         const { data } = await axios.post(CheckUser, { email });
+      //         if (data) {
+      //           dispatch(login({ userData: data.data }));
+      //           setGuideRegisterd(true);
+      //           // const previousRoute = location.state?.from || '/';
+      //           // navigate(previousRoute);  
+      //         }
+      //       }
+      //     }
+          
+      //   });
+      // navigate('/login');
     } else {
       if (GuideuserData) {
         setGuideRegisterd(true);
@@ -172,7 +220,7 @@ const GuideDashboard = () => {
                       </div>
                     </div>
                   ) : (
-                  <div className=' w-full flex'>
+                  <div className=' w-full flex gap-3'>
              <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Income Overview</h3>
             <Doughnut data={incomeData} />
@@ -182,7 +230,7 @@ const GuideDashboard = () => {
 
           </div>
           <div className='shadow-lg w-full'> 
-          <h3 className="text-2xl flex justify-center  font-semibold mb-4 ">chats section</h3>
+          <h3 className="text-2xl flex justify-center text-primary  font-semibold mb-4 ">Query section</h3>
          <div className='sticky'> <GuideChatComponent /> </div> 
           </div>
           </div>
@@ -203,7 +251,7 @@ const GuideDashboard = () => {
                 </div>
               </div>
               <div>
-                <TripDashboard />
+              <TripDashboard GuideRegisterd={ GuideRegisterd }   />   
               </div>
               <div className='border '>
                 <h3 className='text-xl font-semibold mb-4 flex justify-center'>Your customers reviews</h3>

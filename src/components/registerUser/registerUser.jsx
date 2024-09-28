@@ -49,6 +49,7 @@ function SignUp ({signUpPopup ,setSignUpPopup}){
             theme: "light",
             transition: Bounce,
           });
+          Navigate('/login')
       } else {
           setRegister(true);
       }

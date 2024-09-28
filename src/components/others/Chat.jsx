@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { IoClose } from "react-icons/io5";
 
 const ChatComponent = ({ darkMode, setChatStarted }) => {
-  const [timeLeft, setTimeLeft] = useState(600); // 10 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(600); 
 
   // Start the timer on component mount
   useEffect(() => {
