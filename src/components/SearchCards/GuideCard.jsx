@@ -1,11 +1,13 @@
 import React from 'react';
 import { FaMapMarkerAlt, FaStar } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 function GuideCard({ guide }) {
+  const navigate = useNavigate();
   console.log(guide)
   return (
 
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105" onClick={(e)=>{navigate(`/search/${guide._id}`)}}>
       
       <img src={guide.picture} alt={guide.name} className="w-full h-48 object-cover" />
       <div className="p-4">

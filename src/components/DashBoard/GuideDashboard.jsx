@@ -155,7 +155,7 @@ const GuideDashboard = () => {
 
   return (
     <div className="container mx-auto p-5">
-     <div className=" top-0 z-50 bg-white shadow-lg sticky">
+     <div className=" top-0 z-50 bg-white  sticky">
   <DashboardNav notify={notify} setNotify={setNotify} />
 
   {/* "Hello" notification div */}

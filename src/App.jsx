@@ -17,6 +17,7 @@ import TourPackageCreation from "./components/TourPackage/TourPackegeMain";
 import AuthForm from "./components/Authentication/Authform";
 import Search from "./pages/Search";
 import TourPage from "./pages/TourPage.jsx";
+import PaymentPage from "./pages/PaymentcheckoutForm.JSX";
 
 const App = () => {
   React.useEffect(() => {
@@ -46,6 +47,7 @@ const App = () => {
           <Route path="/search" element ={<Search />} />
           <Route path="/search/:guideId" element={<GuidePage />} />
           <Route path="/search/tour/:TripId" element={<TourPage />} />
+          <Route path ="/payment" element={<PaymentPage />} />
         </Routes>
       </BrowserRouter>
     </>

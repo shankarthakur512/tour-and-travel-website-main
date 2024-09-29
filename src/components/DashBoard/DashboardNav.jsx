@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Logo from "../../assets/logo.png";
 import { FaBars, FaUser, FaCog, FaSignOutAlt, FaBell } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const DashboardNav = (
   {notify,setNotify}
@@ -11,15 +11,34 @@ const DashboardNav = (
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
-
+  
+   const NavbarLinks = [
+    { name: "Home", link: "/" },
+    { name: "About", link: "/about" },
+    { name: "Blogs", link: "/blogs" },
+    { name: "Guide", link: "/local-guide" },
+  ];
   return (
-    <div className="relative flex justify-between items-center p-4 bg-white shadow-md">
+    <div className="relative flex justify-between items-center p-4 bg-white ">
        <div className="flex items-center gap-4 font-bold text-2xl">
               <Link to={"/"} onClick={() => window.scrollTo(0, 0)}>
                 <img src={Logo} alt="" className="h-12" />
               </Link>
             </div>
-
+            <ul className="flex items-center gap-7">
+  {NavbarLinks.map((link) => (
+    <li key={link.name} className="py-4">
+      <NavLink
+        to={link.link}
+        className={({ isActive }) =>
+          isActive ? 'text-primary' : 'text-black'
+        }
+      >
+        {link.name}
+      </NavLink>
+    </li>
+  ))}
+</ul>
 
       {/* Icons Section */}
       <div className="flex items-center gap-4">

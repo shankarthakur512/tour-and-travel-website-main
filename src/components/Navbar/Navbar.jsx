@@ -38,8 +38,8 @@ const Navbar = ({ handleSignUpPopup }) => {
 //  console.log(userData.avatar)
   return (
     <>
-      <nav className="fixed top-0 right-0 w-full z-50 bg-white/70 backdrop-blur-sm text-black shadow-md">
-        <div className="container py-3 sm:py-0">
+      <nav className="fixed top-0 right-0 w-full z-50 bg-transparent backdrop-blur-sm text-black h-24 shadow-md">
+        <div className="container py-3 mt-5 sm:py-0">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4 font-bold text-2xl">
               <Link to={"/"} onClick={() => window.scrollTo(0, 0)}>
@@ -50,7 +50,7 @@ const Navbar = ({ handleSignUpPopup }) => {
             <div className="hidden md:block">
               <ul className="flex items-center gap-6">
                 {NavbarLinks.map((link) => (
-                  <li key={link.name} className="py-4">
+                  <li key={link.name} className={`py-4 `}>
                     <NavLink to={link.link} activeClassName="active">
                       {link.name}
                     </NavLink>
