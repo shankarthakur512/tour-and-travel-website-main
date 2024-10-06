@@ -77,7 +77,7 @@ const PaymentPage = () => {
       <h1 className="text-3xl font-bold mb-6 text-center">Payment Checkout</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
-        {/* Left Side: Booking Summary */}
+        
         <div className="bg-white dark:bg-gray-800 p-4 lg:p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-semibold mb-4 text-white p-4 rounded-md bg-gradient-to-r from-blue-500 to-purple-600">
             Booking Summary
@@ -92,7 +92,7 @@ const PaymentPage = () => {
             </p>
           </div>
 
-          {/* Traveller Details */}
+          
           <div className="mb-4 lg:mb-6 overflow-y-auto max-h-60 lg:max-h-80">
             <h3 className="text-xl font-semibold mb-3">Travellers</h3>
             {personDetails.length > 0 ? (
@@ -120,19 +120,19 @@ const PaymentPage = () => {
             )}
           </div>
 
-          {/* Powered by Travellgo */}
+          
           <div className="text-center mt-4 lg:mt-6 text-sm text-gray-400">
             Powered by <span className="text-blue-500">Travellgo</span>
           </div>
         </div>
 
-        {/* Right Side: Payment Form */}
+        
         <div className="bg-white dark:bg-gray-800 p-4 lg:p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-semibold mb-4 text-white p-4 rounded-md bg-gradient-to-r from-indigo-500 to-purple-600">
             Payment Details
           </h2>
 
-          {/* Input for Name on Card */}
+         
           <div className="mb-4">
             <label htmlFor="name-on-card" className="text-sm lg:text-base font-medium mb-1 lg:mb-2 block">
               Name on Card:
@@ -146,7 +146,7 @@ const PaymentPage = () => {
             />
           </div>
 
-          {/* Input for Country */}
+         
           <div className="mb-4">
             <label htmlFor="country" className="text-sm lg:text-base font-medium mb-1 lg:mb-2 block">
               Country:
@@ -160,7 +160,7 @@ const PaymentPage = () => {
             />
           </div>
 
-          {/* Stripe Card Element */}
+         
           <div className="mb-4">
             <label htmlFor="card-element" className="text-sm lg:text-base font-medium mb-1 lg:mb-2 block">
               Enter your card information:
@@ -188,10 +188,10 @@ const PaymentPage = () => {
             </div>
           </div>
 
-          {/* Error Message */}
+          
           {errorMessage && <p className="text-red-500 text-sm lg:text-base">{errorMessage}</p>}
 
-          {/* Terms and Conditions */}
+          
           <div className="mb-4">
             <label className="inline-flex items-center">
               <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-600" />
@@ -201,7 +201,7 @@ const PaymentPage = () => {
             </label>
           </div>
 
-          {/* Payment Button */}
+         
           <button
             onClick={handlePayment}
             className="w-full py-2 lg:py-3 bg-green-600 text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition-colors"
@@ -210,14 +210,14 @@ const PaymentPage = () => {
             {loading ? 'Processing...' : 'Proceed to Payment'}
           </button>
 
-          {/* Powered by Stripe */}
+         
           <div className="text-center mt-4 text-sm lg:text-base text-gray-400">
             Powered by <span className="text-blue-500">Stripe</span>
           </div>
         </div>
       </div>
 
-      {/* Success Popup */}
+      
       {showSuccessPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
