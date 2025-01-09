@@ -51,7 +51,8 @@ function SignUp ({signUpPopup ,setSignUpPopup}){
           });
           Navigate('/login')
       } else {
-          setRegister(true);
+        Navigate('/signup')
+          
       }
   }
 
@@ -73,9 +74,8 @@ function SignUp ({signUpPopup ,setSignUpPopup}){
       if (email) {
           const {data} = await axios.post(CheckUser,{email});
           if(!data.success){
-              setEmail(user.email);
-              setFullname(user.displayName);
-              setRegister(true);
+            Navigate('/signup')
+             
           } else {
               dispatch(login({userData  : data.data}));
               setSignUpPopup(false);

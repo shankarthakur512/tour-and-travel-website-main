@@ -5,11 +5,11 @@ import { FaCaretDown } from "react-icons/fa";
 import ResponsiveMenu from "./ResponsiveMenu";
 import { HiMenuAlt3, HiMenuAlt1 } from "react-icons/hi";
 import { useSelector } from "react-redux";
-import FounderImage from "../../assets/founder.jpg"
-import ProfileImage from "./profile.png"
-// import { VscAccount } from "";
+import FounderImage from "../../assets/founder.jpg";
+import ProfileImage from "./profile.png";
 import UserMenu from "./Usermenu";
-import QueryModal from "./QueryModel"; // New component for the query modal
+import QueryModal from "./QueryModel";
+import DarkModeToggle from "../others/DarkMode";
 
 export const NavbarLinks = [
   { name: "Home", link: "/" },
@@ -35,10 +35,11 @@ const Navbar = ({ handleSignUpPopup }) => {
 
   const status = useSelector((state) => state.auth.status);
   const userData = useSelector((state) => state.auth.userData);
-//  console.log(userData.avatar)
+  console.log("Navbar" , userData)
+
   return (
     <>
-      <nav className="fixed top-0 right-0 w-full z-50 bg-transparent backdrop-blur-sm text-black h-24 shadow-md">
+      <nav className="fixed top-0 right-0 w-full z-50 bg-transparent backdrop-blur-sm text-black dark:text-white h-24 shadow-md">
         <div className="container py-3 mt-5 sm:py-0">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4 font-bold text-2xl">
@@ -60,9 +61,9 @@ const Navbar = ({ handleSignUpPopup }) => {
                   <a className="flex items-center gap-1">
                     Quick Links <FaCaretDown className="transition-transform duration-200 group-hover:rotate-180" />
                   </a>
-                  <div className="absolute hidden group-hover:block bg-white p-2 shadow-lg rounded-md">
+                  <div className="absolute hidden group-hover:block bg-white dark:bg-gray-800 p-2 shadow-lg rounded-md">
                     {DropdownLinks.map((link) => (
-                      <a key={link.name} href={link.link} className="block py-2 px-4 hover:bg-gray-100">
+                      <a key={link.name} href={link.link} className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-700">
                         {link.name}
                       </a>
                     ))}
@@ -72,6 +73,8 @@ const Navbar = ({ handleSignUpPopup }) => {
             </div>
 
             <div className="flex items-center gap-4">
+              <DarkModeToggle /> {/* Dark Mode Toggle */}
+              
               {!status ? (
                 <button
                   className="bg-gradient-to-r from-primary to-secondary text-white px-4 py-2 rounded-full"
@@ -82,7 +85,7 @@ const Navbar = ({ handleSignUpPopup }) => {
               ) : (
                 <div className="relative">
                   <img
-                    src={ProfileImage || "/default-avatar.png"}
+                    src={userData.avatar || "/default-avatar.png"}
                     alt="User Avatar"
                     className="w-10 h-10 rounded-full cursor-pointer"
                     onClick={() => setShowUserMenu(!showUserMenu)}

@@ -10,12 +10,13 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         login: (state, action) => {
-            console.log("yha tak to shi hai")
+            
             console.log(action.payload.userData)
             state.status = true;
             state.userData = action.payload.userData;
         },
         logout: (state) => {
+            console.log("yha tak to shi hai")
             state.status = false;
             state.userData = null;
         }

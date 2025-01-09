@@ -17,9 +17,8 @@ import TripDashboard from './TripDashboard.jsx';
 import { FaUserCheck, FaUserEdit, FaMapMarkerAlt } from 'react-icons/fa'; // Import icons
 import ChatComponent from '../others/Chat.jsx';
 import GuideChatComponent from '../others/guideChat.jsx';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { login } from '../../Redux/authslice.js';
-import { CheckUser } from '../../Apihandle/user.js';
+
+import RecentComponent from './RecentComponent.jsx';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const GuideDashboard = () => {
@@ -31,6 +30,7 @@ const GuideDashboard = () => {
   const [GuideInfo, setGuideInfo] = useState(null);
   const [GuideRegisterd, setGuideRegisterd] = useState(false);
   const [notify , setNotify] = useState(false)
+  const [sliderOpen, setSliderOpen] = useState(false);
   const userData = useSelector((state) => state.auth.userData);
   const GuideuserData = useSelector((state) => state.Guide.userData);
   const dispatch = useDispatch();
@@ -154,9 +154,9 @@ const GuideDashboard = () => {
   }, [userData, GuideuserData, navigate]);
 
   return (
-    <div className="container mx-auto p-5">
+    <div className="container mx-auto p-5 dark:bg-gray-900 dark:text-white ">
      <div className=" top-0 z-50 bg-white  sticky">
-  <DashboardNav notify={notify} setNotify={setNotify} />
+  <DashboardNav notify={notify} setNotify={setNotify} setSlider={setSliderOpen}/>
 
   {/* "Hello" notification div */}
   {notify && (
@@ -220,18 +220,44 @@ const GuideDashboard = () => {
                       </div>
                     </div>
                   ) : (
-                  <div className=' w-full flex gap-3'>
-             <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold mb-4">Income Overview</h3>
-            <Doughnut data={incomeData} />
-            <p className=" mt-4 text-justify w-[30vw] p-2 shadow-lg">
-  Above is an overview of your income from various sources, including call bookings, trip hosting, and chats. This data provides valuable insights into your earnings performance over time, allowing you to track your progress and make informed decisions. Stay updated to maximize your potential and grow your business as a local guide.
-</p>
+                  <div className=' w-full flex  flex-col gap-3'>
+                <div className="mb-6 p-4 shadow-lg rounded-lg bg-white dark:bg-gray-800">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+              Guide Overview
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="p-3 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg text-white shadow-md">
+                <h3>Total Money Earned</h3>
+                <p>$0.00</p>
+              </div>
+              <div className="p-3 bg-gradient-to-r from-yellow-400 to-red-500 rounded-lg text-white shadow-md">
+                <h3>Withdrawal Money</h3>
+                <p>$0.00</p>
+              </div>
+              {/* Add more divs for other metrics */}
+            </div></div>
+            <div className="flex flex-col md:flex-row gap-5">
+  {/* Income Overview Section */}
+  <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-lg md:w-[50%] w-full">
+    <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Income Overview</h3>
+    <Doughnut data={incomeData} />
+    {/* Optional description */}
+    {/* <p className="mt-4 text-justify p-2 shadow-lg">
+      Above is an overview of your income from various sources, including call bookings, trip hosting, and chats. This data provides valuable insights into your earnings performance over time, allowing you to track your progress and make informed decisions. Stay updated to maximize your potential and grow your business as a local guide.
+    </p> */}
+  </div>
 
-          </div>
-          <div className='shadow-lg w-full'> 
-          <h3 className="text-2xl flex justify-center text-primary  font-semibold mb-4 ">Query section</h3>
-         <div className='sticky'> <GuideChatComponent /> </div> 
+  {/* Recent Activities Section */}
+  <div className="w-full md:w-[50%]">
+    <h3 className="text-2xl flex justify-center text-primary font-semibold mb-4">
+      Recent Activities
+    </h3>
+    <div className="sticky top-0">
+      <RecentComponent  />
+    </div>
+  
+</div>
+
           </div>
           </div>
                   )}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { FaUpload, FaCalendarAlt, FaHotel, FaMapMarkerAlt, FaDollarSign, FaImage, FaStar, FaClock, FaTag, FaLocationArrow } from 'react-icons/fa'; // Added icons for trip name and location
+import { FaUpload, FaCalendarAlt, FaHotel, FaMapMarkerAlt, FaDollarSign, FaImage, FaStar, FaClock, FaTag, FaLocationArrow } from 'react-icons/fa'; 
 import BannerPic from '../BannerPic/BannerPic';
 import TourImg from './TourPackage.jpg';
 import { RegisterTour } from '../../Apihandle/Trips';
@@ -57,7 +57,6 @@ const TourPackageCreation = () => {
       formData.append('startingDate', data.startingDate);
       formData.append('duration', data.duration);
     
-
       photos.forEach((photo) => {
         formData.append('photos', photo);
       });
@@ -67,7 +66,7 @@ const TourPackageCreation = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-    navigate('/dashboard')
+      navigate('/dashboard');
       console.log('Tour Package Registered:', response.data);
     } catch (error) {
       console.error('Error registering tour package:', error);
@@ -78,15 +77,15 @@ const TourPackageCreation = () => {
   const description = "Ensure that your package and Trip Hosting follows our policy";
 
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-gray-100 dark:bg-gray-800 min-h-screen">
       <BannerPic img={TourImg} title={title} description={description} />
       <div className="container mx-auto p-6">
-        <h1 className="text-3xl font-bold mb-6">Create a Tour Package</h1>
+        <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200">Create a Tour Package</h1>
         
-        <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-8 rounded-lg shadow-md">
+        <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-md">
           {/* Trip Name */}
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="tripName">
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2" htmlFor="tripName">
               <FaTag className="inline mr-2" /> Trip Name <span className="text-red-500">*</span>
             </label>
             <Controller
@@ -99,7 +98,7 @@ const TourPackageCreation = () => {
                   type="text"
                   id="tripName"
                   {...field}
-                  className="w-full p-3 border border-gray-300 rounded-lg"
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                   placeholder="Enter the name of the trip"
                 />
               )}
@@ -109,7 +108,7 @@ const TourPackageCreation = () => {
 
           {/* Location */}
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="location">
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2" htmlFor="location">
               <FaLocationArrow className="inline mr-2" /> Location <span className="text-red-500">*</span>
             </label>
             <Controller
@@ -122,7 +121,7 @@ const TourPackageCreation = () => {
                   type="text"
                   id="location"
                   {...field}
-                  className="w-full p-3 border border-gray-300 rounded-lg"
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                   placeholder="Enter the trip location"
                 />
               )}
@@ -132,7 +131,7 @@ const TourPackageCreation = () => {
 
           {/* Tour Type */}
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="tourType">
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2" htmlFor="tourType">
               <FaMapMarkerAlt className="inline mr-2" /> Tour Type <span className="text-red-500">*</span>
             </label>
             <Controller
@@ -144,7 +143,7 @@ const TourPackageCreation = () => {
                 <select
                   id="tourType"
                   {...field}
-                  className="w-full p-3 border border-gray-300 rounded-lg"
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 >
                   <option value="" disabled>Select tour type</option>
                   {tourTypeOptions.map((option) => (
@@ -159,7 +158,7 @@ const TourPackageCreation = () => {
           {/* Hotel */}
           <div className="mb-4 flex items-center space-x-4">
             <div className="w-2/3">
-              <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="hotel">
+              <label className="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2" htmlFor="hotel">
                 <FaHotel className="inline mr-2" /> Hotel <span className="text-red-500">*</span>
               </label>
               <Controller
@@ -172,7 +171,7 @@ const TourPackageCreation = () => {
                     type="text"
                     id="hotel"
                     {...field}
-                    className="w-full p-3 border border-gray-300 rounded-lg"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                     placeholder="Hotel name or details"
                   />
                 )}
@@ -182,7 +181,7 @@ const TourPackageCreation = () => {
 
             {/* Hotel Rating */}
             <div className="w-1/3">
-              <label className="block text-gray-700 text-sm font-semibold mb-2">
+              <label className="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2">
                 Rating <span className="text-red-500">*</span>
               </label>
               <div className="flex space-x-1">
@@ -198,54 +197,32 @@ const TourPackageCreation = () => {
             </div>
           </div>
 
-          {/* Starting Date */}
+          {/* Itinerary */}
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="startingDate">
-              <FaCalendarAlt className="inline mr-2" /> Starting Date <span className="text-red-500">*</span>
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2" htmlFor="itinerary">
+              <FaClock className="inline mr-2" /> Itinerary <span className="text-red-500">*</span>
             </label>
             <Controller
-              name="startingDate"
+              name="itinerary"
               control={control}
               defaultValue=""
-              rules={{ required: 'Starting date is required' }}
+              rules={{ required: 'Itinerary is required' }}
               render={({ field }) => (
-                <input
-                  type="date"
-                  id="startingDate"
+                <textarea
+                  id="itinerary"
                   {...field}
-                  className="w-full p-3 border border-gray-300 rounded-lg"
+                  rows={4}
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                  placeholder="Enter your itinerary"
                 />
               )}
             />
-            {errors.startingDate && <p className="text-red-500 text-xs">{errors.startingDate.message}</p>}
-          </div>
-
-          {/* Duration */}
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="duration">
-              <FaClock className="inline mr-2" /> Duration <span className="text-red-500">*</span>
-            </label>
-            <Controller
-              name="duration"
-              control={control}
-              defaultValue=""
-              rules={{ required: 'Duration is required' }}
-              render={({ field }) => (
-                <input
-                  type="number"
-                  id="duration"
-                  {...field}
-                  className="w-full p-3 border border-gray-300 rounded-lg"
-                  placeholder="Enter duration in days"
-                />
-              )}
-            />
-            {errors.duration && <p className="text-red-500 text-xs">{errors.duration.message}</p>}
+            {errors.itinerary && <p className="text-red-500 text-xs">{errors.itinerary.message}</p>}
           </div>
 
           {/* Price */}
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="price">
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2" htmlFor="price">
               <FaDollarSign className="inline mr-2" /> Price <span className="text-red-500">*</span>
             </label>
             <Controller
@@ -258,67 +235,81 @@ const TourPackageCreation = () => {
                   type="number"
                   id="price"
                   {...field}
-                  className="w-full p-3 border border-gray-300 rounded-lg"
-                  placeholder="Enter price"
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                  placeholder="Enter the price"
                 />
               )}
             />
             {errors.price && <p className="text-red-500 text-xs">{errors.price.message}</p>}
           </div>
 
-          {/* Itinerary */}
+          {/* Starting Date */}
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="itinerary">
-              Itinerary <span className="text-red-500">*</span>
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2" htmlFor="startingDate">
+              <FaCalendarAlt className="inline mr-2" /> Starting Date <span className="text-red-500">*</span>
             </label>
             <Controller
-              name="itinerary"
+              name="startingDate"
               control={control}
               defaultValue=""
-              rules={{ required: 'Itinerary is required' }}
+              rules={{ required: 'Starting date is required' }}
               render={({ field }) => (
-                <textarea
-                  id="itinerary"
+                <input
+                  type="date"
+                  id="startingDate"
                   {...field}
-                  className="w-full p-3 border border-gray-300 rounded-lg"
-                  placeholder="Enter trip itinerary"
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 />
               )}
             />
-            {errors.itinerary && <p className="text-red-500 text-xs">{errors.itinerary.message}</p>}
+            {errors.startingDate && <p className="text-red-500 text-xs">{errors.startingDate.message}</p>}
           </div>
 
-          {/* Photos Upload */}
+          {/* Duration */}
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-semibold mb-2">
-              <FaImage className="inline mr-2" /> Photos
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2" htmlFor="duration">
+              <FaClock className="inline mr-2" /> Duration <span className="text-red-500">*</span>
+            </label>
+            <Controller
+              name="duration"
+              control={control}
+              defaultValue=""
+              rules={{ required: 'Duration is required' }}
+              render={({ field }) => (
+                <input
+                  type="text"
+                  id="duration"
+                  {...field}
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                  placeholder="Enter the duration"
+                />
+              )}
+            />
+            {errors.duration && <p className="text-red-500 text-xs">{errors.duration.message}</p>}
+          </div>
+
+          {/* Photos */}
+          <div className="mb-4">
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2" htmlFor="photos">
+              <FaImage className="inline mr-2" /> Photos <span className="text-red-500">*</span>
             </label>
             <input
               type="file"
+              id="photos"
               multiple
-              accept="image/*"
               onChange={handlePhotoUpload}
-              className="w-full p-3 border border-gray-300 rounded-lg"
+              className="p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             />
-            <div className="flex flex-wrap mt-2">
-              {photoPreviews.map((src, index) => (
-                <img
-                  key={index}
-                  src={src}
-                  alt="Preview"
-                  className="w-20 h-20 object-cover rounded mr-2 mb-2"
-                />
+            <div className="flex mt-2 space-x-2">
+              {photoPreviews.map((preview, index) => (
+                <img key={index} src={preview} alt={`preview-${index}`} className="w-24 h-24 object-cover rounded-lg" />
               ))}
             </div>
           </div>
 
-         
-
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200"
-          >
-            Create Package
+          {/* Submit Button */}
+          <button type="submit" className="w-full bg-primary hover:bg-secondary  text-white font-bold py-3 rounded-lg">
+            Create Tour Package
           </button>
         </form>
       </div>

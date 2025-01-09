@@ -7,3 +7,11 @@
     @apply text-primary;
   }
 }
+body {
+  @apply bg-white text-black; /* Default light mode styles */
+}
+
+/* Dark mode styles */
+body.dark {
+  @apply bg-gray-900 text-white; /* Dark mode styles */
+}

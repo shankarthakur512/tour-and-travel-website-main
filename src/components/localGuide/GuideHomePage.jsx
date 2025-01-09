@@ -1,18 +1,19 @@
-import React ,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { IoLocationOutline } from "react-icons/io5";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import WorkwithUs from "./Workwithus";
 import axios from "axios";
-import { useDispatch } from "react-redux";
 import { addGuide } from "../../Redux/GuideSlice";
 import { findGuideByUserId } from "../../Apihandle/LocalGuide";
 
 function GuideHomePage({ setSetup }) {
   const status = useSelector((state) => state.auth.status);
   const userData = useSelector((state) => state.auth.userData);
+  const isDarkMode = useSelector((state) => state.darkMode.isDarkMode); // Dark mode state from Redux
   const navigate = useNavigate();
- const dispatch  = useDispatch();
+  const dispatch = useDispatch();
+
   const handleCreateAccount = () => {
     if (status) {
       navigate("/dashboard");
@@ -22,29 +23,29 @@ function GuideHomePage({ setSetup }) {
   };
 
   useEffect(() => {
-    if(!userData) {
-      navigate('/login')
-
-    }else{
-      const FindGuide = async () =>
-      {
-        const {data} = await axios.post(findGuideByUserId , {user : userData._id})
-        if(data){
-          dispatch(addGuide({userData : data.guide}))
-          navigate('/dashboard')
+    if (!userData) {
+      navigate("/login");
+    } else {
+      const FindGuide = async () => {
+        const { data } = await axios.post(findGuideByUserId, { user: userData._id });
+        if (data.success) {
+          dispatch(addGuide({ userData: data.guide }));
+          navigate("/dashboard");
         }
-      }
+      };
       FindGuide();
-    } },[userData])
+    }
+  }, [userData, dispatch, navigate]);
 
   return (
-    <div className="h-full w-full ">
+    <div className={`h-full w-full ${isDarkMode ? "dark" : ""}`}>
+      <div className="dark:bg-gray-800 border pt-10">
       <div className="h-[70vh] bg-local-guide-bg bg-cover flex items-center justify-start ">
         <div className="flex flex-col ml-24 w-[36vw] p-5">
-          <h1 className="mr-32 text-5xl font-semibold text-primary drop-shadow-lg">
+          <h1 className="mr-32 text-5xl font-semibold text-primary drop-shadow-lg ">
             Be A Local Guide
           </h1>
-          <span className="text-white mt-4 text-lg">
+          <span className="text-white mt-4 text-lg dark:text-gray-300">
             Start your earning by becoming our guide partner
           </span>
           <button
@@ -55,13 +56,13 @@ function GuideHomePage({ setSetup }) {
           </button>
         </div>
       </div>
-
+      </div>
       <WorkwithUs />
 
-      <div className="flex flex-col justify-center py-16 bg-gray-50">
+      <div className="flex flex-col justify-center py-16 bg-gray-50 dark:bg-gray-900">
         <div className="flex justify-center">
           <div className="flex flex-col p-4 items-center">
-            <h1 className="text-4xl font-semibold text-primary">
+            <h1 className="text-4xl font-semibold text-primary dark:text-white">
               Be our Local Guide in 4 Easy Steps
             </h1>
 
@@ -69,10 +70,10 @@ function GuideHomePage({ setSetup }) {
               (step, index) => (
                 <div
                   key={index}
-                  className="border-2 mt-8 rounded-2xl p-6 h-28 w-[90vw] max-w-xl border-secondary bg-white shadow-md"
+                  className="border-2 mt-8 rounded-2xl p-6 h-28 w-[90vw] max-w-xl border-secondary bg-white shadow-md dark:bg-gray-800 dark:border-gray-700"
                 >
-                  <h2 className="text-2xl font-medium text-primary">{step}</h2>
-                  <span className="text-sm text-gray-600">
+                  <h2 className="text-2xl font-medium text-primary dark:text-white">{step}</h2>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
                     {index === 0
                       ? "Register yourself on our website and create your ID"
                       : `Step ${index + 1} description`}
@@ -85,8 +86,8 @@ function GuideHomePage({ setSetup }) {
       </div>
 
       {/* Reviews Section */}
-      <div className="py-16 bg-gradient-to-b from-white to-gray-100">
-        <h2 className="text-4xl font-semibold text-center text-primary">
+      <div className="py-16 bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-gray-800">
+        <h2 className="text-4xl font-semibold text-center text-primary dark:text-white">
           What Our Guides Say
         </h2>
         <div className="flex flex-wrap justify-center mt-10 space-y-8 md:space-y-0 md:space-x-8">
@@ -112,17 +113,17 @@ function GuideHomePage({ setSetup }) {
           ].map((guide, index) => (
             <div
               key={index}
-              className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full mx-4"
+              className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full mx-4 dark:bg-gray-800"
             >
               <img
                 src={guide.image}
                 alt={guide.name}
                 className="rounded-full w-24 h-24 mx-auto mb-4"
               />
-              <h3 className="text-xl font-medium text-center text-primary">
+              <h3 className="text-xl font-medium text-center text-primary dark:text-white">
                 {guide.name}
               </h3>
-              <p className="text-sm text-gray-600 text-center mt-2">
+              <p className="text-sm text-gray-600 text-center mt-2 dark:text-gray-400">
                 "{guide.review}"
               </p>
             </div>

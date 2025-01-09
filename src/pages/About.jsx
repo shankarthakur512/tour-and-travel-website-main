@@ -1,92 +1,112 @@
 import React from "react";
 import BlogsComp from "../components/Blogs/BlogsComp";
 import Location from "../components/Location/Location";
-
-// Import an image of yourself here
 import founderImage from "../assets/founder.jpg"; // Replace with actual image path
+import { FaUsers, FaMapMarkerAlt, FaBriefcase } from 'react-icons/fa';
 
 const About = () => {
   return (
-    <div className="bg-gray-50 text-gray-800 font-sans">
+    <div className="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 font-sans">
       <div className="container mx-auto py-16 px-6">
-        
-        {/* About Us Section */}
-        <div className="py-16 bg-white rounded-lg shadow-md px-10 mb-16">
-          <h1 className="text-4xl font-extrabold border-b-4 border-primary pb-4 mb-8 text-center text-primary">
-            About Us
-          </h1>
-          <p className="text-lg leading-relaxed">
-            At Travellogo, we are passionate about connecting travelers with local guides and hosts who can provide authentic and unique experiences. Our mission is to make travel more meaningful, personalized, and engaging by offering a platform that brings together people from all walks of life. Whether you're looking for a cultural immersion, an adventurous trek, or a relaxing retreat, we have something for everyone.
-          </p>
-        </div>
 
-        {/* Our Founder Section */}
-        <div className="py-16 bg-primary/10 rounded-lg shadow-md px-10 mb-16 flex flex-col lg:flex-row items-center lg:items-start">
-          <img
-            src={founderImage} // Your image
-            alt="Founder"
-            className="w-56 h-56 rounded-full mb-6 lg:mb-0 lg:mr-10 shadow-lg object-cover border-4 border-white"
-          />
-          <div className="lg:w-3/5">
-            <h2 className="text-3xl font-bold mb-4 text-primary">Meet Our Founder</h2>
-            <h3 className="text-2xl font-semibold mb-2">Shankar</h3>
+        {/* About Us Section */}
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 py-16 mb-16">
+          <div className="space-y-6">
+            <h1 className="text-4xl font-extrabold text-primary border-b-4 border-primary pb-4 mb-4">Our Journey</h1>
             <p className="text-lg leading-relaxed">
-              Hi, I'm Shankar, an engineer with a passion for technology and travel. I founded Travellogo to bridge the gap between local guides and travelers. I believe that the best way to explore a place is through the eyes of a local. With my experience in web development and my love for travel, I have created this platform to offer unique and personalized experiences for everyone.
+              Travellogo started with a simple idea: to connect travelers with locals for authentic experiences. 
+              Over time, we’ve built a community of people who share a passion for meaningful travel.
+              From cultural tours to adventurous trips, our platform brings people together to discover the world.
             </p>
           </div>
-        </div>
+          <img 
+            src={founderImage} 
+            alt="Founder" 
+            className="rounded-lg shadow-md w-full h-auto object-cover"
+          />
+        </section>
 
-        {/* Our Team Section */}
-        <div className="py-16 bg-white rounded-lg shadow-md px-10 mb-16">
-          <h2 className="text-3xl font-bold mb-10 text-center text-primary">Our Team</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-            {/* Example team member card */}
-            {[
-              { name: "John Doe", role: "Marketing Specialist", quote: "Passionate about connecting with people and creating meaningful travel experiences." },
-              { name: "Jane Smith", role: "Product Designer", quote: "I love designing intuitive and beautiful interfaces that our users enjoy." },
-              { name: "Samuel Green", role: "Full Stack Developer", quote: "Building scalable and efficient solutions to bring our vision to life." }
-            ].map((member, index) => (
-              <div key={index} className="bg-primary/5 p-6 rounded-lg shadow-lg text-center hover:shadow-2xl transition-shadow duration-300 ease-in-out">
-                <h3 className="text-xl font-bold mb-2">{member.name}</h3>
-                <p className="text-primary font-semibold">{member.role}</p>
-                <p className="text-gray-600 mt-4 italic">"{member.quote}"</p>
-              </div>
-            ))}
+        {/* Meet the Founder */}
+        <section className="py-16 bg-primary/10 rounded-lg px-10 mb-16 text-center lg:text-left">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            <img
+              src={founderImage}
+              alt="Founder"
+              className="w-56 h-56 rounded-full mb-6 mx-auto lg:mb-0 lg:mx-0 shadow-lg object-cover border-4 border-white"
+            />
+            <div>
+              <h2 className="text-3xl font-bold mb-4 text-primary">Meet Our Founder</h2>
+              <h3 className="text-2xl font-semibold mb-2">Shankar</h3>
+              <p className="text-lg leading-relaxed">
+                Hi, I'm Shankar, an engineer with a passion for technology and travel. 
+                Travellogo is my vision to bridge the gap between local guides and travelers, offering personalized experiences.
+              </p>
+            </div>
           </div>
-        </div>
+        </section>
 
-        {/* About Our Website Section */}
-        <div className="py-16 bg-primary/10 rounded-lg shadow-md px-10 mb-16">
-          <h2 className="text-3xl font-bold mb-6 text-center text-primary">About Our Website</h2>
-          <p className="text-lg leading-relaxed mb-6">
-            Travellogo is a platform designed to make traveling easier and more personal. Whether you are a traveler looking for a local experience or a local wanting to share your culture and knowledge, our platform connects you directly with guides or hosts. Here’s how it works:
-          </p>
-          <ul className="list-disc list-inside text-lg mb-6 space-y-4">
-            <li>
-              <strong>Become a Guide or Host:</strong> Share your knowledge, culture, and favorite spots by becoming a guide. Simply register, complete your profile, and start offering trips.
-            </li>
-            <li>
-              <strong>Book a Trip:</strong> Browse through various experiences offered by local guides. Select the one that suits you, book directly through the platform, and get ready for an adventure.
-            </li>
-            <li>
-              <strong>Interactive Dashboard:</strong> Manage your trips, connect with travelers, and grow your business through our intuitive guide dashboard.
-            </li>
-          </ul>
-          <p className="text-lg leading-relaxed">
-            We strive to create a community of travelers and locals that fosters mutual respect, learning, and unforgettable memories.
-          </p>
-        </div>
+        {/* Our Impact Section */}
+        <section className="py-16 bg-white rounded-lg mb-16 text-center grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div>
+            <FaUsers className="mx-auto text-5xl text-primary mb-4" />
+            <h3 className="text-3xl font-bold">50K+</h3>
+            <p className="text-lg">Users</p>
+          </div>
+          <div>
+            <FaMapMarkerAlt className="mx-auto text-5xl text-primary mb-4" />
+            <h3 className="text-3xl font-bold">5K+</h3>
+            <p className="text-lg">Guides</p>
+          </div>
+          <div>
+            <FaBriefcase className="mx-auto text-5xl text-primary mb-4" />
+            <h3 className="text-3xl font-bold">10K+</h3>
+            <p className="text-lg">Trips Hosted</p>
+          </div>
+        </section>
 
-        {/* Location Component with Improved Styling */}
-        <div className="py-16 bg-white rounded-lg shadow-md px-10 mb-16">
+        {/* Contact Us Section */}
+        <section className="py-16 bg-primary/10 rounded-lg px-10 mb-16">
+          <h2 className="text-3xl font-bold mb-8 text-center text-primary">Get In Touch</h2>
+          <form className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <input
+                type="text"
+                className="p-4 rounded-lg border dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
+                placeholder="Your Name"
+                required
+              />
+              <input
+                type="email"
+                className="p-4 rounded-lg border dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
+                placeholder="Your Email"
+                required
+              />
+            </div>
+            <textarea
+              rows="4"
+              className="w-full p-4 rounded-lg border dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
+              placeholder="Your Message"
+              required
+            ></textarea>
+            <button
+              type="submit"
+              className="w-full bg-primary text-white p-4 rounded-lg hover:bg-secondary transition duration-300"
+            >
+              Send Message
+            </button>
+          </form>
+        </section>
+
+        {/* Our Locations Section */}
+        <section className="py-16 bg-white rounded-lg px-10 mb-16">
           <h2 className="text-3xl font-bold mb-6 text-center text-primary">Our Locations</h2>
           <Location />
-        </div>
+        </section>
 
-        {/* Other Components */}
-        <div className="py-16">
+        {/* Other Sections */}
+        <section className="py-16">
           <BlogsComp />
-        </div>
+        </section>
       </div>
     </div>
   );

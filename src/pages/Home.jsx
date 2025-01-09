@@ -112,22 +112,21 @@ const Home = () => {
           Ai Guide
         </button>
 
-        {/* Chat Interface */}
+       
         {chatOpen && (
-          <div className="fixed bottom-16 right-6 w-[30vw] bg-white shadow-xl rounded-lg p-4 z-50 flex flex-col justify-between h-[60vh]">
+          <div className="fixed bottom-16 right-6 w-[30vw] bg-white shadow-xl dark:bg-slate-800 rounded-lg p-4 z-50 flex flex-col justify-between h-[60vh]">
             <h2 className="flex justify-center text-primary text-lg font-semibold mb-3">
               Your AI Buddy
             </h2>
-            {/* Chat messages section */}
             <div className="flex-grow overflow-y-auto p-2">
               {chatMessages.map((msg, index) => (
                <div className={`flex ${
                 msg.isUser
                   ? "justify-start "
-                  : " justify-end  "
+                  : " justify-end text-black "
               }`}>
                 <span
-                  key={index} // Use index as fallback for unique key
+                  key={index}
                   className={`mb-2 p-2 rounded-lg ${
                     msg.isUser
                       ? "bg-primary justify-start self-start p-3 text-white"
@@ -155,7 +154,7 @@ const Home = () => {
                     if(e.key === "Enter") handleSendMessage();
                   }} 
                 placeholder="Type your question..."
-                className="flex-1 outline-none px-2 py-2"
+                className="flex-1 outline-none px-2 py-2 dark:bg-gray-700 rounded-lg"
               />
               {message ? (
                 <FaPaperPlane

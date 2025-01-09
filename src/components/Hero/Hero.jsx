@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 import { FindTripsByLocation } from "../../Apihandle/Trips";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setTripsArray } from "../../Redux/Tripslice";
 import { findGuideByCity } from "../../Apihandle/LocalGuide";
 import { addSearchedGuide } from "../../Redux/GuideSlice";
@@ -13,29 +13,26 @@ const Hero = () => {
   const [priceValue, setPriceValue] = useState(30);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-const [destination , setDestination] = useState("")
+  const [destination, setDestination] = useState("");
+  const Darkmode = useSelector((state) => state.darkMode.isDarkMode);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-const dispatch = useDispatch();
-const navigate = useNavigate();
-
-const handleSearch = async (e) =>{
-e.preventDefault();
-try {
-const data = await axios.post(FindTripsByLocation , {location : destination})
-const res = await axios.post(findGuideByCity , {city : destination})
-const trips = data.data.trips
-console.log(data.data.trips)
-dispatch(setTripsArray({ trips }))
-// console.log(data);
-// console.log(res);
-const guides = res.data.guides
-dispatch(addSearchedGuide({guides}))
-navigate('/search')
-
-} catch (error) {
-  console.log(error)
-}
-}
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    try {
+      const data = await axios.post(FindTripsByLocation, { location: destination });
+      const res = await axios.post(findGuideByCity, { city: destination });
+      const trips = data.data.trips;
+      console.log(data.data.trips);
+      dispatch(setTripsArray({ trips }));
+      const guides = res.data.guides;
+      dispatch(addSearchedGuide({ guides }));
+      navigate('/search');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="relative h-screen">
@@ -48,9 +45,9 @@ navigate('/search')
         loop
       ></video>
 
-      <div className="h-full flex justify-center items-center p-4 bg-black/40">
+      <div className={`h-full flex justify-center items-center p-4 ${Darkmode ? "bg-black/60" : "bg-black/40"}`}>
         <div className="container grid grid-cols-1 gap-6">
-          <div className="text-white text-center">
+          <div className={`${Darkmode ? "text-gray-300" : "text-white"} text-center`}>
             <p data-aos="fade-up" className="text-sm font-medium uppercase tracking-wider">
               Our Packages
             </p>
@@ -65,28 +62,28 @@ navigate('/search')
           <div
             data-aos="fade-up"
             data-aos-delay="600"
-            className="space-y-6 bg-white bg-opacity-90 rounded-xl shadow-lg p-8 relative"
+            className={`space-y-6 rounded-xl shadow-lg p-8 relative ${Darkmode ? "bg-gray-800" : "bg-white"} ${Darkmode ? "text-gray-200" : "text-gray-800"}`}
           >
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
               {/* Destination Input */}
               <div>
-                <label htmlFor="destination" className="opacity-70 text-gray-600">
+                <label htmlFor="destination" className={`opacity-70 ${Darkmode ? "text-gray-400" : "text-gray-600"}`}>
                   Search Your Destination
                 </label>
                 <input
                   type="text"
                   value={destination}
-                  onChange={(e)=>{setDestination(e.target.value)}}
+                  onChange={(e) => { setDestination(e.target.value) }}
                   name="destination"
                   id="destination"
                   placeholder="Enter your destination"
-                  className="w-full bg-gray-100 my-2 rounded-full p-3 text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className={`w-full my-2 rounded-full p-3 ${Darkmode ? "bg-gray-700 text-gray-300 placeholder-gray-500" : "bg-gray-100 text-gray-700 placeholder-gray-500"} focus:outline-none focus:ring-2 focus:ring-primary`}
                 />
               </div>
 
               {/* Date Pickers */}
               <div>
-                <label htmlFor="startDate" className="opacity-70 text-gray-600">
+                <label htmlFor="startDate" className={`opacity-70 ${Darkmode ? "text-gray-400" : "text-gray-600"}`}>
                   Start Date
                 </label>
                 <DatePicker
@@ -96,12 +93,12 @@ navigate('/search')
                   startDate={startDate}
                   endDate={endDate}
                   placeholderText="Select start date"
-                  className="w-full bg-gray-100 my-2 rounded-full p-3 text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className={`w-full my-2 rounded-full p-3 ${Darkmode ? "bg-gray-700 text-gray-300 placeholder-gray-500" : "bg-gray-100 text-gray-700 placeholder-gray-500"} focus:outline-none focus:ring-2 focus:ring-primary`}
                   minDate={new Date()}
                 />
               </div>
               <div>
-                <label htmlFor="endDate" className="opacity-70 text-gray-600">
+                <label htmlFor="endDate" className={`opacity-70 ${Darkmode ? "text-gray-400" : "text-gray-600"}`}>
                   End Date
                 </label>
                 <DatePicker
@@ -112,13 +109,13 @@ navigate('/search')
                   endDate={endDate}
                   minDate={startDate}
                   placeholderText="Select end date"
-                  className="w-full bg-gray-100 my-2 rounded-full p-3 text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className={`w-full my-2 rounded-full p-3 ${Darkmode ? "bg-gray-700 text-gray-300 placeholder-gray-500" : "bg-gray-100 text-gray-700 placeholder-gray-500"} focus:outline-none focus:ring-2 focus:ring-primary`}
                 />
               </div>
 
               {/* Price Range */}
               <div>
-                <label htmlFor="price" className="opacity-70 text-gray-600">
+                <label htmlFor="price" className={`opacity-70 ${Darkmode ? "text-gray-400" : "text-gray-600"}`}>
                   <div className="w-full flex justify-between items-center">
                     <p>Max Price</p>
                     <p className="font-bold text-xl">$ {priceValue}</p>
@@ -148,8 +145,9 @@ navigate('/search')
             </div>
 
             {/* Search Button */}
-            <button className="bg-gradient-to-r from-teal-500 to-blue-500 text-white hover:scale-105 px-5 py-3 rounded-full duration-200 shadow-md absolute -bottom-6 left-1/2 transform -translate-x-1/2"
-            onClick={handleSearch}
+            <button
+              className={`bg-gradient-to-r from-teal-500 to-blue-500 text-white hover:scale-105 px-5 py-3 rounded-full duration-200 shadow-md absolute -bottom-6 left-1/2 transform -translate-x-1/2 ${Darkmode ? "bg-blue-600" : "bg-blue-500"}`}
+              onClick={handleSearch}
             >
               Search Now
             </button>

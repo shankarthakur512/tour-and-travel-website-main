@@ -21,7 +21,6 @@ const GuidePage = () => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const { guideId } = useParams();
 
-  // Mock online status (replace with real-time logic later)
   useEffect(() => {
     const onlineStatus = Math.random() > 0.5;
     setIsOnline(onlineStatus);
@@ -41,16 +40,12 @@ const GuidePage = () => {
     getGuideData();
   }, [guideId]);
 
-  // Toggle Dark Mode
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
-  // Function to handle chat start
   const handleChatStart = () => setChatStarted(true);
 
-  // Handle date selection
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    // Generate time slots from 8 AM to 7 PM (with 1-hour slots)
     const slots = [];
     for (let i = 8; i <= 18; i++) {
       slots.push(`${i}:00`);
@@ -58,22 +53,17 @@ const GuidePage = () => {
     setTimeSlots(slots);
   };
 
-  // Handle slot selection
-  const handleSlotClick = (slot) => {
-    setSelectedSlot(slot);
-  };
+  const handleSlotClick = (slot) => setSelectedSlot(slot);
 
-  // Handle modal close
   const closeModal = () => setShowBooking(false);
 
-  // Render Booking Modal
   const renderBookingModal = () => {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-lg w-11/12 md:w-2/3 lg:w-1/3 p-6">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
+        <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-lg w-11/12 md:w-2/3 lg:w-1/3 p-6 transition-all duration-300">
           <button
             onClick={closeModal}
-            className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300">
+            className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 transition duration-300">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -81,7 +71,6 @@ const GuidePage = () => {
 
           <h2 className="text-lg font-semibold mb-4 text-primary dark:text-gray-200">Book a Call</h2>
 
-          {/* DatePicker Component */}
           <div className="mb-4">
             <label className="block mb-2 dark:text-gray-200">Select Date:</label>
             <DatePicker
@@ -93,7 +82,6 @@ const GuidePage = () => {
             />
           </div>
 
-          {/* Time Slots */}
           {selectedDate && (
             <>
               <label className="block mb-2 dark:text-gray-200">Available Slots:</label>
@@ -110,12 +98,10 @@ const GuidePage = () => {
             </>
           )}
 
-          {/* Show selected time and Save button */}
           {selectedSlot && (
             <div className="mt-4">
               <p className="mb-2 dark:text-gray-200">Selected Time Slot: {selectedSlot}</p>
-              <button
-                className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-300">
+              <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-300">
                 Confirm and Save
               </button>
             </div>
@@ -127,37 +113,34 @@ const GuidePage = () => {
 
   return (
     <div className={`${darkMode ? 'dark' : ''} h-full transition-all duration-300 dark:bg-gray-900`}>
-      {/* Chat Component */}
       {chatStarted && <ChatComponent darkMode={darkMode} setChatStarted={setChatStarted} />}
 
       <div className='p-6 dark:bg-gray-900'>
         <div className='flex justify-between items-center mb-6'>
-          <h1 className='text-2xl font-semibold text-primary dark:text-white'>Guide Details</h1>
+          <h1 className='text-3xl font-bold text-primary dark:text-white'>Guide Details</h1>
           <button 
-            className='border px-4 py-2 rounded-lg hover:bg-secondary hover:text-white dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'
+            className='border px-4 py-2 rounded-lg hover:bg-secondary hover:text-white dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors duration-300'
             onClick={toggleDarkMode}>
             Toggle Dark Mode
           </button>
         </div>
 
-        {/* Guide Information and Image */}
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-6 shadow-2xl p-6 rounded-lg dark:bg-gray-800 dark:text-gray-100'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-8 shadow-2xl p-6 rounded-lg dark:bg-gray-800 dark:text-gray-100'>
           <div className='flex justify-center'>
             <img 
               src={guideData?.picture || guideData?.userDetails?.avatar || 'default_avatar.jpg'} 
               alt='Profile_pic' 
               loading='lazy' 
-              className='rounded-lg w-full h-auto max-w-sm' 
+              className='rounded-lg w-full h-auto max-w-sm transition-transform duration-300 hover:scale-105' 
             />
           </div>
           <section>
-            <h1 className='text-xl font-semibold text-primary dark:text-gray-100'>About :</h1>
-            <p className='p-3 text-justify text-base dark:text-gray-300'>
+            <h1 className='text-xl font-semibold text-primary dark:text-gray-100 mb-4'>About :</h1>
+            <p className='text-justify text-base dark:text-gray-300'>
               {guideData?.aboutYourself || 'Guide information not available.'}
             </p>
 
-            {/* Guide Details Section */}
-            <div className='mt-6 text-base p-4 bg-white rounded-lg shadow-md dark:bg-gray-700'>
+            <div className='mt-6 p-4 bg-white rounded-lg shadow-md dark:bg-gray-700'>
               <h2 className='text-lg text-primary font-semibold mb-3 dark:text-gray-200'>Guide Details</h2>
               <div className='space-y-2'>
                 <p><strong className='text-secondary'>Name:</strong> {guideData?.userDetails?.fullname || 'Not provided'}</p>
@@ -165,7 +148,6 @@ const GuidePage = () => {
                 <p><strong>Native Place:</strong> {guideData?.native || 'Not provided'}</p>
                 <p><strong>Languages Known:</strong> {guideData?.languages?.join(', ') || 'Not provided'}</p>
 
-                {/* Online/Offline Status */}
                 <p className='flex items-center'>
                   <strong>Status:</strong>
                   <span className={`ml-2 font-semibold ${isOnline ? 'text-green-500' : 'text-red-500'}`}>
@@ -173,7 +155,6 @@ const GuidePage = () => {
                   </span>
                 </p>
 
-                {/* Rating Section */}
                 <div className='flex items-center gap-2'>
                   <strong>Rating:</strong> 
                   <div className='flex'>
@@ -188,8 +169,7 @@ const GuidePage = () => {
                 </div>
               </div>
 
-              {/* Booking and Chat Buttons */}
-              <div className='flex gap-3 mt-4'>
+              <div className='flex gap-4 mt-6'>
                 <button
                   className='px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600 transition duration-300'
                   onClick={() => setShowBooking(true)}>
@@ -206,10 +186,8 @@ const GuidePage = () => {
         </div>
       </div>
 
-      {/* Booking Modal */}
       {showBooking && renderBookingModal()}
 
-      {/* Testimonials Section */}
       <Testimonial />
     </div>
   );

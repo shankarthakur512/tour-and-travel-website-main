@@ -24,25 +24,24 @@ const FooterLinks = [
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-gray-50 text-black py-10 relative">
+    <footer className="w-full bg-gray-50 dark:bg-gray-900 dark:text-gray-300 text-black py-10 relative transition-colors duration-300">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-5 lg:px-0">
         {/* Left Section */}
         <div>
           <h1 className="flex items-center gap-3 text-2xl sm:text-3xl font-bold">
             <img src={FooterLogo} alt="Logo" className="max-h-[60px]" />
-           
           </h1>
-          <p className="text-sm mt-4 text-black">
+          <p className="text-sm mt-4 text-black dark:text-gray-400">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde
             facere ab hic accusamus omnis dolor voluptatibus illo, tempore eum
             tenetur.
           </p>
           <div className="mt-6">
-            <div className="flex items-center gap-3 text-black">
+            <div className="flex items-center gap-3 text-black dark:text-gray-400">
               <FaLocationArrow />
               <p>Madhubani, Bihar</p>
             </div>
-            <div className="flex items-center gap-3 mt-3 text-black">
+            <div className="flex items-center gap-3 mt-3 text-black dark:text-gray-400">
               <FaMobileAlt />
               <p>+91 123456789</p>
             </div>
@@ -64,7 +63,7 @@ const Footer = () => {
         <div className="md:col-span-2 grid grid-cols-2 sm:grid-cols-3 gap-8">
           <div>
             <h1 className="text-lg font-semibold mb-4">Tours</h1>
-            <ul className="flex flex-col gap-3 text-black">
+            <ul className="flex flex-col gap-3 text-black dark:text-gray-300">
               {FooterLinks.map((link) => (
                 <li key={link.title} className="hover:text-primary">
                   <Link to={link.link} onClick={() => window.scrollTo(0, 0)}>
@@ -77,7 +76,7 @@ const Footer = () => {
 
           <div>
             <h1 className="text-lg font-semibold mb-4">Features</h1>
-            <ul className="flex flex-col gap-3 text-black">
+            <ul className="flex flex-col gap-3 text-black dark:text-gray-300">
               {FooterLinks.map((link) => (
                 <li key={link.title} className="hover:text-primary">
                   <Link to={link.link} onClick={() => window.scrollTo(0, 0)}>
@@ -90,7 +89,7 @@ const Footer = () => {
 
           <div>
             <h1 className="text-lg font-semibold mb-4">Support</h1>
-            <ul className="flex flex-col gap-3 text-black">
+            <ul className="flex flex-col gap-3 text-black dark:text-gray-300">
               {FooterLinks.map((link) => (
                 <li key={link.title} className="hover:text-primary">
                   <Link to={link.link} onClick={() => window.scrollTo(0, 0)}>
@@ -104,7 +103,7 @@ const Footer = () => {
       </div>
 
       <div className="mt-8 bg-primary text-center py-4">
-        <p className="text-black">© 2024 All rights reserved || TravelloGo</p>
+        <p className="text-black dark:text-white">© 2024 All rights reserved || TravelloGo</p>
       </div>
     </footer>
   );

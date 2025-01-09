@@ -5,11 +5,11 @@ import { tripReducer, tripsArrayReducer } from './Tripslice';
 import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
 import { persistReducer, persistStore } from 'redux-persist';
 import { combineReducers } from 'redux';
-
+import darkModeReducer from './Darkmode.js'
 const persistConfig = {
   key: 'root',
   storage, 
-  whitelist: ['auth', 'Guide'], 
+  whitelist: ['auth', "Guide"], 
 };
 
 const rootReducer = combineReducers({
@@ -18,6 +18,7 @@ const rootReducer = combineReducers({
   searchedGuides: searchedGuidesReducer,
   Trips: tripReducer,
   TripsArray: tripsArrayReducer,
+  darkMode: darkModeReducer,
 });
 
 

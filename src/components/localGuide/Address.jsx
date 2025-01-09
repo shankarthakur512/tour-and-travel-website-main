@@ -2,10 +2,7 @@ import React, { useState, useEffect } from "react";
 import GoogleMap from "../GoogleMap/GoogleMap";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import GuideHomePage from "./GuideHomePage";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { addGuide } from "../../Redux/GuideSlice";
 
 const MAP_API_KEY = "AIzaSyA98Ne9CIOFbqeXZ_hbxhWkIUMDX1r4T6k";
 const CSC_API_KEY = "SVRwWk9YS1luWUxsc1RGa3ZiS212TlFTeGU2bm16NUVvSWVWZ29HRw==";
@@ -16,40 +13,56 @@ const axiosInstance = axios.create({
   },
 });
 
-function Address({ setVerifyAddress,setGuideAddress}) {
+function Address({ setVerifyAddress, setGuideAddress }) {
   const [setUp, setSetUp] = useState(false);
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [country, setCountry] = useState([]);
   const [cities, setCities] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState("");
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm();
-const dispatch = useDispatch();
+  const { register, handleSubmit, setValue } = useForm();
+
   const handleForm = (data) => {
-    console.log(data);
-   setGuideAddress({...data})
-   setVerifyAddress(false);
- };
+    setGuideAddress({ ...data });
+    setVerifyAddress(false);
+  };
 
+  // Fetch countries
   useEffect(() => {
-    const fetchCountriesAndCities = async () => {
+    const fetchCountries = async () => {
       try {
-        const countryResponse = await axiosInstance.get(
-          "https://api.countrystatecity.in/v1/countries"
-        );
-        setCountry(countryResponse.data);
-
-        const cityResponse = await axiosInstance.get(
-          "https://api.countrystatecity.in/v1/countries/IN/states/MH/cities"
-        );
-        setCities(cityResponse.data);
+        const response = await axiosInstance.get("https://api.countrystatecity.in/v1/countries");
+        setCountry(response.data);
       } catch (error) {
         console.error(error);
       }
     };
-
-    fetchCountriesAndCities();
+    fetchCountries();
   }, []);
+
+  // Fetch cities based on selected country
+  const fetchCities = async (countryCode) => {
+    try {
+      const response = await axiosInstance.get(`https://api.countrystatecity.in/v1/countries/${countryCode}/cities`);
+      setCities(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedCountry) {
+      fetchCities(selectedCountry);
+    }
+  }, [selectedCountry]);
+
+  // Handle custom dropdown change for country
+  const handleCountryChange = (e) => {
+    const countryCode = e.target.value;
+    setSelectedCountry(countryCode);
+    setValue("country", countryCode);  // Update form country value
+  };
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -80,19 +93,32 @@ const dispatch = useDispatch();
         </h1>
         <form onSubmit={handleSubmit(handleForm)} className="flex flex-col items-center w-full lg:w-[70vw] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-5 w-full">
+            {/* Country Dropdown */}
             <div className="flex flex-col gap-2">
               <label className="text-lg font-medium">Country</label>
-              <select {...register("country")} className="h-10 border p-2 rounded">
+              <select
+                {...register("country")}
+                className="h-10 border p-2 rounded bg-slate-100"
+                onChange={handleCountryChange}
+              >
+                <option value="" disabled selected>
+                  Select Country
+                </option>
                 {country.map((country) => (
-                  <option key={country.id} value={country.name} className="bg-slate-200">
+                  <option key={country.iso2} value={country.iso2} className="bg-slate-200">
                     {country.name}
                   </option>
                 ))}
               </select>
             </div>
+
+            {/* City Dropdown */}
             <div className="flex flex-col gap-2">
               <label className="text-lg font-medium">City</label>
-              <select {...register("city")} className="h-10 border p-2 rounded">
+              <select {...register("city")} className="h-10 border p-2 rounded bg-slate-100">
+                <option value="" disabled selected>
+                  Select City
+                </option>
                 {cities.map((city) => (
                   <option key={city.id} value={city.name} className="bg-slate-200">
                     {city.name}
@@ -101,6 +127,8 @@ const dispatch = useDispatch();
               </select>
             </div>
           </div>
+
+          {/* Other Address Fields */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-5 w-full">
             <div className="flex flex-col gap-2">
               <label className="text-lg font-medium">House No/Street</label>
@@ -120,10 +148,11 @@ const dispatch = useDispatch();
               />
             </div>
           </div>
+
+          {/* Submit Button */}
           <button
             className="bg-gradient-to-r mt-4 from-primary to-secondary hover:from-secondary hover:to-primary transition-all duration-600 text-white h-12 px-3 py-1 w-full lg:w-[30vw] rounded-full"
             type="submit"
-            
           >
             Submit
           </button>

@@ -19,30 +19,30 @@ function AuthForm() {
   const navigate = useNavigate();
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
 
-const auth = getAuth();
+// const auth = getAuth();
 
-useEffect(() => {
-  const auth = getAuth();
+// useEffect(() => {
+//   const auth = getAuth();
 
-  const unsubscribe = onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      const email = user.email;
+//   const unsubscribe = onAuthStateChanged(auth, async (user) => {
+//     if (user) {
+//       const email = user.email;
 
-      if (email) {
-        const { data } = await axios.post(CheckUser, { email });
-        if (data) {
-          dispatch(login({ userData: data.data }));
+//       if (email) {
+//         const { data } = await axios.post(CheckUser, { email });
+//         if (data.success) {
+//           console.log(data)
+//           dispatch(login({ userData: data.data }));
 
-          const previousRoute = location.state?.from || '/';
-          navigate(previousRoute);  
-        }
-      }
-    }
-  });
+//           const previousRoute = location.state?.from || '/';
+//           navigate(previousRoute);  
+//         }
+//       }
+//     }
+//   });
 
-  // Cleanup subscription on component unmount
-  return () => unsubscribe();
-}, [auth, dispatch, location, navigate]);
+//   return () => unsubscribe();
+// }, [auth, dispatch, location, navigate]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -112,11 +112,11 @@ useEffect(() => {
             <Link to="/" className="flex items-center gap-4 text-2xl font-bold">
               <img src={Logo} alt="Logo" className="h-12" />
             </Link>
-            <button
+            <Link to="/signup"
               className="bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary transition-all duration-600 text-white px-6 py-2 rounded-full"
             >
               Sign Up
-            </button>
+            </Link>
           </div>
         </div>
       </nav>

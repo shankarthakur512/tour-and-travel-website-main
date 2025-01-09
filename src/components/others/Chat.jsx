@@ -35,9 +35,9 @@ const ChatComponent = ({ darkMode, setChatStarted }) => {
         <h2 className='text-lg font-semibold'>
           {darkMode ? 'Dark Mode Chat' : 'Chat with your Guide'}
         </h2>
-        <div className={`text-sm px-2 py-1 rounded-full ${darkMode ? 'bg-gray-700 text-white' : 'bg-primary text-white'}`}>
+        {/* <div className={`text-sm px-2 py-1 rounded-full ${darkMode ? 'bg-gray-700 text-white' : 'bg-primary text-white'}`}>
           Time Left: {formatTime(timeLeft)}
-        </div>
+        </div> */}
         <IoClose
           size={24}
           onClick={() => {

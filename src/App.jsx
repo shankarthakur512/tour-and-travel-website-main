@@ -18,6 +18,7 @@ import AuthForm from "./components/Authentication/Authform";
 import Search from "./pages/Search";
 import TourPage from "./pages/TourPage.jsx";
 import PaymentPage from "./pages/PaymentcheckoutForm.JSX";
+import SignUp from "./components/Authentication/Signup.jsx";
 
 const App = () => {
   React.useEffect(() => {
@@ -41,6 +42,7 @@ const App = () => {
             <Route path="about" element={<About />} />
             <Route path="*" element={<NoPage />} />
           </Route>
+          <Route path="/Signup" element={<SignUp />} />
           <Route path="/login" element={<AuthForm />} />
           <Route path="/dashboard" element={<GuideDashboard />} />
           <Route path="/tourPackage" element={<TourPackageCreation />} />
