@@ -103,7 +103,7 @@ const Footer = () => {
       </div>
 
       <div className="mt-8 bg-primary text-center py-4">
-        <p className="text-black dark:text-white">© 2024 All rights reserved || TravelloGo</p>
+        <p className="text-black dark:text-white">© 2026 All rights reserved || TravelloGo</p>
       </div>
     </footer>
   );

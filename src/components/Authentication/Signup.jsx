@@ -53,7 +53,6 @@ function SignUp() {
         });
         return navigate('/login');
       }
-
       // Prepare form data for signup
       const formData = new FormData();
       formData.append('avatar', avatar);
@@ -202,7 +201,7 @@ function SignUp() {
           <span>IP Rights</span>
         </div>
         <div className="mt-4">
-          &copy; 2024 All rights reserved.
+          &copy; 2026 All rights reserved.
         </div>
       </footer>
     </>

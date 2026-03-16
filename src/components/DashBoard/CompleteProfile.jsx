@@ -47,10 +47,6 @@ function CompleteProfile ({setProfileComp , GuideData ,setGuideData }) {
           </div>
        
         ) : <CapturePhoto  setImage={setImage} setShowCaptureImage={setShowCaptureImage} setImageCaptured ={setImageCaptured}/>}
-      
-   
-    
-
       </div>
     )
 }

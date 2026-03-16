@@ -51,7 +51,7 @@ const Home = () => {
     try {
       // Make the API call to Gemini
       const response = await axios.post(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyAy2hPGLQOIctPri4vVd421BEg9krez08w`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyAhfu1ColdszhaVGqMs974LB3IUEHK_z38`,
         {
           contents: [{ parts: [{ text: message }] }],
         },

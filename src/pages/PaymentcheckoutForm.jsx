@@ -30,7 +30,7 @@ const PaymentPage = () => {
     const cardElement = elements.getElement(CardElement);
 
     try {
-      const response = await fetch(`/create-payment-intent`, {
+      const response = await fetch(`http://localhost:4001/create-payment-intent`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: finalCost * 100 }), // Amount in cents

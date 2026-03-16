@@ -174,6 +174,8 @@ const GuideDashboard = () => {
         !verification ? (
           profileComp ? (
             <CompleteProfile setProfileComp={setProfileComp} setGuideData={setGuideData} />
+
+            
           ) : (
             <>
               <div className="flex   md:flex-row p-5 ">

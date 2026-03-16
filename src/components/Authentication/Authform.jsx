@@ -208,7 +208,7 @@ function AuthForm() {
        
        
        <div className="text-center py-5   bg-primary text-white">
-              @copyright 2024 All rights reserved || 
+              @copyright 2026 All rights reserved || 
             </div>
       </footer>
     </>

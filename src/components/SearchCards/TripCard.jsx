@@ -3,13 +3,15 @@ import { FaCalendarAlt, FaDollarSign } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 function TripCard({ trip }) {
+ 
   const tripStartDate = new Date(trip.startingDate);
   const currentDate = new Date();
   const navigate = useNavigate();
   
-  if (tripStartDate <= currentDate) return null;
- console.log(trip)
+  // if (tripStartDate <= currentDate) return null;
+//  console.log(trip)
   return (
+   
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105" onClick={(e)=>{
       navigate(`/search/tour/${trip._id}`)
     }}>
