@@ -1,23 +1,21 @@
-import React from 'react';
+import React from "react";
+
+import { GUIDE_GUIDELINES } from "../../features/guides/constants/dashboardContent";
 
 const Guidelines = () => {
-  const guidelines = [
-    "Ensure timely arrival for all scheduled trips.",
-    "Maintain professionalism and courteous behavior at all times.",
-    "Provide accurate and detailed information about the destinations.",
-    "Prioritize the safety and well-being of all participants.",
-    "Be prepared for any emergencies and have necessary contact information.",
-    "Keep communication open with participants and address any concerns promptly.",
-  ];
-
   return (
-    <div className="bg-white p-5 rounded-md shadow-md mt-5">
-      <h2 className="text-2xl font-serif mb-4">Guidelines for Local Guides</h2>
-      <ul className="list-disc pl-5 space-y-2">
-        {guidelines.map((guideline, index) => (
-          <li key={index} className="text-gray-700 text-sm">{guideline}</li>
-        ))}
-      </ul>
+    <div className="grid gap-4">
+      {GUIDE_GUIDELINES.map((guideline, index) => (
+        <div
+          key={guideline}
+          className="rounded-[24px] border border-sand-dark/70 bg-sand/40 p-5 shadow-sm dark:border-white/10 dark:bg-white/5"
+        >
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">
+            Guideline {index + 1}
+          </p>
+          <p className="mt-3 text-sm leading-7 text-slate dark:text-sand/75">{guideline}</p>
+        </div>
+      ))}
     </div>
   );
 };

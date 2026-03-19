@@ -2,15 +2,20 @@ import React, { useState } from "react";
 import axios from "axios";
 import { IoCloseOutline } from "react-icons/io5";
 import { FaApple, FaGoogle } from "react-icons/fa";
-import { Bounce, Slide, ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { FcGoogle } from "react-icons/fc";
-import { CheckUser, registerUser } from "../../Apihandle/user";
+import { CheckUser, registerUser } from "../../../Apihandle/user";
 import { useNavigate } from "react-router-dom";
 import { GoogleAuthProvider , signInWithPopup } from "firebase/auth";
-import { firebaseAuth } from "../../firebase/firebaseconf";
+import { firebaseAuth } from "../../../firebase/firebaseconf";
 import { useDispatch } from "react-redux";
-import { login } from "../../Redux/authslice";
+import { login } from "../../../Redux/authslice";
+import { APP_ROUTES } from "../../../shared/constants/routes";
+import { AUTH_STRINGS } from "../constants/authStrings";
+import { createLogger } from "../../../shared/lib/logger";
+import { getErrorMessage } from "../../../shared/lib/error";
+import { toastService } from "../../../shared/services/toast";
+
+const registerModalLogger = createLogger("register-user-modal");
 
 function SignUp ({signUpPopup ,setSignUpPopup}){
 
@@ -38,20 +43,10 @@ function SignUp ({signUpPopup ,setSignUpPopup}){
           res = data;
       }
       if(res.statusCode === 200){
-          toast("Email is Already exist", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-          });
-          Navigate('/login')
+          toastService.error(AUTH_STRINGS.emailAlreadyExists);
+          Navigate(APP_ROUTES.login)
       } else {
-        Navigate('/signup')
+        Navigate(APP_ROUTES.signup)
           
       }
   }
@@ -74,7 +69,7 @@ function SignUp ({signUpPopup ,setSignUpPopup}){
       if (email) {
           const {data} = await axios.post(CheckUser,{email});
           if(!data.success){
-            Navigate('/signup')
+            Navigate(APP_ROUTES.signup)
              
           } else {
               dispatch(login({userData  : data.data}));
@@ -82,7 +77,8 @@ function SignUp ({signUpPopup ,setSignUpPopup}){
           }
       } 
     } catch(error) {
-      console.log(error);
+      registerModalLogger.error("Google sign up failed", error);
+      toastService.error(getErrorMessage(error, AUTH_STRINGS.genericAuthError));
     }
   }
 
@@ -193,19 +189,6 @@ function SignUp ({signUpPopup ,setSignUpPopup}){
                 </div>
               )}
             </div>
-            <ToastContainer  
-                     position="bottom-right"
-                     autoClose={5000}
-                     hideProgressBar={false}
-                     newestOnTop={false}
-                     closeOnClick
-                     rtl={false}
-                     pauseOnFocusLoss
-                     draggable
-                     pauseOnHover
-                     theme="light"
-                     transition={Bounce}
-                    />
           </div>
       )}
       </>

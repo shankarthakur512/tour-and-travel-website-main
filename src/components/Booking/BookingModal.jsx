@@ -1,191 +1,214 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { APP_ROUTES } from "../../shared/constants/routes";
+import { formatCurrency } from "../../shared/lib/format";
+import { BOOKING_MODAL_COPY } from "../../features/trips/constants/content";
 
-const BookingModal = ({ onClose, tripData, navigateToPayment }) => {
+const TravelerField = ({ label, type = "text", value, onChange }) => (
+  <label className="grid gap-2">
+    <span className="text-sm font-medium text-slate dark:text-sand">{label}</span>
+    <input
+      type={type}
+      value={value}
+      onChange={onChange}
+      className="w-full rounded-2xl border border-sand-dark bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-forest/40 dark:border-white/10 dark:bg-[#101714] dark:text-cream"
+      required
+    />
+  </label>
+);
+
+const BookingModal = ({ onClose, tripData }) => {
   const [personDetails, setPersonDetails] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [currentPerson, setCurrentPerson] = useState({ name: '', govtId: '', age: '' });
-  const [totalPersons, setTotalPersons] = useState(0);
-
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [currentPerson, setCurrentPerson] = useState({ name: "", govtId: "", age: "" });
   const navigate = useNavigate();
 
+  const totalPersons = personDetails.length;
+  const totalCost = tripData.price * totalPersons;
+  const discount = totalCost * 0.1;
+  const finalCost = totalCost - discount;
+  const totalPayable = finalCost * 1.1;
+
+  const summaryRows = useMemo(
+    () => [
+      { label: BOOKING_MODAL_COPY.basePrice, value: formatCurrency(tripData.price) },
+      { label: BOOKING_MODAL_COPY.totalTravelers, value: totalPersons },
+      { label: BOOKING_MODAL_COPY.totalBeforeDiscount, value: formatCurrency(totalCost) },
+      { label: BOOKING_MODAL_COPY.discount, value: `-${formatCurrency(discount)}` },
+      { label: BOOKING_MODAL_COPY.gst, value: formatCurrency(finalCost * 0.1) },
+    ],
+    [discount, finalCost, totalCost, totalPersons, tripData.price]
+  );
 
   const handlePersonDetailChange = (field, value) => {
-    setCurrentPerson({
-      ...currentPerson,
+    setCurrentPerson((current) => ({
+      ...current,
       [field]: value,
-    });
+    }));
   };
 
   const handleSavePerson = () => {
-    setPersonDetails([...personDetails, currentPerson]);
-    setCurrentPerson({ name: '', govtId: '', age: '' });
-    setTotalPersons(totalPersons + 1);
-    setIsPopupOpen(false); 
+    setPersonDetails((current) => [...current, currentPerson]);
+    setCurrentPerson({ name: "", govtId: "", age: "" });
+    setIsPopupOpen(false);
   };
 
-  const totalCost = tripData.price * totalPersons;
-  const discount = totalCost * 0.10; // 10% discount
-  const finalCost = totalCost - discount;
-
-  // Handle booking submission
   const handleBooking = () => {
-    navigate('/payment', {
-        state: { personDetails, totalCost, finalCost }, 
-      });
+    if (!acceptedTerms) {
+      return;
+    }
+
+    navigate(APP_ROUTES.payment, {
+      state: { personDetails, totalCost, finalCost },
+    });
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 overflow-y-auto bg-gray-800 bg-opacity-90 flex justify-center items-center z-50">
-      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl w-4/5 max-w-4xl h-auto flex flex-col relative p-6">
-        
-        {/* Close Button */}
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-600 z-50 dark:text-gray-400 text-2xl font-bold">×</button>
-        
-        {/* Modal Header */}
-        <div className="mb-6 bg-gradient-to-r from-primary to-secondary opacity-95 text-white px-10 py-5 rounded-lg">
-          <h3 className="text-xl">Review Your Package</h3>
-          <h2 className="text-3xl mt-2 font-extrabold">
-            {tripData.tripName} - Book your amazing trip
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-ink/70 px-4 backdrop-blur-sm">
+      <div className="surface-panel relative flex w-full max-w-6xl flex-col p-6 dark:border-white/10 dark:bg-[#18211E] sm:p-8">
+        <button
+          onClick={onClose}
+          className="absolute right-5 top-5 z-50 text-2xl font-bold text-mist transition hover:text-ink dark:hover:text-cream"
+        >
+          ×
+        </button>
+
+        <div className="mb-6 rounded-[28px] bg-[linear-gradient(130deg,#1A3530_0%,#2C4A3E_52%,#3D6B5A_100%)] px-8 py-8 text-cream">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gold">
+            {BOOKING_MODAL_COPY.reviewTitle}
+          </p>
+          <h2 className="mt-3 text-4xl font-semibold">
+            {tripData.tripName}
           </h2>
-          <p className="text-sm">
-            {tripData.duration} nights - Price per person: ${tripData.price}
+          <p className="mt-3 text-sm text-sand/75">
+            {tripData.duration} nights - {BOOKING_MODAL_COPY.basePrice}: {formatCurrency(tripData.price)}
           </p>
         </div>
 
-        <div className="mb-4 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
-          <h2 className='text-blue-600'>Important Instruction</h2>
-          <p>Please enter details for each traveler. All fields are mandatory.</p>
+        <div className="mb-6 rounded-[24px] border border-sand-dark bg-sand/30 p-5 dark:border-white/10 dark:bg-white/5">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-clay">
+            {BOOKING_MODAL_COPY.instructionTitle}
+          </h3>
+          <p className="mt-3 text-sm leading-7 text-slate dark:text-sand/70">
+            {BOOKING_MODAL_COPY.instructionBody}
+          </p>
         </div>
 
-        <div className="grid grid-cols-3 gap-5">
-          <div className="col-span-2">
+        <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+          <div>
             <button
-              className="w-full py-3 bg-gradient-to-r  from-primary to-secondary text-white font-semibold rounded-lg shadow-md mb-4"
+              className="brand-button mb-5 w-full rounded-full"
               onClick={() => setIsPopupOpen(true)}
             >
-              Add Traveller
+              {BOOKING_MODAL_COPY.addTraveler}
             </button>
 
-            {/* Travellers List */}
-            <div className="mb-6 flex gap-4 overflow-x-auto">
+            <div className="mb-6 grid gap-4 md:grid-cols-2">
               {personDetails.map((person, index) => (
-                <div key={index} className="p-4 bg-white dark:bg-gray-800 border-l-4 border-primary rounded-lg">
-                  <h3 className="font-semibold text-lg text-gray-800 dark:text-white mb-2">Traveller {index + 1}</h3>
-                  <p><strong>Name:</strong> {person.name}</p>
-                  <p><strong>Government ID:</strong> {person.govtId}</p>
-                  <p><strong>Age:</strong> {person.age}</p>
+                <div
+                  key={`${person.name}-${index}`}
+                  className="rounded-[24px] border border-sand-dark bg-warm-white p-5 dark:border-white/10 dark:bg-white/5"
+                >
+                  <h3 className="mb-3 text-lg font-semibold text-forest dark:text-cream">
+                    Traveller {index + 1}
+                  </h3>
+                  <div className="space-y-1 text-sm text-slate dark:text-sand/70">
+                    <p><strong>{BOOKING_MODAL_COPY.name}:</strong> {person.name}</p>
+                    <p><strong>{BOOKING_MODAL_COPY.governmentId}:</strong> {person.govtId}</p>
+                    <p><strong>{BOOKING_MODAL_COPY.age}:</strong> {person.age}</p>
+                  </div>
                 </div>
               ))}
             </div>
 
-            {/* Proceed to Payment Button */}
             <button
-              className="w-full py-3 bg-gradient-to-r to-pink-500 from-indigo-600 text-white font-semibold rounded-lg shadow-md"
+              className="brand-button w-full rounded-full"
               onClick={handleBooking}
+              disabled={!personDetails.length || !acceptedTerms}
             >
-              Proceed to Payment
+              {BOOKING_MODAL_COPY.proceed}
             </button>
           </div>
 
-          {/* Price Summary */}
-          <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md">
-  <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Price Summary</h2>
+          <aside className="rounded-[28px] border border-sand-dark bg-sand/30 p-6 dark:border-white/10 dark:bg-white/5">
+            <h2 className="text-2xl font-semibold text-forest dark:text-cream">
+              {BOOKING_MODAL_COPY.priceSummary}
+            </h2>
 
-  {/* Price Breakdown */}
-  <div className="border-b pb-4 mb-4">
-    <div className="flex justify-between">
-      <p className="text-gray-600 dark:text-gray-300">Base Price (per person):</p>
-      <p className="text-gray-800 dark:text-white">${tripData.price}</p>
-    </div>
-    <div className="flex justify-between">
-      <p className="text-gray-600 dark:text-gray-300">Total Travelers:</p>
-      <p className="text-gray-800 dark:text-white">{totalPersons}</p>
-    </div>
-    <div className="flex justify-between">
-      <p className="text-gray-600 dark:text-gray-300">Total Price (before discount):</p>
-      <p className="text-gray-800 dark:text-white">${totalCost}</p>
-    </div>
-    <div className="flex justify-between">
-      <p className="text-gray-600 dark:text-gray-300">Discount (10%):</p>
-      <p className="text-green-500">-${discount}</p>
-    </div>
-    <div className="flex justify-between">
-      <p className="text-gray-600 dark:text-gray-300">GST (10%):</p>
-      <p className="text-gray-800 dark:text-white">${(finalCost * 0.1).toFixed(2)}</p>
-    </div>
-  </div>
+            <div className="mt-6 space-y-4 border-b border-sand-dark pb-6 dark:border-white/10">
+              {summaryRows.map(({ label, value }) => (
+                <div key={label} className="flex justify-between gap-4 text-sm">
+                  <span className="text-slate dark:text-sand/70">{label}</span>
+                  <span className="font-semibold text-forest dark:text-cream">{value}</span>
+                </div>
+              ))}
+            </div>
 
-  {/* Final Amount */}
-  <div className="flex justify-between text-lg font-semibold">
-    <p className="text-gray-900 dark:text-white">Total Payable:</p>
-    <p className="text-gray-900 dark:text-white">${(finalCost * 1.1).toFixed(2)}</p>
-  </div>
+            <div className="mt-6 flex justify-between text-lg font-semibold text-forest dark:text-cream">
+              <p>{BOOKING_MODAL_COPY.totalPayable}</p>
+              <p>{formatCurrency(totalPayable)}</p>
+            </div>
 
-  {/* Terms and Conditions */}
-  <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-    <input type="checkbox" id="terms" className="mr-2" />
-    <label htmlFor="terms">
-      I agree to the <span className="text-blue-500 cursor-pointer">Terms and Conditions</span>.
-    </label>
-  </div>
-</div>
-
+            <label className="mt-6 inline-flex items-center gap-3 text-sm text-slate dark:text-sand/70">
+              <input
+                type="checkbox"
+                id="terms"
+                className="h-5 w-5 rounded border-sand-dark text-forest"
+                checked={acceptedTerms}
+                onChange={(event) => setAcceptedTerms(event.target.checked)}
+              />
+              <span>
+                I agree to the{" "}
+                <span className="cursor-pointer font-semibold text-forest dark:text-sand">
+                  {BOOKING_MODAL_COPY.terms}
+                </span>
+                .
+              </span>
+            </label>
+          </aside>
         </div>
 
-        {/* Traveller Details Popup */}
         {isPopupOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-xl w-full max-w-md relative">
-              
-              {/* Close Popup Button */}
-              <button onClick={() => setIsPopupOpen(false)} className="absolute top-4 right-4 text-gray-600 dark:text-gray-400 text-2xl font-bold">×</button>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/60 px-4 backdrop-blur-sm">
+            <div className="surface-panel relative w-full max-w-lg p-8 dark:border-white/10 dark:bg-[#18211E]">
+              <button
+                onClick={() => setIsPopupOpen(false)}
+                className="absolute right-4 top-4 text-2xl font-bold text-mist transition hover:text-ink dark:hover:text-cream"
+              >
+                ×
+              </button>
 
-              {/* Popup Header */}
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Enter Traveller Details</h3>
+              <h3 className="mb-6 text-2xl font-semibold text-forest dark:text-cream">
+                {BOOKING_MODAL_COPY.travelerDetails}
+              </h3>
 
-              {/* Traveller Form */}
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm text-gray-600 dark:text-gray-300">Name:</label>
-                  <input
-                    type="text"
-                    value={currentPerson.name}
-                    onChange={(e) => handlePersonDetailChange('name', e.target.value)}
-                    className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 dark:text-gray-300">Government ID:</label>
-                  <input
-                    type="text"
-                    value={currentPerson.govtId}
-                    onChange={(e) => handlePersonDetailChange('govtId', e.target.value)}
-                    className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 dark:text-gray-300">Age:</label>
-                  <input
-                    type="number"
-                    value={currentPerson.age}
-                    onChange={(e) => handlePersonDetailChange('age', e.target.value)}
-                    className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg"
-                    required
-                  />
-                </div>
+                <TravelerField
+                  label={BOOKING_MODAL_COPY.name}
+                  value={currentPerson.name}
+                  onChange={(event) => handlePersonDetailChange("name", event.target.value)}
+                />
+                <TravelerField
+                  label={BOOKING_MODAL_COPY.governmentId}
+                  value={currentPerson.govtId}
+                  onChange={(event) => handlePersonDetailChange("govtId", event.target.value)}
+                />
+                <TravelerField
+                  label={BOOKING_MODAL_COPY.age}
+                  type="number"
+                  value={currentPerson.age}
+                  onChange={(event) => handlePersonDetailChange("age", event.target.value)}
+                />
               </div>
 
-              {/* Save Button */}
               <button
-                className="w-full py-3 mt-6 bg-primary text-white font-semibold rounded-lg shadow-md"
+                className="brand-button mt-6 w-full rounded-full"
                 onClick={handleSavePerson}
                 disabled={!currentPerson.name || !currentPerson.govtId || !currentPerson.age}
               >
-                Save Traveller
+                {BOOKING_MODAL_COPY.saveTraveler}
               </button>
             </div>
           </div>

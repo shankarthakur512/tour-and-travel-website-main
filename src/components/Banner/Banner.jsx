@@ -4,64 +4,78 @@ import { MdFlight, MdOutlineLocalHotel } from "react-icons/md";
 import { IoIosWifi } from "react-icons/io";
 import { IoFastFoodSharp } from "react-icons/io5";
 
+const perks = [
+  {
+    title: "Flights",
+    icon: MdFlight,
+    tone: "bg-gold/15 text-gold",
+  },
+  {
+    title: "Hotels",
+    icon: MdOutlineLocalHotel,
+    tone: "bg-terracotta/12 text-terracotta",
+  },
+  {
+    title: "Fast Wi-Fi",
+    icon: IoIosWifi,
+    tone: "bg-sage/18 text-forest",
+  },
+  {
+    title: "Great Food",
+    icon: IoFastFoodSharp,
+    tone: "bg-clay/14 text-clay-dark",
+  },
+];
+
 const Banner = () => {
   return (
-    <div className="min-h-[550px] bg-gray-100 dark:bg-gray-900">
-      <div className="min-h-[550px] flex justify-center items-center backdrop-blur-xl py-12 sm:py-0">
-        <div className="container">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
-            {/* Image section */}
-            <div data-aos="flip-up">
+    <section className="py-20 sm:py-24">
+      <div className="section-shell">
+        <div className="surface-panel overflow-hidden bg-[linear-gradient(135deg,#FFFDF9_0%,#F5F0E8_100%)]">
+          <div className="grid items-center gap-10 px-6 py-10 sm:px-10 lg:grid-cols-[0.9fr_1.1fr] lg:px-14 lg:py-14">
+            <div data-aos="flip-up" className="relative">
+              <div className="absolute inset-0 rounded-[32px] bg-[radial-gradient(circle_at_top_right,rgba(212,162,76,0.16),transparent_35%)]" />
               <img
                 src={TravelImg}
                 alt="Travel image"
-                className="max-w-[450px] h-[350px] w-full mx-auto drop-shadow-[5px_5px_12px_rgba(0,0,0,0.7)] object-cover"
+                className="relative mx-auto h-auto w-full max-w-[460px] drop-shadow-[0_30px_60px_rgba(44,74,62,0.18)]"
               />
             </div>
-            {/* Text content section */}
-            <div className="flex flex-col justify-center gap-6 sm:pt-0 lg:px-16">
-              <h1
-                data-aos="fade-up"
-                className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white"
-              >
-                Explore all corners of The world with us
-              </h1>
-              <p
-                data-aos="fade-up"
-                className="text-sm text-gray-500 dark:text-gray-400 tracking-wide leading-8"
-              >
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Eaque reiciendis inventore iste ratione ex alias quis magni at
-                optio ratione ex alias quis magni at optio
-                <br />
+
+            <div className="flex flex-col justify-center gap-6">
+              <span className="eyebrow-label">Travel Without Friction</span>
+              <h2 data-aos="fade-up" className="section-heading max-w-xl">
+                Explore every corner of the world with comfort built into the journey.
+              </h2>
+              <p data-aos="fade-up" className="section-copy max-w-2xl">
+                From logistics to local recommendations, the experience should feel seamless. We shape each trip around ease, atmosphere, and confidence from the moment you book.
               </p>
-              <div data-aos="zoom-in" className="grid grid-cols-2 gap-6">
-                <div className="space-y-6">
-                  <div className="flex items-center gap-4">
-                    <MdFlight className="text-4xl h-12 w-12 shadow-sm p-4 rounded-full bg-violet-100 dark:bg-violet-400" />
-                    <p className="text-gray-900 dark:text-white">Flight</p>
+
+              <div data-aos="zoom-in" className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {perks.map(({ title, icon: Icon, tone }) => (
+                  <div
+                    key={title}
+                    className="rounded-[24px] border border-sand-dark bg-white/80 p-4 shadow-sm"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${tone}`}>
+                        <Icon className="text-2xl" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-forest">{title}</p>
+                        <p className="mt-1 text-xs leading-6 text-slate">
+                          Thoughtfully selected to keep every trip smooth and enjoyable.
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <MdOutlineLocalHotel className="text-4xl h-12 w-12 shadow-sm p-4 rounded-full bg-orange-100 dark:bg-orange-400" />
-                    <p className="text-gray-900 dark:text-white">Hotel</p>
-                  </div>
-                </div>
-                <div className="space-y-6">
-                  <div className="flex items-center gap-4">
-                    <IoIosWifi className="text-4xl h-12 w-12 shadow-sm p-4 rounded-full bg-green-100 dark:bg-green-400" />
-                    <p className="text-gray-900 dark:text-white">Wi-fi</p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <IoFastFoodSharp className="text-4xl h-12 w-12 shadow-sm p-4 rounded-full bg-yellow-100 dark:bg-yellow-400" />
-                    <p className="text-gray-900 dark:text-white">Foods</p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

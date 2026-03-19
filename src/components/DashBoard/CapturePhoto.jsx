@@ -1,85 +1,125 @@
 import React, { useEffect, useRef } from "react";
-import { IoIosArrowBack  ,IoIosArrowForward} from "react-icons/io";
+import { IoIosArrowBack } from "react-icons/io";
 
-import {IoClose} from "react-icons/io5"
+import { GUIDE_CAPTURE_COPY } from "../../features/guides/constants/dashboardContent";
+import { createLogger } from "../../shared/lib/logger";
+import { toastService } from "../../shared/services/toast";
 
-function CapturePhoto({setImage , setShowCaptureImage , setImageCaptured}) {
-const videoref = useRef();
-useEffect(()=>{
-  let stream;
-  try { 
- 
-  const startCamera = async() =>{
-    stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: false
-    });
-    videoref.current.srcObject = stream;
-  };
-  startCamera();
-}catch(error){
- console.log(error);
-}
-  return () =>{
-    stream?.getTracks().forEach((track) => track.stop());
-  };
-},[])
-const CapturePhoto = () => {
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
-  canvas.width = videoref.current.videoWidth;
-  canvas.height = videoref.current.videoHeight;
-  context.drawImage(videoref.current, 0, 0, canvas.width, canvas.height);
+const captureLogger = createLogger("guide-capture-photo");
 
-  canvas.toBlob((blob) => {
-    if (blob) {
-      const file = new File([blob], "photo.jpg", { type: "image/jpeg" });
-      setImage(file);
-      setImageCaptured(true);
-      setShowCaptureImage(false);
+function CapturePhoto({ setImage, setShowCaptureImage, setImageCaptured }) {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    let stream;
+
+    const startCamera = async () => {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false,
+        });
+
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      } catch (error) {
+        captureLogger.error("Unable to access camera", error);
+        toastService.error("Camera access is required to capture your verification photo.");
+      }
+    };
+
+    startCamera();
+
+    return () => {
+      stream?.getTracks().forEach((track) => track.stop());
+    };
+  }, []);
+
+  const handleCapturePhoto = () => {
+    if (!videoRef.current) {
+      return;
     }
-  }, "image/jpeg");
-};
-  return (
 
-    <div className="top-1/4 gap-3 rounded-lg pt-2 flex flex-col md:flex-row items-center justify-center">
-      <div className="flex flex-col gap-4 h-full w-full md:w-1/2">
-        <div className="flex justify-center">
-          <video id="video" className="rounded-lg w-full md:w-auto" autoPlay ref={videoref}></video>
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    canvas.width = videoRef.current.videoWidth;
+    canvas.height = videoRef.current.videoHeight;
+    context?.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          toastService.error("Unable to capture a photo right now. Please try again.");
+          return;
+        }
+
+        const file = new File([blob], "photo.jpg", { type: "image/jpeg" });
+        setImage(file);
+        setImageCaptured(true);
+        setShowCaptureImage(false);
+      },
+      "image/jpeg",
+      0.95
+    );
+  };
+
+  return (
+    <div className="grid gap-8 xl:grid-cols-[1fr_0.9fr]">
+      <div className="rounded-[32px] border border-sand-dark/70 bg-warm-white p-6 shadow-soft dark:border-white/10 dark:bg-[#18211E] sm:p-8">
+        <span className="eyebrow-label">{GUIDE_CAPTURE_COPY.eyebrow}</span>
+        <h2 className="mt-6 text-3xl font-semibold text-forest dark:text-cream">
+          {GUIDE_CAPTURE_COPY.title}
+        </h2>
+        <p className="mt-4 text-sm leading-7 text-slate dark:text-sand/75">
+          {GUIDE_CAPTURE_COPY.body}
+        </p>
+
+        <div className="mt-8 overflow-hidden rounded-[28px] border border-sand-dark bg-ink shadow-soft dark:border-white/10">
+          <video
+            className="aspect-video w-full object-cover"
+            autoPlay
+            muted
+            playsInline
+            ref={videoRef}
+          />
         </div>
-        <div className="flex justify-between w-full ]">
+
+        <div className="mt-6 flex flex-wrap gap-3">
           <button
-            className="flex border text-base p-2 rounded-full hover:scale-105 px-4 py-1 ml-0 md:ml-12 duration-200"
+            type="button"
+            className="brand-button-secondary gap-2 dark:border-white/10 dark:bg-white/5 dark:text-sand"
             onClick={() => setShowCaptureImage(false)}
           >
-            <IoIosArrowBack size={24} /> Back
+            <IoIosArrowBack />
+            {GUIDE_CAPTURE_COPY.back}
           </button>
-          <button
-            className="bg-gradient-to-r from-primary to-secondary text-white hover:scale-105 px-4 py-1 rounded-full duration-200"
-            onClick={CapturePhoto}
-          >
-            Take Photo
+          <button type="button" className="brand-button" onClick={handleCapturePhoto}>
+            {GUIDE_CAPTURE_COPY.capture}
           </button>
         </div>
       </div>
-    
-      <div className="w-full md:w-1/2 p-5">
-        <div className="mt-5 p-5 border rounded-lg mb-8">
-          <h2 className="text-lg font-serif mb-3">Guidelines for Capturing Your Photo</h2>
-          <ul className="list-disc pl-5">
-            <li className="mb-2">Ensure the image is clean and clear.</li>
-            <li className="mb-2">Make sure your face is fully visible and not obstructed.</li>
-            <li className="mb-2">Avoid dim lighting; capture the photo in a well-lit area.</li>
-            <li className="mb-2">Avoid using filters or editing tools that alter your appearance.</li>
-            <li className="mb-2">Use a plain background to avoid distractions.</li>
-            <li className="mb-2">Ensure the photo is up-to-date and represents your current appearance.</li>
-          </ul>
-        </div>
+
+      <div className="rounded-[32px] border border-sand-dark bg-[linear-gradient(135deg,#1A3530_0%,#2C4A3E_52%,#3D6B5A_100%)] px-8 py-10 shadow-luxury">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">
+          {GUIDE_CAPTURE_COPY.previewTitle}
+        </p>
+        <p className="mt-4 text-sm leading-7 text-sand/78">
+          {GUIDE_CAPTURE_COPY.previewBody}
+        </p>
+        <ul className="mt-8 grid gap-4">
+          {GUIDE_CAPTURE_COPY.guidelines.map((guideline) => (
+            <li
+              key={guideline}
+              className="rounded-[22px] border border-white/10 bg-white/10 px-5 py-4 text-sm leading-7 text-sand/85 backdrop-blur-md"
+            >
+              {guideline}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
-    
-  
-    );
+  );
 }
 
 export default CapturePhoto;

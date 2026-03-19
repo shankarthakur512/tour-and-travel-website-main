@@ -1,50 +1,50 @@
 import React from "react";
-import { IoLocationOutline, IoWalletOutline, IoPeopleOutline, IoGlobeOutline } from "react-icons/io5";
-import { useSelector } from "react-redux";
+import {
+  IoGlobeOutline,
+  IoLocationOutline,
+  IoPeopleOutline,
+  IoWalletOutline,
+} from "react-icons/io5";
+
+import { GUIDE_WORK_WITH_US_COPY } from "../../features/guides/constants/dashboardContent";
+
+const benefitIcons = [IoWalletOutline, IoPeopleOutline, IoGlobeOutline];
 
 function WorkwithUs() {
-  const isDarkMode = useSelector((state) => state.darkMode.isDarkMode); // Get dark mode state from Redux
-
   return (
-    <div className={`mt-20 h-auto pt-10 pb-10 ${isDarkMode ? "dark" : ""} dark:bg-slate-800 bg-secondary`}>
-      <div className="text-3xl sm:text-4xl lg:text-5xl flex font-semibold text-white justify-center items-center mb-10 px-4 text-center">
-        Why Work with Travellogo <IoLocationOutline className="ml-2" />?
+    <section className="mt-12 rounded-[36px] bg-[linear-gradient(180deg,#17332C_0%,#102520_100%)] px-6 py-12 text-sand shadow-luxury sm:px-10 sm:py-14">
+      <div className="mx-auto max-w-4xl text-center">
+        <span className="eyebrow-label">{GUIDE_WORK_WITH_US_COPY.eyebrow}</span>
+        <h2 className="mt-6 flex items-center justify-center gap-2 text-3xl font-semibold text-cream sm:text-4xl">
+          {GUIDE_WORK_WITH_US_COPY.title}
+          <IoLocationOutline className="text-gold" />
+        </h2>
+        <p className="mt-5 text-sm leading-8 text-sand/75 sm:text-base">
+          {GUIDE_WORK_WITH_US_COPY.body}
+        </p>
       </div>
 
-      <div className="mx-5 sm:mx-10 lg:mx-20 p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        
-        <div className="border rounded-lg p-5 bg-white shadow-lg dark:bg-gray-800 dark:border-gray-700">
-          <div className="flex items-center mb-4">
-            <IoWalletOutline className="text-primary text-3xl sm:text-4xl mr-3 dark:text-secondary" />
-            <h1 className="text-lg sm:text-xl font-sans text-primary dark:text-white">Hassle-Free Payments</h1>
-          </div>
-          <p className="text-gray-700 text-sm sm:text-base dark:text-gray-300">
-            Experience seamless and secure payments through our platform. We ensure that all transactions are quick, transparent, and protected, giving you peace of mind.
-          </p>
-        </div>
+      <div className="mt-10 grid gap-6 lg:grid-cols-3">
+        {GUIDE_WORK_WITH_US_COPY.items.map((item, index) => {
+          const Icon = benefitIcons[index];
 
-        <div className="border rounded-lg p-5 bg-white shadow-lg dark:bg-gray-800 dark:border-gray-700">
-          <div className="flex items-center mb-4">
-            <IoPeopleOutline className="text-primary text-3xl sm:text-4xl mr-3 dark:text-secondary" />
-            <h1 className="text-lg sm:text-xl font-sans text-primary dark:text-white">Connect with a Global Audience</h1>
-          </div>
-          <p className="text-gray-700 text-sm sm:text-base dark:text-gray-300">
-            By partnering with Travellogo, you gain access to a global network of travelers eager to explore new destinations. Expand your reach and grow your business.
-          </p>
-        </div>
-
-        <div className="border rounded-lg p-5 bg-white shadow-lg dark:bg-gray-800 dark:border-gray-700">
-          <div className="flex items-center mb-4">
-            <IoGlobeOutline className="text-primary text-3xl sm:text-4xl mr-3 dark:text-secondary" />
-            <h1 className="text-lg sm:text-xl font-sans text-primary dark:text-white">24/7 Support</h1>
-          </div>
-          <p className="text-gray-700 text-sm sm:text-base dark:text-gray-300">
-            We offer round-the-clock support to ensure that you and your clients have the best experience possible. Whether it's resolving issues or answering questions, we are always here to help.
-          </p>
-        </div>
-
+          return (
+            <article
+              key={item.title}
+              className="rounded-[28px] border border-white/10 bg-white/10 p-6 backdrop-blur-md"
+            >
+              <div className="flex items-center gap-3">
+                <div className="rounded-2xl bg-white/10 p-3 text-gold">
+                  <Icon className="text-2xl" />
+                </div>
+                <h3 className="text-xl font-semibold text-cream">{item.title}</h3>
+              </div>
+              <p className="mt-4 text-sm leading-7 text-sand/78">{item.description}</p>
+            </article>
+          );
+        })}
       </div>
-    </div>
+    </section>
   );
 }
 

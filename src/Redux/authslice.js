@@ -1,4 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { createLogger } from "../shared/lib/logger";
+
+const authLogger = createLogger("auth-slice");
 
 const initialState = {
     status : false,
@@ -10,13 +13,12 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         login: (state, action) => {
-            
-            console.log(action.payload.userData)
+            authLogger.debug("login", action.payload.userData);
             state.status = true;
             state.userData = action.payload.userData;
         },
         logout: (state) => {
-            console.log("yha tak to shi hai")
+            authLogger.debug("logout");
             state.status = false;
             state.userData = null;
         }

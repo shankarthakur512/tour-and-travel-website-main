@@ -1,29 +1,21 @@
-import React, { useState } from 'react';
-import { FaMoon, FaSun } from 'react-icons/fa';
-import { useDispatch, useSelector } from 'react-redux';
-import { toggleDarkMode } from '../../Redux/Darkmode';
+import React from "react";
+import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi2";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleDarkMode } from "../../Redux/Darkmode";
 
 const DarkModeToggle = () => {
-    const isDarkMode = useSelector((state) => state.darkMode.isDarkMode); // Get dark mode state from Redux
-    const dispatch = useDispatch();
-
-  const toggleDarkModehere = () => {
-    if (!isDarkMode) {
-        document.body.classList.add("dark");
-        dispatch(toggleDarkMode());
-      } else {
-        document.body.classList.remove("dark");
-        dispatch(toggleDarkMode());
-      }
-    
-  };
+  const isDarkMode = useSelector((state) => state.darkMode.isDarkMode);
+  const dispatch = useDispatch();
 
   return (
     <button
-      onClick={toggleDarkModehere}
-      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+      type="button"
+      onClick={() => dispatch(toggleDarkMode())}
+      className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-sand-dark bg-white text-forest shadow-sm transition hover:bg-sand dark:border-white/10 dark:bg-white/5 dark:text-sand dark:hover:bg-white/10"
+      aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+      title={isDarkMode ? "Light mode" : "Dark mode"}
     >
-      {isDarkMode ? <FaSun size={20} /> : <FaMoon size={20} />}
+      {isDarkMode ? <HiOutlineSun size={20} /> : <HiOutlineMoon size={20} />}
     </button>
   );
 };

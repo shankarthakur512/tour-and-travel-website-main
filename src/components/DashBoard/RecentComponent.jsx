@@ -1,33 +1,29 @@
-import React from 'react';
+import React from "react";
 
-const RecentComponent = ({ activities = []}) => {
+import { GUIDE_RECENT_ACTIVITY_COPY } from "../../features/guides/constants/dashboardContent";
+
+const RecentComponent = ({ activities = [] }) => {
   return (
-    <div className="p-4 bg-white dark:bg-gray-800 shadow-lg rounded-lg">
-      <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
-        Recent Activities
-      </h2>
-
-      <div className="h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-700">
-        {activities.length > 0 ? (
-          activities.map((activity, index) => (
-            <div
-              key={index}
-              className="p-3 mb-2 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm"
-            >
-              <p className="text-gray-800 dark:text-gray-200">
-                {activity.description}
-              </p>
-              <small className="text-gray-500 dark:text-gray-400">
-                {activity.date}
-              </small>
-            </div>
-          ))
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            <p className="text-gray-500 dark:text-gray-400">No Recent Activity</p>
-          </div>
-        )}
-      </div>
+    <div className="grid gap-3">
+      {activities.length > 0 ? (
+        activities.map((activity, index) => (
+          <article
+            key={`${activity.description}-${index}`}
+            className="rounded-[24px] border border-sand-dark/70 bg-sand/40 p-5 shadow-sm dark:border-white/10 dark:bg-white/5"
+          >
+            <p className="text-sm leading-7 text-forest dark:text-cream">
+              {activity.description}
+            </p>
+            <small className="mt-2 block text-xs uppercase tracking-[0.2em] text-mist dark:text-sand/50">
+              {activity.date}
+            </small>
+          </article>
+        ))
+      ) : (
+        <div className="flex min-h-56 items-center justify-center rounded-[24px] border border-dashed border-sand-dark bg-sand/30 px-6 text-center text-sm text-slate dark:border-white/10 dark:bg-white/5 dark:text-sand/75">
+          {GUIDE_RECENT_ACTIVITY_COPY.empty}
+        </div>
+      )}
     </div>
   );
 };

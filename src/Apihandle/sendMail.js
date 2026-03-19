@@ -1,3 +1,5 @@
-export const Host = "http://localhost:4001";
+import { API_ROUTES } from "../shared/config/api";
 
-export const sendMail  = `${Host}/sendmail`
+export const Host = API_ROUTES.sendMail.replace("/sendmail", "");
+
+export const sendMail = API_ROUTES.sendMail;

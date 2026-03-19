@@ -8,17 +8,17 @@ import NoPage from "./pages/NoPage";
 import About from "./pages/About";
 import Localguide from "./pages/Localguide";
 import BlogsDetails from "./pages/BlogsDetails";
-import GuidePage from "./pages/guidePage.jsx";
+import GuidePage from "./features/guides/pages/GuidePage.jsx";
 import AOS from "aos";
 import "aos/dist/aos.css";
 //  from "./components/Authentication/SignIn";
 import GuideDashboard from "./components/DashBoard/GuideDashboard";
-import TourPackageCreation from "./components/TourPackage/TourPackegeMain";
-import AuthForm from "./components/Authentication/Authform";
-import Search from "./pages/Search";
-import TourPage from "./pages/TourPage.jsx";
-import PaymentPage from "./pages/PaymentcheckoutForm.JSX";
-import SignUp from "./components/Authentication/Signup.jsx";
+import TourPackageCreation from "./features/trips/components/TourPackageCreation";
+import AuthForm from "./features/auth/components/AuthForm";
+import Search from "./features/search/pages/SearchPage";
+import TourPage from "./features/trips/pages/TourPage.jsx";
+import PaymentPage from "./features/trips/pages/PaymentCheckoutPage.jsx";
+import SignUp from "./features/auth/components/SignUpPage.jsx";
 
 const App = () => {
   React.useEffect(() => {
@@ -40,16 +40,16 @@ const App = () => {
             <Route path="blogs/:id" element={<BlogsDetails />} />
             <Route path="local-guide" element={<Localguide />} />
             <Route path="about" element={<About />} />
+            <Route path="signup" element={<SignUp />} />
+            <Route path="login" element={<AuthForm />} />
+            <Route path="dashboard" element={<GuideDashboard />} />
+            <Route path="tourPackage" element={<TourPackageCreation />} />
+            <Route path="search" element ={<Search />} />
+            <Route path="search/:guideId" element={<GuidePage />} />
+            <Route path="search/tour/:TripId" element={<TourPage />} />
+            <Route path="payment" element={<PaymentPage />} />
             <Route path="*" element={<NoPage />} />
           </Route>
-          <Route path="/Signup" element={<SignUp />} />
-          <Route path="/login" element={<AuthForm />} />
-          <Route path="/dashboard" element={<GuideDashboard />} />
-          <Route path="/tourPackage" element={<TourPackageCreation />} />
-          <Route path="/search" element ={<Search />} />
-          <Route path="/search/:guideId" element={<GuidePage />} />
-          <Route path="/search/tour/:TripId" element={<TourPage />} />
-          <Route path ="/payment" element={<PaymentPage />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -1,54 +1,85 @@
 import React, { useEffect, useState } from "react";
-import { IoIosArrowForward } from "react-icons/io";
 import { FcCheckmark } from "react-icons/fc";
+import { IoIosArrowForward } from "react-icons/io";
 
 import CapturePhoto from "./CapturePhoto";
 import GuideQuestions from "./GuideQuestions";
+import { GUIDE_PROFILE_COPY } from "../../features/guides/constants/dashboardContent";
 
+function CompleteProfile({ setProfileComp, setGuideData }) {
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [showCaptureImage, setShowCaptureImage] = useState(false);
+  const [imageCaptured, setImageCaptured] = useState(false);
 
+  useEffect(() => {
+    if (image) {
+      setImageCaptured(true);
+      const previewUrl = URL.createObjectURL(image);
+      setImagePreview(previewUrl);
 
+      return () => URL.revokeObjectURL(previewUrl);
+    }
+  }, [image]);
 
-function CompleteProfile ({setProfileComp , GuideData ,setGuideData }) {
-    const [image , setImage] = useState(null);
-    const [showCaptureImage , setShowCaptureImage] = useState(false);
-    const  [imageCaptured , setImageCaptured] = useState(false);
-    useEffect(()=>{
-        if(image){
-        setImageCaptured(!imageCaptured)
-        }
-      },[])
+  if (showCaptureImage) {
     return (
-        <div className="  px-36 p-10">
-       {!showCaptureImage ?( 
-        <div>
-        <div className={`border p-5 rounded-lg cursor-pointer   hover:translate-x-2 transition-all duration-300 ${imageCaptured ? "border-secondary":""}`}
-        onClick={(e) =>{
-       e.preventDefault();
-       setShowCaptureImage(!showCaptureImage)
-        }}
+      <CapturePhoto
+        setImage={setImage}
+        setShowCaptureImage={setShowCaptureImage}
+        setImageCaptured={setImageCaptured}
+      />
+    );
+  }
+
+  return (
+    <div className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
+      <div className="rounded-[32px] border border-sand-dark bg-[linear-gradient(135deg,#1A3530_0%,#2C4A3E_52%,#3D6B5A_100%)] px-8 py-10 shadow-luxury">
+        <span className="eyebrow-label">Guide profile</span>
+        <h2 className="mt-6 text-4xl font-semibold leading-tight text-cream">
+          {GUIDE_PROFILE_COPY.title}
+        </h2>
+        <p className="mt-5 text-sm leading-8 text-sand/80">{GUIDE_PROFILE_COPY.body}</p>
+
+        <button
+          type="button"
+          className="mt-8 flex w-full items-start justify-between rounded-[28px] border border-white/10 bg-white/10 p-6 text-left backdrop-blur-md transition hover:bg-white/15"
+          onClick={() => setShowCaptureImage(true)}
         >
-          <div className="flex justify-between">
-           {!imageCaptured ? <div>
-              <h1 className="text-xl font-serif">Capture your Photo</h1>
-              <span className="text-xs">For verification purposes, you have to take your picture</span>
-            </div> : <div>
-              <h1 className="text-xl font-serif text-primary">Your Photo is Captured</h1>
-              <span className="text-xs text-secondary">If you want to change , click me again</span>
-            </div>}
-          {imageCaptured ? <FcCheckmark className="text-3xl mt-2 " />  :  <IoIosArrowForward className="text-3xl mt-2" />}
+          <div>
+            <h3 className="text-xl font-semibold text-cream">
+              {imageCaptured ? GUIDE_PROFILE_COPY.photoComplete : GUIDE_PROFILE_COPY.photoTitle}
+            </h3>
+            <p className="mt-2 text-sm leading-7 text-sand/78">
+              {imageCaptured
+                ? GUIDE_PROFILE_COPY.photoCompleteBody
+                : GUIDE_PROFILE_COPY.photoPending}
+            </p>
           </div>
+          <div className="mt-1 text-3xl">
+            {imageCaptured ? <FcCheckmark /> : <IoIosArrowForward className="text-sand" />}
           </div>
-          {imageCaptured ? <div className=" flex justify-center py-3 ">
-     <img  src={image}  alt="nothing" className="rounded-full h-40 w-40"/>
-     </div> : <></>}
-          <div className=" mt-5">
-        <GuideQuestions setGuideData={setGuideData}  setProfileComp={setProfileComp}   imageCaptured={imageCaptured} image={image}/>
-         </div>
+        </button>
+
+        {imageCaptured && imagePreview && (
+          <div className="mt-8 flex justify-center">
+            <img
+              src={imagePreview}
+              alt="Guide preview"
+              className="h-40 w-40 rounded-full object-cover ring-4 ring-white/20"
+            />
           </div>
-       
-        ) : <CapturePhoto  setImage={setImage} setShowCaptureImage={setShowCaptureImage} setImageCaptured ={setImageCaptured}/>}
+        )}
       </div>
-    )
+
+      <GuideQuestions
+        setGuideData={setGuideData}
+        setProfileComp={setProfileComp}
+        imageCaptured={imageCaptured}
+        image={image}
+      />
+    </div>
+  );
 }
 
-export default CompleteProfile
+export default CompleteProfile;

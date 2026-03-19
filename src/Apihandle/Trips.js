@@ -1,6 +1,8 @@
-const Host = "http://localhost:4001/api/v1/Trips";
+import { API_ROUTES } from "../shared/config/api";
 
-export const RegisterTour = `${Host}/register-trip`
-export const FindTripsByLocalGuide = `${Host}/trips`
-export const FindTripsByLocation = `${Host}/find-trips`
-export const FindtripDetail = `${Host}/find-trip`
+const host = API_ROUTES.trips;
+
+export const RegisterTour = `${host}/register-trip`;
+export const FindTripsByLocalGuide = `${host}/trips`;
+export const FindTripsByLocation = `${host}/find-trips`;
+export const FindtripDetail = `${host}/find-trip`;

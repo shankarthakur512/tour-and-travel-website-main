@@ -1,134 +1,160 @@
 import React, { useEffect } from "react";
 import { IoLocationOutline } from "react-icons/io5";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import WorkwithUs from "./Workwithus";
 import axios from "axios";
+
 import { addGuide } from "../../Redux/GuideSlice";
 import { findGuideByUserId } from "../../Apihandle/LocalGuide";
+import { APP_ROUTES } from "../../shared/constants/routes";
+import { createLogger } from "../../shared/lib/logger";
+import WorkwithUs from "./Workwithus";
+import {
+  GUIDE_LANDING_BENEFITS,
+  GUIDE_LANDING_CONTENT,
+  GUIDE_LANDING_STEPS,
+  GUIDE_LANDING_TESTIMONIALS,
+} from "../../features/guides/constants/dashboardContent";
 
-function GuideHomePage({ setSetup }) {
+const guideLandingLogger = createLogger("guide-landing");
+
+function GuideHomePage() {
   const status = useSelector((state) => state.auth.status);
   const userData = useSelector((state) => state.auth.userData);
-  const isDarkMode = useSelector((state) => state.darkMode.isDarkMode); // Dark mode state from Redux
+  const guideData = useSelector((state) => state.Guide.userData);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleCreateAccount = () => {
-    if (status) {
-      navigate("/dashboard");
-    } else {
-      navigate("/login");
+  useEffect(() => {
+    if (!userData || guideData) {
+      return;
     }
+
+    const findGuide = async () => {
+      try {
+        const { data } = await axios.post(findGuideByUserId, { user: userData._id });
+
+        if (data.success && data.guide) {
+          dispatch(addGuide({ userData: data.guide }));
+        }
+      } catch (error) {
+        guideLandingLogger.warn("Unable to look up guide profile", error);
+      }
+    };
+
+    findGuide();
+  }, [dispatch, guideData, userData]);
+
+  const handlePrimaryAction = () => {
+    if (!status) {
+      navigate(APP_ROUTES.login);
+      return;
+    }
+
+    navigate(APP_ROUTES.dashboard);
   };
 
-  useEffect(() => {
-    if (!userData) {
-      navigate("/login");
-    } else {
-      const FindGuide = async () => {
-        const { data } = await axios.post(findGuideByUserId, { user: userData._id });
-        if (data.success) {
-          dispatch(addGuide({ userData: data.guide }));
-          navigate("/dashboard");
-        }
-      };
-      FindGuide();
-    }
-  }, [userData, dispatch, navigate]);
+  const primaryCtaLabel = guideData
+    ? GUIDE_LANDING_CONTENT.heroCtaGuide
+    : status
+      ? GUIDE_LANDING_CONTENT.heroCtaMember
+      : GUIDE_LANDING_CONTENT.heroCtaGuest;
 
   return (
-    <div className={`h-full w-full ${isDarkMode ? "dark" : ""}`}>
-      <div className="dark:bg-gray-800 border pt-10">
-      <div className="h-[70vh] bg-local-guide-bg bg-cover flex items-center justify-start ">
-        <div className="flex flex-col ml-24 w-[36vw] p-5">
-          <h1 className="mr-32 text-5xl font-semibold text-primary drop-shadow-lg ">
-            Be A Local Guide
-          </h1>
-          <span className="text-white mt-4 text-lg dark:text-gray-300">
-            Start your earning by becoming our guide partner
-          </span>
-          <button
-            className="bg-gradient-to-r mt-8 from-primary to-secondary hover:from-secondary hover:to-primary transition-all duration-500 text-white h-12 px-8 py-2 rounded-full shadow-lg"
-            onClick={handleCreateAccount}
-          >
-            Create Your Account
-          </button>
-        </div>
-      </div>
-      </div>
-      <WorkwithUs />
-
-      <div className="flex flex-col justify-center py-16 bg-gray-50 dark:bg-gray-900">
-        <div className="flex justify-center">
-          <div className="flex flex-col p-4 items-center">
-            <h1 className="text-4xl font-semibold text-primary dark:text-white">
-              Be our Local Guide in 4 Easy Steps
-            </h1>
-
-            {["Sign Up", "Verify Account", "Complete Profile", "Start Guiding"].map(
-              (step, index) => (
-                <div
-                  key={index}
-                  className="border-2 mt-8 rounded-2xl p-6 h-28 w-[90vw] max-w-xl border-secondary bg-white shadow-md dark:bg-gray-800 dark:border-gray-700"
-                >
-                  <h2 className="text-2xl font-medium text-primary dark:text-white">{step}</h2>
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
-                    {index === 0
-                      ? "Register yourself on our website and create your ID"
-                      : `Step ${index + 1} description`}
-                  </span>
-                </div>
-              )
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Reviews Section */}
-      <div className="py-16 bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-gray-800">
-        <h2 className="text-4xl font-semibold text-center text-primary dark:text-white">
-          What Our Guides Say
-        </h2>
-        <div className="flex flex-wrap justify-center mt-10 space-y-8 md:space-y-0 md:space-x-8">
-          {[
-            {
-              name: "John Doe",
-              review:
-                "Being a local guide has been an amazing experience! I get to meet new people and share my love for my hometown.",
-              image: "https://via.placeholder.com/150",
-            },
-            {
-              name: "Jane Smith",
-              review:
-                "Working with this platform has given me the freedom to work on my own terms while helping tourists discover hidden gems.",
-              image: "https://via.placeholder.com/150",
-            },
-            {
-              name: "Carlos Rivera",
-              review:
-                "The support from the team is great, and the flexibility of the job allows me to explore new places while earning money.",
-              image: "https://via.placeholder.com/150",
-            },
-          ].map((guide, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full mx-4 dark:bg-gray-800"
-            >
-              <img
-                src={guide.image}
-                alt={guide.name}
-                className="rounded-full w-24 h-24 mx-auto mb-4"
-              />
-              <h3 className="text-xl font-medium text-center text-primary dark:text-white">
-                {guide.name}
-              </h3>
-              <p className="text-sm text-gray-600 text-center mt-2 dark:text-gray-400">
-                "{guide.review}"
+    <div className="min-h-screen bg-cream pb-20 pt-24 dark:bg-charcoal">
+      <div className="section-shell grid gap-12">
+        <section className="grid gap-8 xl:grid-cols-[1.05fr_0.95fr]">
+          <div className="overflow-hidden rounded-[36px] border border-sand-dark bg-[linear-gradient(135deg,#1A3530_0%,#2C4A3E_52%,#3D6B5A_100%)] px-8 py-10 shadow-luxury sm:px-12 sm:py-14">
+            <div className="relative">
+              <span className="eyebrow-label">{GUIDE_LANDING_CONTENT.eyebrow}</span>
+              <h1 className="mt-6 max-w-2xl text-4xl font-semibold leading-tight text-cream sm:text-5xl">
+                {GUIDE_LANDING_CONTENT.heroTitle}
+              </h1>
+              <p className="mt-5 max-w-2xl text-sm leading-8 text-sand/80 sm:text-base">
+                {GUIDE_LANDING_CONTENT.heroBody}
               </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <button onClick={handlePrimaryAction} className="brand-button">
+                  {primaryCtaLabel}
+                </button>
+                <button
+                  onClick={() => navigate(APP_ROUTES.search)}
+                  className="brand-button-secondary dark:border-white/10 dark:bg-white/5 dark:text-sand"
+                >
+                  Explore traveler experience
+                </button>
+              </div>
+
+              <div className="mt-10 grid gap-4 sm:grid-cols-3">
+                {GUIDE_LANDING_BENEFITS.map((benefit) => (
+                  <div
+                    key={benefit.title}
+                    className="rounded-[24px] border border-white/10 bg-white/10 p-5 backdrop-blur-md"
+                  >
+                    <p className="text-lg font-semibold text-cream">{benefit.title}</p>
+                    <p className="mt-3 text-sm leading-7 text-sand/75">{benefit.description}</p>
+                  </div>
+                ))}
+              </div>
             </div>
+          </div>
+
+          <div className="surface-panel p-6 dark:border-white/10 dark:bg-[#18211E] sm:p-8">
+            <div className="flex items-center gap-3 text-forest dark:text-sand">
+              <IoLocationOutline className="text-2xl" />
+              <span className="text-sm font-semibold uppercase tracking-[0.22em]">
+                {GUIDE_LANDING_CONTENT.stepsHeading}
+              </span>
+            </div>
+            <h2 className="mt-5 text-3xl font-semibold text-forest dark:text-cream">
+              A clear path from profile creation to hosted trips
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-slate dark:text-sand/75">
+              {GUIDE_LANDING_CONTENT.stepsBody}
+            </p>
+
+            <div className="mt-8 grid gap-4">
+              {GUIDE_LANDING_STEPS.map((step, index) => (
+                <div
+                  key={step.title}
+                  className="rounded-[24px] border border-sand-dark/70 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-[#101714]"
+                >
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">
+                    Step {index + 1}
+                  </p>
+                  <h3 className="mt-3 text-xl font-semibold text-forest dark:text-cream">
+                    {step.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-7 text-slate dark:text-sand/75">
+                    {step.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="grid gap-8 lg:grid-cols-3">
+          {GUIDE_LANDING_TESTIMONIALS.map((testimonial) => (
+            <article
+              key={testimonial.name}
+              className="surface-panel p-6 dark:border-white/10 dark:bg-[#18211E]"
+            >
+              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">
+                {testimonial.role}
+              </p>
+              <p className="mt-5 text-lg leading-8 text-forest dark:text-cream">
+                "{testimonial.quote}"
+              </p>
+              <p className="mt-6 text-sm font-semibold text-slate dark:text-sand/75">
+                {testimonial.name}
+              </p>
+            </article>
           ))}
-        </div>
+        </section>
+
+        <WorkwithUs />
       </div>
     </div>
   );

@@ -4,26 +4,29 @@ import Slider from "react-slick";
 const testimonialData = [
   {
     id: 1,
-    name: "Samuel",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque reiciendis inventore iste ratione ex alias quis magni at optio",
-    img: "https://picsum.photos/101/101",
+    name: "Maya Chen",
+    text: "The guide profile felt trustworthy, the itinerary was beautifully paced, and booking never felt stressful. It was the first trip site that felt curated for people, not just clicks.",
+    img: "https://picsum.photos/seed/traveler1/120/120",
+    role: "Booked a heritage journey",
   },
   {
-    id: 1,
-    name: "John Doe",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque reiciendis inventore iste ratione ex alias quis magni at optio",
-    img: "https://picsum.photos/102/102",
+    id: 2,
+    name: "Samuel Brooks",
+    text: "I found a local guide in minutes, asked a few questions, and had a much better trip than if I had planned everything alone. The experience felt premium from start to finish.",
+    img: "https://picsum.photos/seed/traveler2/120/120",
+    role: "Used a local guide in Jaipur",
   },
   {
-    id: 1,
-    name: "Smith",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque reiciendis inventore iste ratione ex alias quis magni at optio",
-    img: "https://picsum.photos/103/103",
+    id: 3,
+    name: "Aisha Rahman",
+    text: "The site made it easy to compare options without overwhelm. The visual design and the way details were presented made me feel confident enough to book right away.",
+    img: "https://picsum.photos/seed/traveler3/120/120",
+    role: "Booked a curated escape",
   },
 ];
 
 const Testimonial = () => {
-  var settings = {
+  const settings = {
     dots: true,
     arrows: false,
     infinite: true,
@@ -31,8 +34,8 @@ const Testimonial = () => {
     slidesToShow: 2,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 2000,
-    cssEase: "linear",
+    autoplaySpeed: 3500,
+    cssEase: "ease",
     pauseOnHover: true,
     pauseOnFocus: true,
     responsive: [
@@ -49,11 +52,10 @@ const Testimonial = () => {
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
-          initialSlide: 2,
         },
       },
       {
-        breakpoint: 640,
+        breakpoint: 768,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -61,53 +63,43 @@ const Testimonial = () => {
       },
     ],
   };
+
   return (
-    <>
-      <div data-aos="fade-up" data-aos-duration="300" className="py-10">
-        <div className="container">
-          {/* Header section */}
-          <div className="text-center mb-20 max-w-[400px] mx-auto">
-            <p className="text-sm bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-              Testimonial
-            </p>
-            <h1 className="text-3xl font-bold">Testimonial</h1>
-            <p className="text-xs text-gray-400">
-              {" "}
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
-              nesciunt explicabo a! Laborum delectus aliquam labore, earum rerum
-              quam! Nulla?
-            </p>
-          </div>
-          {/* testimonial section */}
-          <div
-            data-aos="zoom-in"
-            data-aos-duration="300"
-            className="grid grid-cols-1 max-w-[800px] mx-auto gap-6"
-          >
-            <Slider {...settings}>
-              {testimonialData.map(({ id, name, text, img }) => {
-                return (
-                  <div key={id} className="my-6">
-                    <div className="flex flex-col justify-center items-center gap-4 text-center shadow-lg p-4 mx-4 rounded-xl dark:bg-gray-800 bg-primary/10 relative">
-                      <img
-                        src={img}
-                        alt=""
-                        className="rounded-full block mx-auto"
-                      />
-                      <h1 className="text-xl font-bold">{name}</h1>
-                      <p className="text-gray-500 text-sm">{text}</p>
-                      <p className="text-black/20 text-9xl font-serif absolute top-0 right-0">
-                        ,,
-                      </p>
+    <section data-aos="fade-up" data-aos-duration="300" className="py-20 sm:py-24">
+      <div className="section-shell">
+        <div className="mx-auto mb-14 max-w-2xl text-center">
+          <span className="eyebrow-label">Traveler Notes</span>
+          <h2 className="section-heading mt-5">What people remember most is how easy it all felt.</h2>
+          <p className="section-copy mx-auto mt-4">
+            Social proof should feel intimate and believable. These testimonials support trust right after the more aspirational sections.
+          </p>
+        </div>
+
+        <div data-aos="zoom-in" data-aos-duration="300" className="mx-auto max-w-6xl">
+          <Slider {...settings}>
+            {testimonialData.map(({ id, name, text, img, role }) => (
+              <div key={id} className="px-3 py-6">
+                <article className="relative h-full rounded-[30px] border border-sand-dark/70 bg-warm-white p-8 shadow-soft">
+                  <div className="absolute right-6 top-5 text-7xl leading-none text-clay/15">"</div>
+                  <div className="mb-6 flex items-center gap-4">
+                    <img
+                      src={img}
+                      alt={name}
+                      className="h-16 w-16 rounded-full object-cover ring-4 ring-sand"
+                    />
+                    <div>
+                      <h3 className="text-xl font-semibold text-forest">{name}</h3>
+                      <p className="text-sm text-mist">{role}</p>
                     </div>
                   </div>
-                );
-              })}
-            </Slider>
-          </div>
+                  <p className="relative z-10 text-sm leading-8 text-slate">{text}</p>
+                </article>
+              </div>
+            ))}
+          </Slider>
         </div>
       </div>
-    </>
+    </section>
   );
 };
 

@@ -1,305 +1,347 @@
-import React, { useEffect, useState } from 'react';
-import DashboardNav from './DashboardNav';
-import { useDispatch, useSelector } from 'react-redux';
-import { Doughnut } from 'react-chartjs-2';
-import { IoIosNotificationsOutline } from "react-icons/io";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'; // Import chart elements
-import Footer from '../Footer/Footer';
-import Guidelines from '../Guidlines/Guideline.jsx'; // Fixed the import path
-import Verification from './GuideVerification';
-import CompleteProfile from "./CompleteProfile.jsx";
-import Address from '../localGuide/Address.jsx';
-import axios from 'axios';
-import { findGuideByUserId, registerGuide } from '../../Apihandle/LocalGuide.js';
-import { addGuide } from '../../Redux/GuideSlice.js';
-import { useNavigate } from 'react-router-dom';
-import TripDashboard from './TripDashboard.jsx';
-import { FaUserCheck, FaUserEdit, FaMapMarkerAlt } from 'react-icons/fa'; // Import icons
-import ChatComponent from '../others/Chat.jsx';
-import GuideChatComponent from '../others/guideChat.jsx';
+import React, { useEffect, useMemo, useState } from "react";
+import { Doughnut } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { FaMapMarkerAlt, FaUserCheck, FaUserEdit } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-import RecentComponent from './RecentComponent.jsx';
+import Verification from "./GuideVerification";
+import CompleteProfile from "./CompleteProfile.jsx";
+import TripDashboard from "./TripDashboard.jsx";
+import RecentComponent from "./RecentComponent.jsx";
+import Guidelines from "../Guidlines/Guideline.jsx";
+import Address from "../localGuide/Address.jsx";
+import { findGuideByUserId, registerGuide } from "../../Apihandle/LocalGuide.js";
+import { addGuide } from "../../Redux/GuideSlice.js";
+import { APP_ROUTES } from "../../shared/constants/routes";
+import { TOAST_MESSAGES } from "../../shared/constants/strings";
+import { getErrorMessage } from "../../shared/lib/error";
+import { createLogger } from "../../shared/lib/logger";
+import { toastService } from "../../shared/services/toast";
+import {
+  GUIDE_DASHBOARD_COPY,
+  GUIDE_ONBOARDING_STEPS,
+} from "../../features/guides/constants/dashboardContent";
+
 ChartJS.register(ArcElement, Tooltip, Legend);
+
+const dashboardLogger = createLogger("guide-dashboard");
 
 const GuideDashboard = () => {
   const [verification, setVerification] = useState(false);
   const [profileComp, setProfileComp] = useState(false);
   const [verifyAddress, setVerifyAddress] = useState(false);
-  const [GuideData, setGuideData] = useState(null);
-  const [GuideAddress, setGuideAddress] = useState(null);
-  const [GuideInfo, setGuideInfo] = useState(null);
-  const [GuideRegisterd, setGuideRegisterd] = useState(false);
-  const [notify , setNotify] = useState(false)
-  const [sliderOpen, setSliderOpen] = useState(false);
+  const [guideProfileDraft, setGuideProfileDraft] = useState(null);
+  const [guideAddress, setGuideAddress] = useState(null);
+  const [guideIdentity, setGuideIdentity] = useState(null);
+  const [guideRegistered, setGuideRegistered] = useState(false);
+
   const userData = useSelector((state) => state.auth.userData);
-  const GuideuserData = useSelector((state) => state.Guide.userData);
+  const guideUserData = useSelector((state) => state.Guide.userData);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const incomeData = {
-    labels: ['Calls', 'Chats', 'Trips'],
-    datasets: [{
-      data: [10, 100, 1000], 
-      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-    }],
-  };
-
-
-  // useEffect(() => {
-  //   const auth = getAuth();
-  
-  //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
-  //     if (user) {
-  //       const email = user.email;
-  
-  //       if (email) {
-  //         const { data } = await axios.post(CheckUser, { email });
-  //         if (data) {
-  //           dispatch(login({ userData: data.data }));
-  
-  //           // const previousRoute = location.state?.from || '/';
-  //           // navigate(previousRoute);  
-  //         }
-  //       }
-  //     }
-  //   });
-  
-  //   // Cleanup subscription on component unmount
-  //   return () => unsubscribe();
-  // }, [auth, dispatch, location, navigate]);
-
-
-
-
-  useEffect(() => {
-    const RegisterGuide = async () => {
-      if (GuideAddress && GuideData && GuideInfo) {
-        try {
-          const formData = new FormData();
-          formData.append('user', userData?._id);
-          formData.append('address', GuideAddress.street);
-          formData.append('city', GuideAddress.city);
-          formData.append('country', GuideAddress.country);
-          formData.append('aboutYourself', GuideData.aboutYourself);
-          formData.append('native', GuideData.placeBelonging);
-          formData.append('mobileNo', GuideInfo.mobile);
-          formData.append('email', GuideInfo.email);
-          formData.append('Govt_ID', GuideInfo.aadhaar);
-          formData.append('languages', GuideData.Languages);
-
-          if (GuideData.Photo) {
-            formData.append('Photo', GuideData.Photo);
-          }
-          console.log(formData);
-          const { data } = await axios.post(registerGuide, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-
-          console.log('Guide registered successfully:', data);
-          dispatch(addGuide({ userData: data.guide }));
-          setGuideRegisterd(true);
-        } catch (error) {
-          console.error('Error registering guide:', error);
-        }
-      }
-    };
-
-    RegisterGuide();
-  }, [GuideAddress, GuideData, GuideInfo, userData, dispatch]);
-
-  const handleVerification = (e) => {
-    e.preventDefault();
-    setVerification(!verification);
-  };
-
-  const handleProfileCompletion = (e) => {
-    e.preventDefault();
-    setProfileComp(!profileComp);
-  };
-
-  const handleAddressVerification = (e) => {
-    e.preventDefault();
-    setVerifyAddress(true);
+    labels: ["Calls", "Chats", "Trips"],
+    datasets: [
+      {
+        data: [10, 100, 1000],
+        backgroundColor: ["#C4603B", "#3D6B5A", "#D4A24C"],
+        borderWidth: 0,
+      },
+    ],
   };
 
   useEffect(() => {
     if (!userData) {
-      // const auth = getAuth();
-      //   console.log("here")
-      // onAuthStateChanged(auth, async (user) => {
-      //     if (user) {
-      //       console.log(user)
-      //       const email = user.email;
-      
-      //       if (email) {
-      //         const { data } = await axios.post(CheckUser, { email });
-      //         if (data) {
-      //           dispatch(login({ userData: data.data }));
-      //           setGuideRegisterd(true);
-      //           // const previousRoute = location.state?.from || '/';
-      //           // navigate(previousRoute);  
-      //         }
-      //       }
-      //     }
-          
-      //   });
-      // navigate('/login');
-    } else {
-      if (GuideuserData) {
-        setGuideRegisterd(true);
-      }
+      navigate(APP_ROUTES.login);
     }
-  }, [userData, GuideuserData, navigate]);
+  }, [navigate, userData]);
+
+  useEffect(() => {
+    if (!userData || guideUserData) {
+      if (guideUserData) {
+        setGuideRegistered(true);
+      }
+      return;
+    }
+
+    const fetchGuide = async () => {
+      try {
+        const { data } = await axios.post(findGuideByUserId, { user: userData._id });
+
+        if (data.success && data.guide) {
+          dispatch(addGuide({ userData: data.guide }));
+          setGuideRegistered(true);
+        }
+      } catch (error) {
+        dashboardLogger.warn("Unable to fetch guide profile", error);
+      }
+    };
+
+    fetchGuide();
+  }, [dispatch, guideUserData, userData]);
+
+  useEffect(() => {
+    if (!guideAddress || !guideProfileDraft || !guideIdentity || !userData || guideRegistered) {
+      return;
+    }
+
+    const registerNewGuide = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("user", userData._id);
+        formData.append("address", guideAddress.street);
+        formData.append("city", guideAddress.city);
+        formData.append("country", guideAddress.country);
+        formData.append("aboutYourself", guideProfileDraft.aboutYourself);
+        formData.append("native", guideProfileDraft.placeBelonging);
+        formData.append("mobileNo", guideIdentity.mobile);
+        formData.append("email", guideIdentity.email);
+        formData.append("Govt_ID", guideIdentity.aadhaar);
+        formData.append("languages", guideProfileDraft.Languages);
+
+        if (guideProfileDraft.Photo) {
+          formData.append("Photo", guideProfileDraft.Photo);
+        }
+
+        const { data } = await axios.post(registerGuide, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        dispatch(addGuide({ userData: data.guide }));
+        setGuideRegistered(true);
+        toastService.success(TOAST_MESSAGES.guideRegistered);
+      } catch (error) {
+        dashboardLogger.error("Guide registration failed", error);
+        toastService.error(getErrorMessage(error, TOAST_MESSAGES.genericError));
+      }
+    };
+
+    registerNewGuide();
+  }, [dispatch, guideAddress, guideIdentity, guideProfileDraft, guideRegistered, userData]);
+
+  const checklistItems = useMemo(
+    () =>
+      GUIDE_ONBOARDING_STEPS.map((step) => {
+        const isComplete =
+          (step.key === "verification" && Boolean(guideIdentity || guideRegistered)) ||
+          (step.key === "profile" && Boolean(guideProfileDraft || guideRegistered)) ||
+          (step.key === "address" && Boolean(guideAddress || guideRegistered));
+
+        return {
+          ...step,
+          isComplete,
+        };
+      }),
+    [guideAddress, guideIdentity, guideProfileDraft, guideRegistered]
+  );
+
+  const renderFlow = () => {
+    if (verifyAddress) {
+      return <Address setVerifyAddress={setVerifyAddress} setGuideAddress={setGuideAddress} />;
+    }
+
+    if (verification) {
+      return (
+        <div className="surface-panel p-6 dark:border-white/10 dark:bg-[#18211E] sm:p-8">
+          <Verification setVerification={setVerification} setGuideInfo={setGuideIdentity} />
+        </div>
+      );
+    }
+
+    if (profileComp) {
+      return (
+        <div className="surface-panel p-4 dark:border-white/10 dark:bg-[#18211E] sm:p-6">
+          <CompleteProfile setProfileComp={setProfileComp} setGuideData={setGuideProfileDraft} />
+        </div>
+      );
+    }
+
+    return (
+      <div className="grid gap-8">
+        <section className="grid gap-8 xl:grid-cols-[1.15fr_0.85fr]">
+          <div className="overflow-hidden rounded-[36px] border border-sand-dark bg-[linear-gradient(135deg,#1A3530_0%,#2C4A3E_48%,#3D6B5A_100%)] px-8 py-10 shadow-luxury">
+            <div className="relative">
+              <span className="eyebrow-label">{GUIDE_DASHBOARD_COPY.eyebrow}</span>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <h1 className="max-w-2xl text-4xl font-semibold leading-tight text-cream sm:text-5xl">
+                  Welcome back, {userData?.fullname?.split(" ")[0] || "Guide"}.
+                </h1>
+                <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-semibold text-sand">
+                  {guideRegistered
+                    ? GUIDE_DASHBOARD_COPY.completionReady
+                    : GUIDE_DASHBOARD_COPY.completionPending}
+                </span>
+              </div>
+              <p className="mt-5 max-w-2xl text-sm leading-8 text-sand/80 sm:text-base">
+                {GUIDE_DASHBOARD_COPY.heroBody}
+              </p>
+
+              <div className="mt-8 grid gap-4 sm:grid-cols-3">
+                {GUIDE_DASHBOARD_COPY.statCards.map((card) => (
+                  <div
+                    key={card.label}
+                    className="rounded-[24px] border border-white/10 bg-white/10 p-5 backdrop-blur-md"
+                  >
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-sand/60">
+                      {card.label}
+                    </p>
+                    <p className="mt-3 text-3xl font-semibold text-cream">{card.value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="surface-panel p-6 dark:border-white/10 dark:bg-[#18211E] sm:p-8">
+            <h2 className="text-2xl font-semibold text-forest dark:text-cream">
+              {GUIDE_DASHBOARD_COPY.checklistHeading}
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-slate dark:text-sand/75">
+              {GUIDE_DASHBOARD_COPY.checklistBody}
+            </p>
+
+            <div className="mt-6 grid gap-4">
+              {checklistItems.map((item) => {
+                const iconClassName = item.isComplete
+                  ? "text-gold"
+                  : "text-forest dark:text-sand";
+
+                const actionHandler =
+                  item.key === "verification"
+                    ? () => setVerification(true)
+                    : item.key === "profile"
+                      ? () => setProfileComp(true)
+                      : () => setVerifyAddress(true);
+
+                const Icon =
+                  item.key === "verification"
+                    ? FaUserCheck
+                    : item.key === "profile"
+                      ? FaUserEdit
+                      : FaMapMarkerAlt;
+
+                return (
+                  <button
+                    key={item.key}
+                    type="button"
+                    onClick={actionHandler}
+                    className="flex w-full items-start gap-4 rounded-[24px] border border-sand-dark/70 bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-soft dark:border-white/10 dark:bg-[#101714]"
+                  >
+                    <div className="mt-1 rounded-2xl bg-sand/70 p-3 dark:bg-white/5">
+                      <Icon className={`text-xl ${iconClassName}`} />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-forest dark:text-cream">
+                        {item.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-7 text-slate dark:text-sand/75">
+                        {item.isComplete
+                          ? item.completeDescription
+                          : item.pendingDescription}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {guideRegistered && (
+          <section className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
+            <div className="surface-panel p-6 dark:border-white/10 dark:bg-[#18211E] sm:p-8">
+              <h2 className="text-2xl font-semibold text-forest dark:text-cream">
+                {GUIDE_DASHBOARD_COPY.analyticsHeading}
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-slate dark:text-sand/75">
+                {GUIDE_DASHBOARD_COPY.analyticsBody}
+              </p>
+              <div className="mt-8">
+                <Doughnut data={incomeData} />
+              </div>
+            </div>
+
+            <div className="surface-panel p-6 dark:border-white/10 dark:bg-[#18211E] sm:p-8">
+              <h2 className="text-2xl font-semibold text-forest dark:text-cream">
+                Recent activity
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-slate dark:text-sand/75">
+                Keep an eye on new actions as your guide presence grows.
+              </p>
+              <div className="mt-6">
+                <RecentComponent />
+              </div>
+            </div>
+          </section>
+        )}
+
+        <section className="surface-panel p-6 dark:border-white/10 dark:bg-[#18211E] sm:p-8">
+          <div className="flex flex-col gap-4 border-b border-sand-dark/70 pb-6 dark:border-white/10 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h2 className="text-2xl font-semibold text-forest dark:text-cream">
+                {GUIDE_DASHBOARD_COPY.activityHeading}
+              </h2>
+              <p className="mt-2 text-sm leading-7 text-slate dark:text-sand/75">
+                {GUIDE_DASHBOARD_COPY.activityBody}
+              </p>
+            </div>
+            {!guideRegistered && (
+              <button onClick={() => setVerification(true)} className="brand-button">
+                Finish onboarding
+              </button>
+            )}
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <span className="rounded-full bg-forest px-4 py-2 text-sm font-semibold text-sand">
+              {GUIDE_DASHBOARD_COPY.upcomingCalls}
+            </span>
+            <span className="rounded-full border border-sand-dark px-4 py-2 text-sm font-semibold text-forest dark:border-white/10 dark:text-sand">
+              {GUIDE_DASHBOARD_COPY.pastCalls}
+            </span>
+          </div>
+
+          <div className="mt-6 flex min-h-40 items-center justify-center rounded-[28px] border border-dashed border-sand-dark bg-sand/40 px-6 text-center text-sm text-slate dark:border-white/10 dark:bg-white/5 dark:text-sand/75">
+            {guideRegistered
+              ? GUIDE_DASHBOARD_COPY.callsEmpty
+              : GUIDE_DASHBOARD_COPY.callsLocked}
+          </div>
+        </section>
+
+        <TripDashboard guideRegistered={guideRegistered} />
+
+        <section className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
+          <div className="surface-panel p-6 dark:border-white/10 dark:bg-[#18211E] sm:p-8">
+            <h2 className="text-2xl font-semibold text-forest dark:text-cream">
+              {GUIDE_DASHBOARD_COPY.reviewsHeading}
+            </h2>
+            <div className="mt-6 flex min-h-52 items-center justify-center rounded-[28px] border border-dashed border-sand-dark bg-sand/40 px-6 text-center text-sm text-slate dark:border-white/10 dark:bg-white/5 dark:text-sand/75">
+              {GUIDE_DASHBOARD_COPY.reviewsEmpty}
+            </div>
+          </div>
+
+          <div className="surface-panel p-6 dark:border-white/10 dark:bg-[#18211E] sm:p-8">
+            <h2 className="text-2xl font-semibold text-forest dark:text-cream">
+              Hosting guidelines
+            </h2>
+            <div className="mt-6">
+              <Guidelines />
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  };
 
   return (
-    <div className="container mx-auto p-5 dark:bg-gray-900 dark:text-white ">
-     <div className=" top-0 z-50 bg-white  sticky">
-  <DashboardNav notify={notify} setNotify={setNotify} setSlider={setSliderOpen}/>
-
-  {/* "Hello" notification div */}
-  {notify && (
-    <div className="absolute h-[40vh] w-[30vw] right-24 top-12 bg-white border border-gray-300 shadow-lg rounded-md p-3">
-      <h2 className='flex justify-center'>Notifications</h2>
-      <div className='h-full flex items-center justify-center'>
-        <span>No notifiction here </span>
-         </div>
-    </div>
-  )}
-</div>
-
-
-      {!verifyAddress ? (
-        !verification ? (
-          profileComp ? (
-            <CompleteProfile setProfileComp={setProfileComp} setGuideData={setGuideData} />
-
-            
-          ) : (
-            <>
-              <div className="flex   md:flex-row p-5 ">
-                <div className="mb-6 flex-1  md:mb-0 ml-2">
-                  <h1 className="text-3xl font-bold text-primary mb-4">Welcome, {userData ? userData.fullname : 'User'}!</h1>
-                  {!GuideRegisterd ? (
-                    <div className='flex flex-col gap-6 md:flex-row'>
-                      {!GuideInfo ? (
-                        <div
-                          className="mt-6 border p-5 w-64 rounded-lg cursor-pointer hover:shadow-lg transition-all duration-300 bg-white"
-                          onClick={handleVerification}
-                        >
-                          <FaUserCheck className="text-2xl text-primary mb-3" />
-                          <h1 className="text-xl font-bold text-primary">Verify your Account</h1>
-                          <span className="text-sm text-gray-600">Verify your email, mobile number</span>
-                        </div>
-                      ) : (
-                        <div
-                          className="mt-6 border p-5 w-64 rounded-lg cursor-pointer border-primary bg-white shadow-lg hover:shadow-xl transition-all duration-300"
-                          onClick={handleVerification}
-                        >
-                          <FaUserCheck className="text-2xl text-green-600 mb-3" />
-                          <h1 className="text-xl font-bold text-green-600">Information Verified</h1>
-                          <span className="text-sm text-secondary">Your details are verified</span>
-                        </div>
-                      )}
-                      <div
-                        className={`mt-6 border p-5 w-64 rounded-lg cursor-pointer ${GuideData ? "border-primary shadow-lg" : "hover:shadow-lg"} transition-all duration-300 bg-white`}
-                        onClick={handleProfileCompletion}
-                      >
-                        <FaUserEdit className={`text-2xl mb-3 ${GuideData ? "text-primary" : "text-gray-600"}`} />
-                        <h1 className={`text-xl font-bold ${GuideData ? "text-primary" : "text-gray-600"}`}>Complete your Profile</h1>
-                        <span className="text-sm text-gray-500">Upload your picture, Languages</span>
-                      </div>
-                      <div
-                        className={`mt-6 border p-5 w-64 rounded-lg cursor-pointer ${GuideAddress ? "border-primary shadow-lg" : "hover:shadow-lg"} transition-all duration-300 bg-white`}
-                        onClick={handleAddressVerification}
-                      >
-                        <FaMapMarkerAlt className={`text-2xl mb-3 ${GuideAddress ? "text-primary" : "text-gray-600"}`} />
-                        <h1 className={`text-xl font-bold ${GuideAddress ? "text-primary" : "text-gray-600"}`}>
-                          {GuideAddress ? 'Address Verified' : 'Verify Your Address'}
-                        </h1>
-                        <span className="text-sm text-gray-500">{GuideAddress ? 'Your Address is Verified' : 'Provide your country, city details'}</span>
-                      </div>
-                    </div>
-                  ) : (
-                  <div className=' w-full flex  flex-col gap-3'>
-                <div className="mb-6 p-4 shadow-lg rounded-lg bg-white dark:bg-gray-800">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
-              Guide Overview
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="p-3 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg text-white shadow-md">
-                <h3>Total Money Earned</h3>
-                <p>$0.00</p>
-              </div>
-              <div className="p-3 bg-gradient-to-r from-yellow-400 to-red-500 rounded-lg text-white shadow-md">
-                <h3>Withdrawal Money</h3>
-                <p>$0.00</p>
-              </div>
-              {/* Add more divs for other metrics */}
-            </div></div>
-            <div className="flex flex-col md:flex-row gap-5">
-  {/* Income Overview Section */}
-  <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-lg md:w-[50%] w-full">
-    <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Income Overview</h3>
-    <Doughnut data={incomeData} />
-    {/* Optional description */}
-    {/* <p className="mt-4 text-justify p-2 shadow-lg">
-      Above is an overview of your income from various sources, including call bookings, trip hosting, and chats. This data provides valuable insights into your earnings performance over time, allowing you to track your progress and make informed decisions. Stay updated to maximize your potential and grow your business as a local guide.
-    </p> */}
-  </div>
-
-  {/* Recent Activities Section */}
-  <div className="w-full md:w-[50%]">
-    <h3 className="text-2xl flex justify-center text-primary font-semibold mb-4">
-      Recent Activities
-    </h3>
-    <div className="sticky top-0">
-      <RecentComponent  />
-    </div>
-  
-</div>
-
-          </div>
-          </div>
-                  )}
-                </div>
-              </div>
-              <div className="p-5 mt-5 gap-5">
-                <div className="flex gap-5">
-                  <span className="border p-2 rounded-lg hover:border-b-4 cursor-pointer bg-gradient-to-r from-secondary to-primary text-white">
-                    Your upcoming call bookings (0)
-                  </span>
-                  <span className="border p-2 rounded-lg hover:border-b-4 cursor-pointer bg-gradient-to-r from-secondary to-primary text-white">
-                    Your past bookings
-                  </span>
-                </div>
-                <div className={`h-56 mt-5 border-2 rounded-lg flex items-center justify-center ${GuideRegisterd ? "bg-white" :"bg-gray-200"}`}>
-                  {GuideRegisterd ? <span className=''>No calls booking</span> : <span>Update and verify your account first.</span>}
-                </div>
-              </div>
-              <div>
-              <TripDashboard GuideRegisterd={ GuideRegisterd }   />   
-              </div>
-              <div className='border '>
-                <h3 className='text-xl font-semibold mb-4 flex justify-center'>Your customers reviews</h3>
-              </div>
-              <div className="p-5 mt-5">
-                <Guidelines />
-              </div>
-            </>
-          )
-        ) : (
-          <div className="p-10">
-            <Verification setVerification={setVerification} setGuideInfo={setGuideInfo} />
-          </div>
-        )
-      ) : (
-        <Address setVerifyAddress={setVerifyAddress} setGuideAddress={setGuideAddress} />
-      )}
-      <div className="mt-5">
-        <Footer />
-      </div>
+    <div className="min-h-screen bg-cream px-4 pb-20 pt-32 dark:bg-charcoal">
+      <div className="section-shell">{renderFlow()}</div>
     </div>
   );
 };

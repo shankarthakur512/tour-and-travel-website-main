@@ -1,4 +1,7 @@
-const Host = "http://localhost:4001/api/v1/users";
-export const  registerUser = `${Host}/register-user`
-export const loginUser = `${Host}/login-user`
-export const CheckUser = `${Host}/check-user`
+import { API_ROUTES } from "../shared/config/api";
+
+const host = API_ROUTES.users;
+
+export const registerUser = `${host}/register-user`;
+export const loginUser = `${host}/login-user`;
+export const CheckUser = `${host}/check-user`;

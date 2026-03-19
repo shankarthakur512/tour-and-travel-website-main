@@ -1,4 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { createLogger } from "../shared/lib/logger";
+
+const tripsLogger = createLogger("trips-slice");
 
 const initialState = {
   trips: [] 
@@ -32,7 +35,7 @@ const TripsArraySlice = createSlice({
   initialState: tripsArrayInitialState,
   reducers: {
     setTripsArray: (state, action) => {
-      console.log(action.payload.trips)
+      tripsLogger.debug("setTripsArray", action.payload.trips);
       state.tripsArray = action.payload.trips;
     },
     clearTripsArray: (state) => {

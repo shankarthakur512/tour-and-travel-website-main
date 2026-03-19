@@ -1,113 +1,150 @@
 import React from "react";
+import { FaBriefcase, FaMapMarkerAlt, FaUsers } from "react-icons/fa";
+
 import BlogsComp from "../components/Blogs/BlogsComp";
 import Location from "../components/Location/Location";
-import founderImage from "../assets/founder.jpg"; // Replace with actual image path
-import { FaUsers, FaMapMarkerAlt, FaBriefcase } from 'react-icons/fa';
+import founderImage from "../assets/founder.jpg";
+import { ABOUT_CONTENT } from "../shared/constants/editorialContent";
+
+const impactIcons = [FaUsers, FaMapMarkerAlt, FaBriefcase];
 
 const About = () => {
   return (
-    <div className="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 font-sans">
-      <div className="container mx-auto py-16 px-6">
-
-        {/* About Us Section */}
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 py-16 mb-16">
-          <div className="space-y-6">
-            <h1 className="text-4xl font-extrabold text-primary border-b-4 border-primary pb-4 mb-4">Our Journey</h1>
-            <p className="text-lg leading-relaxed">
-              Travellogo started with a simple idea: to connect travelers with locals for authentic experiences. 
-              Over time, we’ve built a community of people who share a passion for meaningful travel.
-              From cultural tours to adventurous trips, our platform brings people together to discover the world.
-            </p>
-          </div>
-          <img 
-            src={founderImage} 
-            alt="Founder" 
-            className="rounded-lg shadow-md w-full h-auto object-cover"
-          />
+    <div className="min-h-screen bg-cream px-4 pb-20 pt-32 text-ink dark:bg-charcoal dark:text-cream">
+      <div className="section-shell grid gap-10">
+        <section className="overflow-hidden rounded-[36px] border border-sand-dark bg-[linear-gradient(135deg,#1A3530_0%,#2C4A3E_52%,#3D6B5A_100%)] px-8 py-10 shadow-luxury sm:px-12 sm:py-14">
+          <span className="eyebrow-label">{ABOUT_CONTENT.eyebrow}</span>
+          <h1 className="mt-6 max-w-4xl text-4xl font-semibold leading-tight text-cream sm:text-5xl">
+            {ABOUT_CONTENT.title}
+          </h1>
+          <p className="mt-5 max-w-3xl text-sm leading-8 text-sand/80 sm:text-base">
+            {ABOUT_CONTENT.body}
+          </p>
         </section>
 
-        {/* Meet the Founder */}
-        <section className="py-16 bg-primary/10 rounded-lg px-10 mb-16 text-center lg:text-left">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-            <img
-              src={founderImage}
-              alt="Founder"
-              className="w-56 h-56 rounded-full mb-6 mx-auto lg:mb-0 lg:mx-0 shadow-lg object-cover border-4 border-white"
-            />
+        <section className="grid gap-8 xl:grid-cols-[1.05fr_0.95fr]">
+          <div className="surface-panel p-6 dark:border-white/10 dark:bg-[#18211E] sm:p-8">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">
+              {ABOUT_CONTENT.storyTitle}
+            </span>
+            <h2 className="mt-4 text-3xl font-semibold text-forest dark:text-cream">
+              A travel experience shaped around clarity, confidence, and local trust.
+            </h2>
+            <p className="mt-5 text-sm leading-8 text-slate dark:text-sand/75">
+              {ABOUT_CONTENT.storyBody}
+            </p>
+          </div>
+
+          <div className="overflow-hidden rounded-[32px] border border-sand-dark/70 shadow-soft dark:border-white/10">
+            <img src={founderImage} alt={ABOUT_CONTENT.founderName} className="h-full w-full object-cover" />
+          </div>
+        </section>
+
+        <section className="surface-panel p-6 dark:border-white/10 dark:bg-[#18211E] sm:p-8">
+          <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+            <div className="flex justify-center lg:justify-start">
+              <img
+                src={founderImage}
+                alt={ABOUT_CONTENT.founderName}
+                className="h-56 w-56 rounded-full object-cover ring-4 ring-sand shadow-luxury dark:ring-white/10"
+              />
+            </div>
             <div>
-              <h2 className="text-3xl font-bold mb-4 text-primary">Meet Our Founder</h2>
-              <h3 className="text-2xl font-semibold mb-2">Shankar</h3>
-              <p className="text-lg leading-relaxed">
-                Hi, I'm Shankar, an engineer with a passion for technology and travel. 
-                Travellogo is my vision to bridge the gap between local guides and travelers, offering personalized experiences.
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">
+                {ABOUT_CONTENT.founderTitle}
+              </span>
+              <h2 className="mt-4 text-3xl font-semibold text-forest dark:text-cream">
+                {ABOUT_CONTENT.founderName}
+              </h2>
+              <p className="mt-5 text-sm leading-8 text-slate dark:text-sand/75">
+                {ABOUT_CONTENT.founderBody}
               </p>
             </div>
           </div>
         </section>
 
-        {/* Our Impact Section */}
-        <section className="py-16 bg-white rounded-lg mb-16 text-center grid grid-cols-1 md:grid-cols-3 gap-10">
-          <div>
-            <FaUsers className="mx-auto text-5xl text-primary mb-4" />
-            <h3 className="text-3xl font-bold">50K+</h3>
-            <p className="text-lg">Users</p>
-          </div>
-          <div>
-            <FaMapMarkerAlt className="mx-auto text-5xl text-primary mb-4" />
-            <h3 className="text-3xl font-bold">5K+</h3>
-            <p className="text-lg">Guides</p>
-          </div>
-          <div>
-            <FaBriefcase className="mx-auto text-5xl text-primary mb-4" />
-            <h3 className="text-3xl font-bold">10K+</h3>
-            <p className="text-lg">Trips Hosted</p>
-          </div>
+        <section className="grid gap-6 md:grid-cols-3">
+          {ABOUT_CONTENT.impactCards.map((item, index) => {
+            const Icon = impactIcons[index];
+
+            return (
+              <article
+                key={item.value}
+                className="surface-panel p-6 text-center dark:border-white/10 dark:bg-[#18211E]"
+              >
+                <Icon className="mx-auto text-4xl text-gold" />
+                <h3 className="mt-5 text-3xl font-semibold text-forest dark:text-cream">
+                  {item.value}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-slate dark:text-sand/72">
+                  {item.label}
+                </p>
+              </article>
+            );
+          })}
         </section>
 
-        {/* Contact Us Section */}
-        <section className="py-16 bg-primary/10 rounded-lg px-10 mb-16">
-          <h2 className="text-3xl font-bold mb-8 text-center text-primary">Get In Touch</h2>
-          <form className="space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <input
-                type="text"
-                className="p-4 rounded-lg border dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
-                placeholder="Your Name"
+        <section className="grid gap-8 xl:grid-cols-[0.95fr_1.05fr]">
+          <div className="surface-panel p-6 dark:border-white/10 dark:bg-[#18211E] sm:p-8">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">
+              {ABOUT_CONTENT.contactTitle}
+            </span>
+            <h2 className="mt-4 text-3xl font-semibold text-forest dark:text-cream">
+              A simple contact space for collaboration and questions.
+            </h2>
+            <p className="mt-5 text-sm leading-8 text-slate dark:text-sand/75">
+              {ABOUT_CONTENT.contactBody}
+            </p>
+
+            <form className="mt-8 space-y-5">
+              <div className="grid gap-5 sm:grid-cols-2">
+                <input
+                  type="text"
+                  className="rounded-2xl border border-sand-dark bg-white px-4 py-4 text-sm text-ink outline-none transition focus:border-forest/40 dark:border-white/10 dark:bg-[#101714] dark:text-cream"
+                  placeholder="Your Name"
+                  required
+                />
+                <input
+                  type="email"
+                  className="rounded-2xl border border-sand-dark bg-white px-4 py-4 text-sm text-ink outline-none transition focus:border-forest/40 dark:border-white/10 dark:bg-[#101714] dark:text-cream"
+                  placeholder="Your Email"
+                  required
+                />
+              </div>
+              <textarea
+                rows="5"
+                className="w-full rounded-2xl border border-sand-dark bg-white px-4 py-4 text-sm text-ink outline-none transition focus:border-forest/40 dark:border-white/10 dark:bg-[#101714] dark:text-cream"
+                placeholder="Your Message"
                 required
               />
-              <input
-                type="email"
-                className="p-4 rounded-lg border dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
-                placeholder="Your Email"
-                required
-              />
+              <button type="submit" className="brand-button w-full">
+                Send Message
+              </button>
+            </form>
+          </div>
+
+          <div className="surface-panel p-6 dark:border-white/10 dark:bg-[#18211E] sm:p-8">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-gold">
+              {ABOUT_CONTENT.locationsTitle}
+            </span>
+            <h2 className="mt-4 text-3xl font-semibold text-forest dark:text-cream">
+              A grounded starting point for the brand story.
+            </h2>
+            <p className="mt-5 text-sm leading-8 text-slate dark:text-sand/75">
+              {ABOUT_CONTENT.locationsBody}
+            </p>
+            <div className="mt-6 overflow-hidden rounded-[28px] border border-sand-dark/70 dark:border-white/10">
+              <Location />
             </div>
-            <textarea
-              rows="4"
-              className="w-full p-4 rounded-lg border dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
-              placeholder="Your Message"
-              required
-            ></textarea>
-            <button
-              type="submit"
-              className="w-full bg-primary text-white p-4 rounded-lg hover:bg-secondary transition duration-300"
-            >
-              Send Message
-            </button>
-          </form>
-        </section>
-
-        {/* Our Locations Section */}
-        <section className="py-16 bg-white rounded-lg px-10 mb-16">
-          <h2 className="text-3xl font-bold mb-6 text-center text-primary">Our Locations</h2>
-          <Location />
-        </section>
-
-        {/* Other Sections */}
-        <section className="py-16">
-          <BlogsComp />
+          </div>
         </section>
       </div>
+
+      <BlogsComp
+        variant="compact"
+        title="Editorial pieces that extend the same travel philosophy."
+        copy="The journal helps the About page feel more alive and connected to the rest of the product."
+      />
     </div>
   );
 };

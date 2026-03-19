@@ -1,4 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { createLogger } from "../shared/lib/logger";
+
+const guideLogger = createLogger("guide-slice");
 
 const initialGuideState = {
   newGuide: false,
@@ -10,7 +13,7 @@ const GuideSlice = createSlice({
   initialState: initialGuideState,
   reducers: {
     addGuide: (state, action) => {
-      console.log(action.payload.userData);
+      guideLogger.debug("addGuide", action.payload.userData);
       state.newGuide = true;
       state.userData = action.payload.userData;
     },
@@ -30,7 +33,7 @@ const searchedGuidesSlice = createSlice({
   initialState: initialSearchedGuidesState,
   reducers: {
     addSearchedGuide: (state, action) => {
-        console.log(action.payload)
+      guideLogger.debug("addSearchedGuide", action.payload);
       state.guides = action.payload.guides;
     },
     removeSearchedGuide: (state, action) => {

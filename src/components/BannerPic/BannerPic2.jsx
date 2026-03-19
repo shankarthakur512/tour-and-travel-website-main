@@ -1,93 +1,62 @@
 import React from "react";
 
-const BannerPic2 = ({ img}) => {
-   
-    const title = "Explore the Wonders of Bali";
-    const description =
-      "Subscribe to our newsletter and be the first to know about the best travel deals, exclusive offers, and upcoming events in Bali.";
-  const bgImage = {
-    backgroundImage: `url(${img})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    height: "600px", // Increased height to accommodate the newsletter section
-    position: "relative",
-  };
-
-  const overlayStyle = {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    color: "white",
-    textAlign: "center",
-    padding: "0 20px",
-  };
-
-  const titleStyle = {
-    fontSize: "2.5rem",
-    fontWeight: "bold",
-    marginBottom: "20px",
-    textShadow: "2px 2px 5px rgba(0, 0, 0, 0.7)",
-  };
-
-  const descriptionStyle = {
-    fontSize: "1.25rem",
-    lineHeight: "1.5",
-    maxWidth: "800px",
-    textShadow: "1px 1px 3px rgba(0, 0, 0, 0.7)",
-    marginBottom: "40px",
-  };
-
-  const newsletterContainerStyle = {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: "20px",
-  };
-
-  const inputStyle = {
-    padding: "10px 15px",
-    fontSize: "1rem",
-    borderRadius: "5px 0 0 5px",
-    border: "none",
-    outline: "none",
-    minWidth: "250px",
-  };
-
-  const buttonStyle = {
-    padding: "10px 20px",
-    fontSize: "1rem",
-    borderRadius: "0 5px 5px 0",
-    backgroundColor: "#ff7f50", // Coral color for the button
-    color: "white",
-    border: "none",
-    cursor: "pointer",
-    transition: "background-color 0.3s ease",
-  };
+const BannerPic2 = ({ img }) => {
+  const title = "Get beautiful travel ideas before everyone else.";
+  const description =
+    "Subscribe for destination notes, guide picks, limited-time packages, and thoughtful inspiration for your next escape.";
 
   return (
-    <div data-aos="zoom-in" className="relative h-[600px] w-full" style={bgImage}>
-      <div style={overlayStyle}>
-        <h1 style={titleStyle}>{title}</h1>
-        <p style={descriptionStyle}>{description}</p>
-        <div style={newsletterContainerStyle}>
-          <input
-            type="email"
-            placeholder="Enter your email"
-            style={inputStyle}
-          />
-          <button style={buttonStyle} onMouseEnter={(e) => (e.target.style.backgroundColor = "#ff6347")} onMouseLeave={(e) => (e.target.style.backgroundColor = "#ff7f50")}>
-            Subscribe
-          </button>
+    <section className="py-20 sm:py-24">
+      <div className="section-shell">
+        <div
+          data-aos="zoom-in"
+          className="relative overflow-hidden rounded-[36px] shadow-luxury"
+          style={{
+            backgroundImage: `url(${img})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(44,74,62,0.88)_0%,rgba(61,107,90,0.72)_48%,rgba(201,149,106,0.56)_100%)]" />
+          <div className="relative grid min-h-[520px] items-center gap-10 px-6 py-10 sm:px-10 lg:grid-cols-[1fr_360px] lg:px-14">
+            <div className="max-w-2xl text-cream">
+              <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-gold">
+                Weekly travel letter
+              </span>
+              <h2 className="mt-6 text-4xl font-semibold leading-tight text-cream sm:text-5xl">
+                {title}
+              </h2>
+              <p className="mt-5 max-w-xl text-sm leading-8 text-sand/80 sm:text-base">
+                {description}
+              </p>
+            </div>
+
+            <div className="rounded-[32px] border border-white/12 bg-warm-white p-6 shadow-soft sm:p-8">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-clay">
+                Join the list
+              </p>
+              <h3 className="mt-3 text-2xl font-semibold text-forest">
+                Curated updates. No clutter.
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-slate">
+                Be first to hear about guide-led packages, editorial travel notes, and seasonal offers.
+              </p>
+
+              <div className="mt-6 space-y-3">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="w-full rounded-full border border-sand-dark bg-white px-5 py-4 text-sm text-ink outline-none transition focus:border-forest/40"
+                />
+                <button className="brand-button w-full rounded-full py-4">
+                  Subscribe
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

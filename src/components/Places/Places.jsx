@@ -10,66 +10,75 @@ import Img6 from "../../assets/places/place6.jpg";
 const PlacesData = [
   {
     img: Img1,
-    title: "Boat",
-    location: "USA",
-    description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-    price: 6700,
+    title: "Lake Retreat",
+    location: "Lake Tahoe",
+    description: "Slow mornings, private boat rides, and crisp alpine air wrapped into a calming long-weekend itinerary.",
+    price: 670,
     type: "Cultural Relax",
   },
   {
     img: Img2,
-    title: "Taj Mahal",
-    location: "India",
-    description:
-      "The Taj Mahal is an ivory-white marble mausoleum on the south bank of the river Yamuna in the Indian city of Agra.",
-    price: 6700,
-    type: "Cultural Relax",
+    title: "Taj Mahal Dawn Tour",
+    location: "Agra, India",
+    description: "Sunrise at the Taj, local storytelling, and heritage dining designed for travelers who want beauty with context.",
+    price: 420,
+    type: "Heritage Escape",
   },
   {
     img: Img3,
-    title: "Underwater",
-    location: "US",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus, nulla!",
-    price: 6200,
-    type: "Cultural Relax",
+    title: "Blue Water Getaway",
+    location: "Maui, Hawaii",
+    description: "Ocean-front stays, curated diving spots, and laid-back coastal plans for a breezy tropical reset.",
+    price: 620,
+    type: "Island Leisure",
   },
   {
     img: Img4,
-    title: "Sydney",
-    location: "USA",
-    description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-    price: 6700,
-    type: "Cultural Relax",
+    title: "Sydney After Dark",
+    location: "Sydney, Australia",
+    description: "Harbour views, rooftop dinners, and city walks shaped around design-led urban travel.",
+    price: 710,
+    type: "Urban Discovery",
   },
   {
     img: Img5,
-    title: "Los Angeles",
-    location: "United States",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus, nulla!",
-    price: 6700,
-    type: "Cultural Relax",
+    title: "Pacific Coast Drive",
+    location: "California, USA",
+    description: "Scenic highways, boutique stops, and flexible local guidance for the perfect west-coast road story.",
+    price: 540,
+    type: "Road Journey",
   },
   {
     img: Img6,
-    title: "Las Vegas",
-    location: "California",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus, nulla!",
-    price: 6200,
-    type: "Cultural Relax",
+    title: "Desert Lights",
+    location: "Nevada, USA",
+    description: "A cinematic mix of skyline nights, desert escapes, and bold experiences crafted for adventurous groups.",
+    price: 580,
+    type: "City + Desert",
   },
 ];
 
 const Places = ({ handleOrderPopup }) => {
   return (
-    <div className="dark:bg-gray-900 dark:text-white bg-gray-50 py-10">
-      <section data-aos="fade-up" className="container mx-auto">
-        <h1 className="my-8 border-l-8 border-primary/50 py-2 pl-2 text-3xl font-bold">
-          Best Places to Visit
-        </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <section className="py-20 sm:py-24">
+      <div className="section-shell">
+        <div className="mb-12 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-2xl">
+            <span className="eyebrow-label">Most Loved Journeys</span>
+            <h2 className="section-heading mt-5">Best places to visit for a story-worthy escape.</h2>
+            <p className="section-copy mt-4">
+              Browse a curated collection of destinations that feel elevated, photogenic, and easy to explore with the right local host.
+            </p>
+          </div>
+          <div className="rounded-[24px] border border-sand-dark bg-warm-white px-6 py-5 shadow-soft">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-mist">Why travelers love these</p>
+            <p className="mt-2 max-w-sm text-sm leading-7 text-slate">
+              Flexible dates, trusted local support, and beautiful stays bundled into each itinerary.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3">
           {PlacesData.map((item, index) => (
             <PlaceCard
               handleOrderPopup={handleOrderPopup}
@@ -78,8 +87,8 @@ const Places = ({ handleOrderPopup }) => {
             />
           ))}
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 

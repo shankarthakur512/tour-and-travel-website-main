@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios"; // Import axios for API calls
 import Hero from "../components/Hero/Hero";
-import NatureVid from "../assets/video/main.mp4";
 import BlogsComp from "../components/Blogs/BlogsComp";
 import Places from "../components/Places/Places";
 import Testimonial from "../components/Testimonial/Testimonial";
@@ -13,7 +12,6 @@ import OrderPopup from "../components/OrderPopup/OrderPopup";
 import BannerPic2 from "../components/BannerPic/BannerPic2";
 import { FiMic } from "react-icons/fi";
 import { FaPaperPlane } from "react-icons/fa";
-import { useDispatch } from "react-redux";
 
 const Home = () => {
   const [orderPopup, setOrderPopup] = useState(false);
@@ -21,7 +19,6 @@ const Home = () => {
   const [message, setMessage] = useState(""); // State for the chat input
   const [chatMessages, setChatMessages] = useState([]); // State to manage chat messages
   const [isLoading, setIsLoading] = useState(false); // State to show loading
-   const dispatch = useDispatch();
 
   const handleOrderPopup = () => {
     setOrderPopup(!orderPopup);
@@ -84,18 +81,8 @@ const Home = () => {
 
   return (
     <>
-      <div>
-        <div className="h-[700px] relative">
-          <video
-            autoPlay
-            loop
-            muted
-            className="absolute right-0 top-0 h-[700px] w-full object-cover z-[-1]"
-          >
-            <source src={NatureVid} type="video/mp4" />
-          </video>
-          <Hero />
-        </div>
+      <div className="bg-cream">
+        <Hero />
         <Places handleOrderPopup={handleOrderPopup} />
         <BannerPic img={BannerImg} title={title} description={description} />
         <BlogsComp />
@@ -107,15 +94,15 @@ const Home = () => {
         {/* Chatbot Button */}
         <button
           onClick={handleChatToggle}
-          className="fixed bottom-6 border flex border-primary right-6 text-primary p-4 rounded-full shadow-lg hover:bg-secondary transition-all z-50"
+          className="fixed bottom-6 right-6 z-50 flex rounded-full border border-sand-dark bg-warm-white px-5 py-4 text-sm font-semibold text-forest shadow-soft transition hover:-translate-y-0.5 hover:bg-sand"
         >
           Ai Guide
         </button>
 
        
         {chatOpen && (
-          <div className="fixed bottom-16 right-6 w-[30vw] bg-white shadow-xl dark:bg-slate-800 rounded-lg p-4 z-50 flex flex-col justify-between h-[60vh]">
-            <h2 className="flex justify-center text-primary text-lg font-semibold mb-3">
+          <div className="fixed bottom-20 right-6 z-50 flex h-[60vh] w-[30vw] min-w-[320px] flex-col justify-between rounded-[28px] border border-sand-dark bg-warm-white p-4 shadow-luxury dark:bg-slate-800">
+            <h2 className="mb-3 flex justify-center text-lg font-semibold text-forest">
               Your AI Buddy
             </h2>
             <div className="flex-grow overflow-y-auto p-2">
@@ -139,31 +126,30 @@ const Home = () => {
                 </div>
               ))}
               {isLoading && (
-                <div className="self-end p-2 text-primary">Loading...</div>
+                <div className="self-end p-2 text-forest">Loading...</div>
               )}
             </div>
             {/* Input Section */}
-            <div className="flex items-center border-t pt-2">
+            <div className="flex items-center border-t border-sand-dark pt-2">
               <input
                 type="text"
                 value={message}
                 onChange={handleInputChange}
                 
                   onKeyDown={(e) =>{
-                    console.log(e)
                     if(e.key === "Enter") handleSendMessage();
                   }} 
                 placeholder="Type your question..."
-                className="flex-1 outline-none px-2 py-2 dark:bg-gray-700 rounded-lg"
+                className="flex-1 rounded-lg px-2 py-2 outline-none dark:bg-gray-700"
               />
               {message ? (
                 <FaPaperPlane
-                  className="text-primary ml-2 cursor-pointer"
+                  className="ml-2 cursor-pointer text-forest"
                   size={24}
                   
                 />
               ) : (
-                <FiMic className="text-primary ml-2 cursor-pointer" size={24} />
+                <FiMic className="ml-2 cursor-pointer text-forest" size={24} />
               )}
             </div>
           </div>

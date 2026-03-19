@@ -1,11 +1,18 @@
-import React, { useState, useEffect } from "react";
-import GoogleMap from "../GoogleMap/GoogleMap";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const MAP_API_KEY = "AIzaSyA98Ne9CIOFbqeXZ_hbxhWkIUMDX1r4T6k";
+import GoogleMap from "../GoogleMap/GoogleMap";
+import { ENV_CONFIG } from "../../shared/config/env";
+import { createLogger } from "../../shared/lib/logger";
+import { toastService } from "../../shared/services/toast";
+import {
+  GUIDE_ADDRESS_COPY,
+} from "../../features/guides/constants/dashboardContent";
+
+const MAP_API_KEY = ENV_CONFIG.mapApiKey;
 const CSC_API_KEY = "SVRwWk9YS1luWUxsc1RGa3ZiS212TlFTeGU2bm16NUVvSWVWZ29HRw==";
+const addressLogger = createLogger("guide-address");
 
 const axiosInstance = axios.create({
   headers: {
@@ -14,149 +21,196 @@ const axiosInstance = axios.create({
 });
 
 function Address({ setVerifyAddress, setGuideAddress }) {
-  const [setUp, setSetUp] = useState(false);
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-  const [country, setCountry] = useState([]);
+  const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
-  const navigate = useNavigate();
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit, setValue } = useForm({
+    defaultValues: {
+      country: "",
+      city: "",
+      street: "",
+      pincode: "",
+    },
+  });
 
   const handleForm = (data) => {
     setGuideAddress({ ...data });
     setVerifyAddress(false);
   };
 
-  // Fetch countries
   useEffect(() => {
     const fetchCountries = async () => {
       try {
         const response = await axiosInstance.get("https://api.countrystatecity.in/v1/countries");
-        setCountry(response.data);
+        setCountries(response.data);
       } catch (error) {
-        console.error(error);
+        addressLogger.error("Failed to fetch countries", error);
+        toastService.error("Unable to load countries right now.");
       }
     };
+
     fetchCountries();
   }, []);
 
-  // Fetch cities based on selected country
-  const fetchCities = async (countryCode) => {
-    try {
-      const response = await axiosInstance.get(`https://api.countrystatecity.in/v1/countries/${countryCode}/cities`);
-      setCities(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    if (selectedCountry) {
-      fetchCities(selectedCountry);
+    if (!selectedCountry) {
+      return;
     }
+
+    const fetchCities = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `https://api.countrystatecity.in/v1/countries/${selectedCountry}/cities`
+        );
+        setCities(response.data);
+      } catch (error) {
+        addressLogger.error("Failed to fetch cities", error);
+        toastService.error("Unable to load cities for the selected country.");
+      }
+    };
+
+    fetchCities();
   }, [selectedCountry]);
 
-  // Handle custom dropdown change for country
-  const handleCountryChange = (e) => {
-    const countryCode = e.target.value;
+  const handleCountryChange = (event) => {
+    const countryCode = event.target.value;
     setSelectedCountry(countryCode);
-    setValue("country", countryCode);  // Update form country value
+    setValue("country", countryCode);
+    setValue("city", "");
   };
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setLatitude(latitude);
-          setLongitude(longitude);
-        },
-        (error) => {
-          console.log(error.message);
-        }
-      );
+    if (!navigator.geolocation) {
+      return;
     }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude: nextLatitude, longitude: nextLongitude } = position.coords;
+        setLatitude(nextLatitude);
+        setLongitude(nextLongitude);
+      },
+      (error) => {
+        addressLogger.warn(error.message);
+      }
+    );
   }, []);
 
   return (
-    <div className="h-full my-20 mx-4 lg:mx-10">
-      <div>
-        <h1 className="border-l-4 border-primary/50 py-2 pl-2 mb-5 text-xl font-bold sm:text-3xl">
-          Confirm Your Location
+    <div className="grid gap-8">
+      <section className="overflow-hidden rounded-[36px] border border-sand-dark bg-[linear-gradient(135deg,#1A3530_0%,#2C4A3E_52%,#3D6B5A_100%)] px-8 py-10 shadow-luxury sm:px-12 sm:py-14">
+        <span className="eyebrow-label">{GUIDE_ADDRESS_COPY.eyebrow}</span>
+        <h1 className="mt-6 max-w-2xl text-4xl font-semibold leading-tight text-cream sm:text-5xl">
+          {GUIDE_ADDRESS_COPY.title}
         </h1>
-        <GoogleMap apiKey={MAP_API_KEY} longitude={longitude} latitude={latitude} />
-      </div>
-      <div className="mt-8">
-        <h1 className="border-l-4 border-primary/50 py-2 pl-2 mb-4 text-xl font-bold sm:text-3xl">
-          Enter Your Address Details
-        </h1>
-        <form onSubmit={handleSubmit(handleForm)} className="flex flex-col items-center w-full lg:w-[70vw] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-5 w-full">
-            {/* Country Dropdown */}
-            <div className="flex flex-col gap-2">
-              <label className="text-lg font-medium">Country</label>
-              <select
-                {...register("country")}
-                className="h-10 border p-2 rounded bg-slate-100"
-                onChange={handleCountryChange}
+        <p className="mt-5 max-w-2xl text-sm leading-8 text-sand/80 sm:text-base">
+          {GUIDE_ADDRESS_COPY.body}
+        </p>
+      </section>
+
+      <div className="grid gap-8 xl:grid-cols-[1.05fr_0.95fr]">
+        <section className="surface-panel p-6 dark:border-white/10 dark:bg-[#18211E] sm:p-8">
+          <h2 className="text-2xl font-semibold text-forest dark:text-cream">
+            {GUIDE_ADDRESS_COPY.mapTitle}
+          </h2>
+          <p className="mt-3 text-sm leading-7 text-slate dark:text-sand/75">
+            Your current location helps confirm the place you guide from.
+          </p>
+          <div className="mt-6 overflow-hidden rounded-[28px] border border-sand-dark/70 dark:border-white/10">
+            <GoogleMap apiKey={MAP_API_KEY} longitude={longitude} latitude={latitude} />
+          </div>
+        </section>
+
+        <section className="surface-panel p-6 dark:border-white/10 dark:bg-[#18211E] sm:p-8">
+          <h2 className="text-2xl font-semibold text-forest dark:text-cream">
+            {GUIDE_ADDRESS_COPY.formTitle}
+          </h2>
+
+          <form onSubmit={handleSubmit(handleForm)} className="mt-6 grid gap-5">
+            <div className="grid gap-5 sm:grid-cols-2">
+              <label className="grid gap-2">
+                <span className="text-sm font-medium text-slate dark:text-sand">
+                  {GUIDE_ADDRESS_COPY.countryLabel}
+                </span>
+                <select
+                  {...register("country")}
+                  className="rounded-2xl border border-sand-dark bg-white px-4 py-4 text-sm text-ink outline-none transition focus:border-forest/40 dark:border-white/10 dark:bg-[#101714] dark:text-cream"
+                  onChange={handleCountryChange}
+                  defaultValue=""
+                >
+                  <option value="" disabled>
+                    {GUIDE_ADDRESS_COPY.countryPlaceholder}
+                  </option>
+                  {countries.map((country) => (
+                    <option key={country.iso2} value={country.iso2}>
+                      {country.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="grid gap-2">
+                <span className="text-sm font-medium text-slate dark:text-sand">
+                  {GUIDE_ADDRESS_COPY.cityLabel}
+                </span>
+                <select
+                  {...register("city")}
+                  className="rounded-2xl border border-sand-dark bg-white px-4 py-4 text-sm text-ink outline-none transition focus:border-forest/40 dark:border-white/10 dark:bg-[#101714] dark:text-cream"
+                  defaultValue=""
+                >
+                  <option value="" disabled>
+                    {GUIDE_ADDRESS_COPY.cityPlaceholder}
+                  </option>
+                  {cities.map((city) => (
+                    <option key={city.id} value={city.name}>
+                      {city.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              <label className="grid gap-2">
+                <span className="text-sm font-medium text-slate dark:text-sand">
+                  {GUIDE_ADDRESS_COPY.streetLabel}
+                </span>
+                <input
+                  {...register("street")}
+                  className="rounded-2xl border border-sand-dark bg-white px-4 py-4 text-sm text-ink outline-none transition focus:border-forest/40 dark:border-white/10 dark:bg-[#101714] dark:text-cream"
+                  placeholder={GUIDE_ADDRESS_COPY.streetPlaceholder}
+                />
+              </label>
+
+              <label className="grid gap-2">
+                <span className="text-sm font-medium text-slate dark:text-sand">
+                  {GUIDE_ADDRESS_COPY.pincodeLabel}
+                </span>
+                <input
+                  type="number"
+                  {...register("pincode")}
+                  className="rounded-2xl border border-sand-dark bg-white px-4 py-4 text-sm text-ink outline-none transition focus:border-forest/40 dark:border-white/10 dark:bg-[#101714] dark:text-cream"
+                  placeholder={GUIDE_ADDRESS_COPY.pincodePlaceholder}
+                />
+              </label>
+            </div>
+
+            <div className="flex flex-wrap gap-3 pt-2">
+              <button className="brand-button" type="submit">
+                {GUIDE_ADDRESS_COPY.submit}
+              </button>
+              <button
+                type="button"
+                onClick={() => setVerifyAddress(false)}
+                className="brand-button-secondary dark:border-white/10 dark:bg-white/5 dark:text-sand"
               >
-                <option value="" disabled selected>
-                  Select Country
-                </option>
-                {country.map((country) => (
-                  <option key={country.iso2} value={country.iso2} className="bg-slate-200">
-                    {country.name}
-                  </option>
-                ))}
-              </select>
+                Cancel
+              </button>
             </div>
-
-            {/* City Dropdown */}
-            <div className="flex flex-col gap-2">
-              <label className="text-lg font-medium">City</label>
-              <select {...register("city")} className="h-10 border p-2 rounded bg-slate-100">
-                <option value="" disabled selected>
-                  Select City
-                </option>
-                {cities.map((city) => (
-                  <option key={city.id} value={city.name} className="bg-slate-200">
-                    {city.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Other Address Fields */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-5 w-full">
-            <div className="flex flex-col gap-2">
-              <label className="text-lg font-medium">House No/Street</label>
-              <input
-                {...register("street")}
-                className="h-10 w-full lg:w-[30vw] border p-2 rounded"
-                placeholder="Enter House no / street"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-lg font-medium">Pincode</label>
-              <input
-                type="number"
-                {...register("pincode")}
-                className="h-10 w-full lg:w-[24vw] border p-2 rounded"
-                placeholder="Enter your Pincode"
-              />
-            </div>
-          </div>
-
-          {/* Submit Button */}
-          <button
-            className="bg-gradient-to-r mt-4 from-primary to-secondary hover:from-secondary hover:to-primary transition-all duration-600 text-white h-12 px-3 py-1 w-full lg:w-[30vw] rounded-full"
-            type="submit"
-          >
-            Submit
-          </button>
-        </form>
+          </form>
+        </section>
       </div>
     </div>
   );
