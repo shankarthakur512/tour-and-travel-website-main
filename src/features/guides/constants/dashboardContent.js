@@ -209,7 +209,7 @@ export const GUIDE_ADDRESS_COPY = {
 
 export const GUIDE_WORK_WITH_US_COPY = {
   eyebrow: "Why guide with us",
-  title: "Why host on Travellgo?",
+  title: "Why host on Lockal Way?",
   body:
     "The guide experience should feel professional for you and trustworthy for travelers from the first booking onward.",
   items: [

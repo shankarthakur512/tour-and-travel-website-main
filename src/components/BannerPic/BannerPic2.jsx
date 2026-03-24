@@ -31,14 +31,14 @@ const BannerPic2 = ({ img }) => {
               </p>
             </div>
 
-            <div className="rounded-[32px] border border-white/12 bg-warm-white p-6 shadow-soft sm:p-8">
+            <div className="rounded-[32px] border border-white/12 bg-warm-white p-6 shadow-soft dark:bg-[#18211E] sm:p-8">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-clay">
                 Join the list
               </p>
-              <h3 className="mt-3 text-2xl font-semibold text-forest">
+              <h3 className="mt-3 text-2xl font-semibold text-forest dark:text-cream">
                 Curated updates. No clutter.
               </h3>
-              <p className="mt-3 text-sm leading-7 text-slate">
+              <p className="mt-3 text-sm leading-7 text-slate dark:text-sand/72">
                 Be first to hear about guide-led packages, editorial travel notes, and seasonal offers.
               </p>
 
@@ -46,7 +46,7 @@ const BannerPic2 = ({ img }) => {
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="w-full rounded-full border border-sand-dark bg-white px-5 py-4 text-sm text-ink outline-none transition focus:border-forest/40"
+                  className="w-full rounded-full border border-sand-dark bg-white px-5 py-4 text-sm text-ink outline-none transition focus:border-forest/40 dark:border-white/10 dark:bg-[#101714] dark:text-cream dark:placeholder:text-sand/45"
                 />
                 <button className="brand-button w-full rounded-full py-4">
                   Subscribe

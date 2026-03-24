@@ -98,3 +98,35 @@
     @apply max-w-2xl text-sm leading-7 text-slate sm:text-base;
   }
 }
+
+body.dark .react-datepicker {
+  background-color: #18211e;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #fdfaf5;
+}
+
+body.dark .react-datepicker__header {
+  background-color: #101714;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .react-datepicker__current-month,
+body.dark .react-datepicker-time__header,
+body.dark .react-datepicker-year-header,
+body.dark .react-datepicker__day-name,
+body.dark .react-datepicker__day,
+body.dark .react-datepicker__time-name {
+  color: #fdfaf5;
+}
+
+body.dark .react-datepicker__day:hover,
+body.dark .react-datepicker__month-text:hover,
+body.dark .react-datepicker__quarter-text:hover,
+body.dark .react-datepicker__year-text:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark .react-datepicker__day--selected,
+body.dark .react-datepicker__day--keyboard-selected {
+  background-color: #2c4a3e;
+}

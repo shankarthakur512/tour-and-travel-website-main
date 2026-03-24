@@ -69,8 +69,8 @@ const Testimonial = () => {
       <div className="section-shell">
         <div className="mx-auto mb-14 max-w-2xl text-center">
           <span className="eyebrow-label">Traveler Notes</span>
-          <h2 className="section-heading mt-5">What people remember most is how easy it all felt.</h2>
-          <p className="section-copy mx-auto mt-4">
+          <h2 className="section-heading mt-5 dark:text-cream">What people remember most is how easy it all felt.</h2>
+          <p className="section-copy mx-auto mt-4 dark:text-sand/75">
             Social proof should feel intimate and believable. These testimonials support trust right after the more aspirational sections.
           </p>
         </div>
@@ -79,7 +79,7 @@ const Testimonial = () => {
           <Slider {...settings}>
             {testimonialData.map(({ id, name, text, img, role }) => (
               <div key={id} className="px-3 py-6">
-                <article className="relative h-full rounded-[30px] border border-sand-dark/70 bg-warm-white p-8 shadow-soft">
+                <article className="relative h-full rounded-[30px] border border-sand-dark/70 bg-warm-white p-8 shadow-soft dark:border-white/10 dark:bg-[#18211E]">
                   <div className="absolute right-6 top-5 text-7xl leading-none text-clay/15">"</div>
                   <div className="mb-6 flex items-center gap-4">
                     <img
@@ -88,11 +88,11 @@ const Testimonial = () => {
                       className="h-16 w-16 rounded-full object-cover ring-4 ring-sand"
                     />
                     <div>
-                      <h3 className="text-xl font-semibold text-forest">{name}</h3>
-                      <p className="text-sm text-mist">{role}</p>
+                      <h3 className="text-xl font-semibold text-forest dark:text-cream">{name}</h3>
+                      <p className="text-sm text-mist dark:text-sand/50">{role}</p>
                     </div>
                   </div>
-                  <p className="relative z-10 text-sm leading-8 text-slate">{text}</p>
+                  <p className="relative z-10 text-sm leading-8 text-slate dark:text-sand/72">{text}</p>
                 </article>
               </div>
             ))}

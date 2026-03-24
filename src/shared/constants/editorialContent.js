@@ -51,38 +51,118 @@ export const BLOGS_DATA = [
 ];
 
 export const ABOUT_CONTENT = {
-  eyebrow: "About Travellgo",
-  title: "Building a calmer way to discover places through local insight.",
+  eyebrow: "Careers at Lockal Way",
+  title: "Help build a travel platform where local insight leads every journey.",
   body:
-    "Travellgo is designed around a simple idea: travelers should find guides, trips, and planning support in one place without the experience feeling noisy or fragmented.",
-  storyTitle: "Our journey",
+    "We are creating a calmer, more trustworthy way for travelers to discover destinations and for guides to grow meaningful businesses. If you care about product craft, local communities, and thoughtful travel experiences, there is room to shape what comes next here.",
+  storyTitle: "Our history",
   storyBody:
-    "The product started from the belief that meaningful travel happens when local knowledge is easier to trust. Instead of treating travel like a list of transactions, the goal is to connect discovery, confidence, and human context in a more thoughtful flow.",
-  founderTitle: "Meet the founder",
-  founderName: "Shankar",
-  founderBody:
-    "Shankar built Travellgo to bring together technology, hospitality, and local expertise. The vision is to help travelers discover better experiences while giving guides a more credible place to present what they do best.",
-  impactTitle: "Why the platform matters",
-  impactCards: [
+    "Lockal Way started as a simple idea in 2023: travel feels better when the people who know a place best are part of the experience from the beginning. Since then, the product has grown from an early guide directory into a broader platform for discovery, trip planning, and guide-led packages.",
+  historyTimeline: [
     {
-      value: "Local-first",
-      label: "A traveler journey shaped by guides and real destination context.",
+      year: "2023",
+      title: "The idea takes shape",
+      description:
+        "The first concept focused on helping travelers find trustworthy local guides without jumping between scattered apps and social profiles.",
     },
     {
-      value: "Trust-led",
-      label: "Verification, clearer flows, and calmer design improve confidence.",
+      year: "2024",
+      title: "Guide onboarding launched",
+      description:
+        "We introduced onboarding, profile completion, and verification steps so guide identities could feel more credible and professional.",
     },
     {
-      value: "Two-sided",
-      label: "Built for both travelers booking trips and guides publishing them.",
+      year: "2025",
+      title: "Trips and packages expanded",
+      description:
+        "The platform evolved beyond profiles into curated trips, package publishing, and stronger traveler support flows.",
+    },
+    {
+      year: "2026",
+      title: "Hiring for the next chapter",
+      description:
+        "Now we are growing the team with product, design, operations, and partnerships roles to make the experience richer from end to end.",
     },
   ],
-  contactTitle: "Get in touch",
+  founderTitle: "Why people join",
+  founderName: "Lockal Way team",
+  founderBody:
+    "People join Lockal Way to work on real travel problems with visible product impact. The team cares about clarity, trust, and building tools that respect both travelers and local experts. We value curiosity, ownership, and the ability to turn rough ideas into polished experiences.",
+  impactTitle: "What makes the work meaningful",
+  impactCards: [
+    {
+      value: "Product ownership",
+      label: "Work close to decisions and help shape features from concept to launch.",
+    },
+    {
+      value: "Real-world impact",
+      label: "Your work directly affects how travelers discover guides and book trips.",
+    },
+    {
+      value: "Travel-minded team",
+      label: "Collaborate with people who care deeply about hospitality and local culture.",
+    },
+  ],
+  careerPathsTitle: "Career paths",
+  careerPathsBody:
+    "A few sample paths below show the kind of roles we are building around product growth. These are dummy examples for now, but they reflect the type of team structure the platform can support.",
+  careerPaths: [
+    {
+      title: "Product & UX",
+      description:
+        "Own traveler journeys, guide onboarding flows, experiments, and polished interfaces that reduce friction.",
+    },
+    {
+      title: "Engineering",
+      description:
+        "Build scalable booking, dashboard, profile, and search experiences across frontend and backend systems.",
+    },
+    {
+      title: "Guide Success",
+      description:
+        "Partner with local guides, improve onboarding quality, and help hosts launch stronger offers on the platform.",
+    },
+    {
+      title: "Growth & Partnerships",
+      description:
+        "Create destination partnerships, shape launch campaigns, and connect demand with the right local supply.",
+    },
+  ],
+  openingsTitle: "Current openings",
+  openingsBody:
+    "These sample roles are included as placeholder job data for the new Career section.",
+  openings: [
+    {
+      title: "Frontend Developer",
+      meta: "Product Engineering • Remote / India • Full-time",
+      description:
+        "Build responsive booking, dashboard, and discovery experiences with a strong eye for UI polish and interaction quality.",
+    },
+    {
+      title: "Travel Operations Associate",
+      meta: "Operations • Hybrid • Full-time",
+      description:
+        "Coordinate guide onboarding, traveler support, and quality checks so every itinerary feels reliable and ready to launch.",
+    },
+    {
+      title: "Partnerships Manager",
+      meta: "Growth • Remote / India • Full-time",
+      description:
+        "Develop relationships with local experts, boutique stays, and destination partners to expand high-quality supply.",
+    },
+    {
+      title: "Content & Community Intern",
+      meta: "Brand • Remote • Internship",
+      description:
+        "Support destination storytelling, guide spotlights, and editorial campaigns that bring the product voice to life.",
+    },
+  ],
+  contactTitle: "Apply or start a conversation",
   contactBody:
-    "Whether you want to collaborate, ask questions, or explore how the platform is evolving, reach out here.",
-  locationsTitle: "Our location",
+    "If one of these roles feels close to your strengths, share a short note and we can begin the conversation. The form below is placeholder content for now, but the section is ready for a real hiring workflow later.",
+  locationsTitle: "Where we collaborate",
   locationsBody:
-    "The current repo points to a single embedded location map. If more office or guide hubs are added later, this section can expand easily.",
+    "Today the team can collaborate remotely, with room to support hybrid destination hubs later. This placeholder map can evolve into office, guide, or regional operations locations as the company grows.",
 };
 
 export const slugifyBlogTitle = (title = "") =>

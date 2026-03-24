@@ -13,13 +13,12 @@ const UserMenu = () => {
   const guideData = useSelector((state) => state.Guide.userData);
 
   const menuLinks = [
-    { label: NAV_STRINGS.home, to: APP_ROUTES.home },
+    { label: NAV_STRINGS.profile, to: APP_ROUTES.profile },
     {
-      label: guideData ? NAV_STRINGS.guideDashboard : NAV_STRINGS.becomeGuide,
-      to: APP_ROUTES.dashboard,
+      label: NAV_STRINGS.bookedTrips,to: APP_ROUTES.myTrips,
     },
-    ...(guideData ? [{ label: NAV_STRINGS.createPackage, to: APP_ROUTES.tourPackage }] : []),
-    { label: NAV_STRINGS.blogs, to: APP_ROUTES.blogs },
+    { label: NAV_STRINGS.callAndMessages, to: APP_ROUTES.callsAndMessages },
+    { label: NAV_STRINGS.AccountSettings, to: APP_ROUTES.accountOverview },
   ];
 
   const handleLogout = () => {

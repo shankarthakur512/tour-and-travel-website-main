@@ -1,9 +1,11 @@
 import React, { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { useSelector } from "react-redux";
 import { FaTicketAlt } from "react-icons/fa";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { HiOutlineCreditCard, HiOutlineShieldCheck } from "react-icons/hi2";
+import axios from "axios";
 import { API_ROUTES } from "../../../shared/config/api";
 import { APP_STRINGS, TOAST_MESSAGES, UI_STRINGS } from "../../../shared/constants/strings";
 import { APP_ROUTES } from "../../../shared/constants/routes";
@@ -11,6 +13,7 @@ import { createLogger } from "../../../shared/lib/logger";
 import { toastService } from "../../../shared/services/toast";
 import { formatCurrency } from "../../../shared/lib/format";
 import { PAYMENT_PAGE_COPY } from "../constants/content";
+import { BookTrip } from "../../../Apihandle/Trips";
 
 const paymentLogger = createLogger("payment-page");
 
@@ -25,11 +28,13 @@ const PaymentPage = () => {
   const [nameOnCard, setNameOnCard] = useState("");
   const [country, setCountry] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const userData = useSelector((state) => state.auth.userData);
 
-  const { personDetails, totalCost, finalCost } = location.state || {
+  const { personDetails, totalCost, finalCost, tripData } = location.state || {
     personDetails: [],
     totalCost: 0,
     finalCost: 0,
+    tripData: null,
   };
 
   const summaryItems = useMemo(
@@ -48,6 +53,18 @@ const PaymentPage = () => {
   );
 
   const handlePayment = async () => {
+    if (!userData?._id) {
+      toastService.warning(TOAST_MESSAGES.signInRequired);
+      navigate(APP_ROUTES.login);
+      return;
+    }
+
+    if (!tripData?._id) {
+      toastService.error("Trip details are missing for this payment.");
+      navigate(APP_ROUTES.home);
+      return;
+    }
+
     if (!stripe || !elements || !nameOnCard || !country || !acceptedTerms) {
       toastService.warning("Complete all payment fields and accept the terms to continue.");
       return;
@@ -90,10 +107,18 @@ const PaymentPage = () => {
         setErrorMessage(error.message);
         toastService.error(error.message);
       } else if (paymentIntent.status === "succeeded") {
+        await axios.post(BookTrip, {
+          tripId: tripData._id,
+          bookedBy: userData._id,
+          personDetails,
+          paymentIntentId: paymentIntent.id,
+        });
+
         setShowSuccessPopup(true);
+        toastService.success(TOAST_MESSAGES.tripBooked);
         setTimeout(() => {
           setShowSuccessPopup(false);
-          navigate(APP_ROUTES.home);
+          navigate(APP_ROUTES.myTrips);
         }, 3000);
       }
     } catch (error) {
@@ -191,6 +216,11 @@ const PaymentPage = () => {
               <h2 className="mt-3 text-3xl font-semibold text-forest dark:text-cream">
                 {PAYMENT_PAGE_COPY.paymentTitle}
               </h2>
+              {tripData ? (
+                <p className="mt-3 text-sm text-slate dark:text-sand/70">
+                  Booking for <span className="font-semibold text-forest dark:text-cream">{tripData.tripName}</span>
+                </p>
+              ) : null}
             </div>
 
             <div className="grid gap-5">

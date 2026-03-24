@@ -1,8 +1,11 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { APP_ROUTES } from "../../shared/constants/routes";
 import { formatCurrency } from "../../shared/lib/format";
 import { BOOKING_MODAL_COPY } from "../../features/trips/constants/content";
+import { TOAST_MESSAGES } from "../../shared/constants/strings";
+import { toastService } from "../../shared/services/toast";
 
 const TravelerField = ({ label, type = "text", value, onChange }) => (
   <label className="grid gap-2">
@@ -23,6 +26,7 @@ const BookingModal = ({ onClose, tripData }) => {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [currentPerson, setCurrentPerson] = useState({ name: "", govtId: "", age: "" });
   const navigate = useNavigate();
+  const isLoggedIn = useSelector((state) => state.auth.status);
 
   const totalPersons = personDetails.length;
   const totalCost = tripData.price * totalPersons;
@@ -55,12 +59,18 @@ const BookingModal = ({ onClose, tripData }) => {
   };
 
   const handleBooking = () => {
+    if (!isLoggedIn) {
+      toastService.warning(TOAST_MESSAGES.signInRequired);
+      navigate(APP_ROUTES.login);
+      return;
+    }
+
     if (!acceptedTerms) {
       return;
     }
 
     navigate(APP_ROUTES.payment, {
-      state: { personDetails, totalCost, finalCost },
+      state: { personDetails, totalCost, finalCost, tripData },
     });
     onClose();
   };

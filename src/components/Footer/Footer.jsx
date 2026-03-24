@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   FaFacebook,
   FaInstagram,
@@ -8,16 +9,16 @@ import {
   FaMobileAlt,
 } from "react-icons/fa";
 
-import FooterLogo from "../../assets/logo.png";
-import { APP_ROUTES } from "../../shared/constants/routes";
+import FooterLogo from "../../assets/lokalway-logo.svg";
+import { APP_ROUTES, getGuideEntryRoute } from "../../shared/constants/routes";
 import { APP_STRINGS, NAV_STRINGS } from "../../shared/constants/strings";
 
-const defaultFooterColumns = {
+const getDefaultFooterColumns = (isLoggedIn) => ({
   Discover: [
     { title: NAV_STRINGS.home, link: APP_ROUTES.home },
     { title: NAV_STRINGS.about, link: APP_ROUTES.about },
     { title: NAV_STRINGS.blogs, link: APP_ROUTES.blogs },
-    { title: NAV_STRINGS.guides, link: APP_ROUTES.localGuide },
+    { title: NAV_STRINGS.guideHome, link: getGuideEntryRoute(isLoggedIn) },
   ],
   Plan: [
     { title: "Curated Trips", link: APP_ROUTES.home },
@@ -26,12 +27,12 @@ const defaultFooterColumns = {
     { title: "Flexible Dates", link: APP_ROUTES.home },
   ],
   Host: [
-    { title: NAV_STRINGS.becomeGuide, link: APP_ROUTES.localGuide },
+    { title: NAV_STRINGS.guideHome, link: getGuideEntryRoute(isLoggedIn) },
     { title: NAV_STRINGS.guideDashboard, link: APP_ROUTES.dashboard },
     { title: NAV_STRINGS.createPackage, link: APP_ROUTES.tourPackage },
     { title: "Payments", link: APP_ROUTES.payment },
   ],
-};
+});
 
 const workspaceLinks = [
   { title: NAV_STRINGS.backHome, link: APP_ROUTES.home },
@@ -41,10 +42,12 @@ const workspaceLinks = [
 
 const Footer = () => {
   const location = useLocation();
+  const isLoggedIn = useSelector((state) => Boolean(state.auth.status));
   const pathname = location.pathname;
   const isGuideWorkspace =
     pathname === APP_ROUTES.dashboard || pathname === APP_ROUTES.tourPackage;
   const isAuthPage = pathname === APP_ROUTES.login || pathname === APP_ROUTES.signup;
+  const defaultFooterColumns = getDefaultFooterColumns(isLoggedIn);
 
   if (isGuideWorkspace || isAuthPage) {
     return (
@@ -84,11 +87,10 @@ const Footer = () => {
         <div className="grid gap-10 border-b border-white/10 pb-12 lg:grid-cols-[1.1fr_1.4fr]">
           <div className="max-w-md">
             <div className="flex items-center gap-4">
-              <img src={FooterLogo} alt="Logo" className="h-14 w-14 rounded-full object-cover" />
+              <img src={FooterLogo} alt={APP_STRINGS.brandName} className="h-14 w-auto sm:h-16" />
               <div>
-                <h2 className="text-2xl font-semibold text-cream">{APP_STRINGS.brandName}</h2>
                 <p className="text-xs uppercase tracking-[0.24em] text-sand/55">
-                  Curated travel marketplace
+                  {APP_STRINGS.tagline}
                 </p>
               </div>
             </div>

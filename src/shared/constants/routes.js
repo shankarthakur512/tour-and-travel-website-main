@@ -9,7 +9,13 @@ export const APP_ROUTES = {
   search: "/search",
   payment: "/payment",
   tourPackage: "/tourPackage",
+  profile: "/profile",
+  myTrips: "/my-trips",
+  callsAndMessages: "/calls-messages",
 };
+
+export const getGuideEntryRoute = (isLoggedIn) =>
+  isLoggedIn ? APP_ROUTES.dashboard : APP_ROUTES.localGuide;
 
 export const getGuideDetailsRoute = (guideId) => `${APP_ROUTES.search}/${guideId}`;
 

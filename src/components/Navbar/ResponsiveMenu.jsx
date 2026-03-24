@@ -1,7 +1,6 @@
 import React from "react";
 import { FaCompass } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { NavbarLinks } from "./Navbar";
 import { useSelector } from "react-redux";
 import DarkModeToggle from "../others/DarkMode";
 import { NAV_STRINGS } from "../../shared/constants/strings";
@@ -13,6 +12,7 @@ const ResponsiveMenu = ({
   primaryAction,
   showQueryAction,
   isGuideWorkspace,
+  navbarLinks,
 }) => {
   const userData = useSelector((state) => state.auth.userData) || { fullname: "Traveler" };
   const isLoggedIn = useSelector((state) => state.auth.status);
@@ -45,7 +45,7 @@ const ResponsiveMenu = ({
         </div>
 
         <nav className="space-y-2">
-          {NavbarLinks.map((data) => (
+          {navbarLinks.map((data) => (
             <Link
               key={data.name}
               to={data.link}

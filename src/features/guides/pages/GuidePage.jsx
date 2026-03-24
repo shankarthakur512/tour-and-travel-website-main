@@ -3,12 +3,12 @@ import { FiMessageSquare } from "react-icons/fi";
 import { IoCallSharp } from "react-icons/io5";
 import { FaStar } from "react-icons/fa";
 import { HiOutlineGlobeAlt, HiOutlineMapPin, HiOutlineUser } from "react-icons/hi2";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { findGuide } from "../../../Apihandle/LocalGuide";
+import { findGuide, scheduleGuideCall } from "../../../Apihandle/LocalGuide";
 import ChatComponent from "../../../components/others/Chat";
 import Testimonial from "../../../components/Testimonial/Testimonial";
 import DarkModeToggle from "../../../components/others/DarkMode";
@@ -17,6 +17,8 @@ import { createLogger } from "../../../shared/lib/logger";
 import { getErrorMessage } from "../../../shared/lib/error";
 import { toastService } from "../../../shared/services/toast";
 import { getInitials } from "../../../shared/lib/format";
+import { APP_ROUTES } from "../../../shared/constants/routes";
+import { TOAST_MESSAGES } from "../../../shared/constants/strings";
 
 const guidePageLogger = createLogger("guide-page");
 
@@ -34,6 +36,8 @@ const GuidePage = () => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const { guideId } = useParams();
   const isDarkMode = useSelector((state) => state.darkMode.isDarkMode);
+  const userData = useSelector((state) => state.auth.userData);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsOnline(Math.random() > 0.5);
@@ -66,6 +70,33 @@ const GuidePage = () => {
     setShowBooking(false);
     setSelectedSlot(null);
     setSelectedDate(null);
+  };
+
+  const handleScheduleCall = async () => {
+    if (!userData?._id) {
+      toastService.warning(TOAST_MESSAGES.signInRequired);
+      navigate(APP_ROUTES.login);
+      return;
+    }
+
+    if (!selectedDate || !selectedSlot) {
+      toastService.warning("Select a date and time slot to schedule the call.");
+      return;
+    }
+
+    try {
+      await axios.post(scheduleGuideCall, {
+        guideId,
+        bookedBy: userData._id,
+        selectedDate,
+        selectedSlot,
+      });
+      toastService.success(TOAST_MESSAGES.guideCallBooked);
+      closeModal();
+    } catch (error) {
+      guidePageLogger.error("Guide call scheduling failed", error);
+      toastService.error(getErrorMessage(error, "Unable to schedule the guide call."));
+    }
   };
 
   const bookingModal = (
@@ -128,7 +159,7 @@ const GuidePage = () => {
             <p className="text-sm text-slate dark:text-sand/70">
               {GUIDE_PAGE_COPY.selectedSlot}: <span className="font-semibold text-forest dark:text-cream">{selectedSlot}</span>
             </p>
-            <button className="brand-button rounded-full px-5 py-3">
+            <button className="brand-button rounded-full px-5 py-3" onClick={handleScheduleCall}>
               {GUIDE_PAGE_COPY.confirmBooking}
             </button>
           </div>
@@ -284,7 +315,15 @@ const GuidePage = () => {
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
                 <button
                   className="brand-button rounded-full"
-                  onClick={() => setShowBooking(true)}
+                  onClick={() => {
+                    if (!userData?._id) {
+                      toastService.warning(TOAST_MESSAGES.signInRequired);
+                      navigate(APP_ROUTES.login);
+                      return;
+                    }
+
+                    setShowBooking(true);
+                  }}
                 >
                   <IoCallSharp className="mr-2 inline" />
                   {GUIDE_PAGE_COPY.bookCall}

@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   FaDollarSign,
   FaHotel,
@@ -29,6 +30,7 @@ const TourPage = () => {
   const [showPolicy, setShowPolicy] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const { TripId } = useParams();
+  const userData = useSelector((state) => state.auth.userData);
 
   useEffect(() => {
     const getTripData = async () => {
@@ -94,6 +96,10 @@ const TourPage = () => {
   const hostLocation = [tourData?.guideDetails?.city, tourData?.guideDetails?.country]
     .filter(Boolean)
     .join(", ");
+  const bookedUsers = tourData?.bookedByUsers || [];
+  const isBookedByCurrentUser = bookedUsers.some(
+    (entry) => entry.user === userData?._id || entry.user?._id === userData?._id
+  );
 
   return (
     <div className="min-h-screen bg-cream pb-20 pt-28 text-ink dark:bg-charcoal dark:text-cream">
@@ -126,6 +132,11 @@ const TourPage = () => {
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gold">
                 {TRIP_PAGE_COPY.bookingTitle}
               </p>
+              {isBookedByCurrentUser ? (
+                <span className="mt-4 inline-flex rounded-full border border-white/15 bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-sand">
+                  Already booked
+                </span>
+              ) : null}
               <div className="mt-5 flex items-end justify-between gap-4">
                 <div>
                   <p className="text-sm text-sand/70">{TRIP_PAGE_COPY.pricePerPerson}</p>
@@ -278,15 +289,15 @@ const TourPage = () => {
 
               <div className="mt-6 space-y-4 border-t border-sand-dark pt-6 dark:border-white/10">
                 <div className="flex justify-between gap-4 text-sm">
-                  <span className="text-mist">{TRIP_PAGE_COPY.guideEmail}</span>
+                  <span className="text-mist">Booking status</span>
                   <span className="text-right font-medium text-forest dark:text-cream">
-                    {tourData?.guideDetails?.email || "Not available"}
+                    {isBookedByCurrentUser ? "Booked by you" : "Available to book"}
                   </span>
                 </div>
                 <div className="flex justify-between gap-4 text-sm">
-                  <span className="text-mist">{TRIP_PAGE_COPY.guidePhone}</span>
+                  <span className="text-mist">Booked travellers</span>
                   <span className="text-right font-medium text-forest dark:text-cream">
-                    {tourData?.guideDetails?.mobileNo || "Not available"}
+                    {bookedUsers.length}
                   </span>
                 </div>
               </div>
@@ -294,11 +305,31 @@ const TourPage = () => {
 
             <div className="surface-panel p-6 dark:border-white/10 dark:bg-[#18211E] sm:p-8">
               <h3 className="text-2xl font-semibold text-forest dark:text-cream">
-                {TRIP_PAGE_COPY.reviewsTitle}
+                Booked by
               </h3>
-              <p className="mt-4 text-sm leading-8 text-slate dark:text-sand/70">
-                {TRIP_PAGE_COPY.reviewsFallback}
-              </p>
+              {bookedUsers.length > 0 ? (
+                <div className="mt-5 space-y-3">
+                  {bookedUsers.map((entry, index) => (
+                    <div
+                      key={`${entry.fullname}-${index}`}
+                      className="rounded-[24px] border border-sand-dark bg-sand/30 p-4 dark:border-white/10 dark:bg-white/5"
+                    >
+                      <div className="flex items-center justify-between gap-4">
+                        <p className="text-sm font-semibold text-forest dark:text-cream">
+                          {entry.fullname}
+                        </p>
+                        <span className="text-xs uppercase tracking-[0.18em] text-mist dark:text-sand/55">
+                          {entry.totalUnitsBooked} traveller{entry.totalUnitsBooked > 1 ? "s" : ""}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-4 text-sm leading-8 text-slate dark:text-sand/70">
+                  No one has booked this trip yet. Be the first traveller to confirm it.
+                </p>
+              )}
             </div>
           </aside>
         </section>

@@ -6,3 +6,4 @@ export const registerGuide = `${host}/register-guide`;
 export const findGuideByUserId = `${host}/find-guide`;
 export const findGuideByCity = `${host}/find-guideByCity`;
 export const findGuide = `${host}/find-guide`;
+export const scheduleGuideCall = `${host}/schedule-call`;

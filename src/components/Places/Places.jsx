@@ -65,14 +65,14 @@ const Places = ({ handleOrderPopup }) => {
         <div className="mb-12 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <span className="eyebrow-label">Most Loved Journeys</span>
-            <h2 className="section-heading mt-5">Best places to visit for a story-worthy escape.</h2>
-            <p className="section-copy mt-4">
+            <h2 className="section-heading mt-5 dark:text-cream">Best places to visit for a story-worthy escape.</h2>
+            <p className="section-copy mt-4 dark:text-sand/75">
               Browse a curated collection of destinations that feel elevated, photogenic, and easy to explore with the right local host.
             </p>
           </div>
-          <div className="rounded-[24px] border border-sand-dark bg-warm-white px-6 py-5 shadow-soft">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-mist">Why travelers love these</p>
-            <p className="mt-2 max-w-sm text-sm leading-7 text-slate">
+          <div className="rounded-[24px] border border-sand-dark bg-warm-white px-6 py-5 shadow-soft dark:border-white/10 dark:bg-[#18211E]">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-mist dark:text-sand/50">Why travelers love these</p>
+            <p className="mt-2 max-w-sm text-sm leading-7 text-slate dark:text-sand/72">
               Flexible dates, trusted local support, and beautiful stays bundled into each itinerary.
             </p>
           </div>

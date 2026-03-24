@@ -12,7 +12,7 @@ const Location = () => {
         referrerPolicy="no-referrer-when-downgrade"
         style={{ border: 0 }}
         className="w-full"
-        title="Travellgo location"
+        title="Lockal Way location"
       />
     </div>
   );

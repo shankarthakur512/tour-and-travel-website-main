@@ -1,7 +1,7 @@
 export const APP_STRINGS = {
-  brandName: "Travellgo",
-  brandNameAlt: "TravelloGo",
-  tagline: "You visit, we guide",
+  brandName: "Lockal Way",
+  brandNameAlt: "Lockal Way",
+  tagline: "Travel with a local",
   heroTitle: "Travel The World",
   copyright: "All rights reserved.",
 };
@@ -13,20 +13,26 @@ export const NAV_STRINGS = {
   planTrip: "Plan Your Journey",
   premiumUser: "Premium traveler",
   becomeGuide: "Become a Guide",
+  guideHome: "Guide Home",
   guideDashboard: "Guide Dashboard",
   createPackage: "Create Package",
   accountMenu: "Account menu",
   openMenu: "Open navigation menu",
   closeMenu: "Close navigation menu",
   home: "Home",
-  about: "About",
+  about: "Career",
   blogs: "Blogs",
   guides: "Guides",
   accountOverview: "My Dashboard",
+  profile: "Profile",
+  bookedTrips: "Trips Booked",
+  chats: "Chats",
   logout: "Logout",
   workspaceLabel: "Guide workspace",
   browseLabel: "Traveler mode",
   backHome: "Back Home",
+  callAndMessages: "Calls & Messages",
+  AccountSettings: "Account Settings",
 };
 
 export const HOME_STRINGS = {
@@ -80,6 +86,9 @@ export const TOAST_MESSAGES = {
   otpInvalid: "Invalid OTP. Please try again.",
   guideRegistered: "Guide registered successfully.",
   tripCreated: "Tour package created successfully.",
+  signInRequired: "Please sign in to continue.",
+  tripBooked: "Trip booked successfully.",
+  guideCallBooked: "Guide call scheduled successfully.",
 };
 
 export const UI_STRINGS = {
@@ -93,10 +102,10 @@ export const UI_STRINGS = {
 };
 
 export const AUTH_QUOTES = [
-  "Experience the joy of travel with Travellgo. Your guide to the world's wonders.",
-  "From dream destinations to real-life adventures. Travellgo makes it happen.",
-  "Explore new horizons and create unforgettable memories with Travellgo.",
-  "Discover hidden gems and travel with the best guides. Only with Travellgo.",
+  "Experience the joy of travel with Lockal Way. Your guide to the world's wonders.",
+  "From dream destinations to real-life adventures. Lockal Way makes it happen.",
+  "Explore new horizons and create unforgettable memories with Lockal Way.",
+  "Discover hidden gems and travel with the best guides. Only with Lockal Way.",
 ];
 
 export const AUTH_PAGE_COPY = {

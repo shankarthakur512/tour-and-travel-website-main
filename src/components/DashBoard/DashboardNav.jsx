@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import Logo from "../../assets/logo.png";
+import Logo from "../../assets/lokalway-logo.svg";
 import { FaBars, FaUser, FaCog, FaSignOutAlt, FaBell } from 'react-icons/fa';
 import DarkModeToggle from '../others/DarkMode';
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getGuideEntryRoute } from '../../shared/constants/routes';
 
 const DashboardNav = ({ notify, setNotify }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const isLoggedIn = useSelector((state) => Boolean(state.auth.status));
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -13,15 +16,15 @@ const DashboardNav = ({ notify, setNotify }) => {
 
   const NavbarLinks = [
     { name: "Home", link: "/" },
-    { name: "About", link: "/about" },
+    { name: "Career", link: "/about" },
     { name: "Blogs", link: "/blogs" },
-    { name: "Guide", link: "/local-guide" },
+    { name: "Guide Home", link: getGuideEntryRoute(isLoggedIn) },
   ];
 
   return (
     <div className="relative flex justify-between items-center p-4 bg-white dark:bg-gray-800 transition-colors duration-300">
       <div className="flex items-center gap-4 font-bold text-2xl">
-        <img src={Logo} alt="Logo" className="h-12" />
+        <img src={Logo} alt="Lockal Way" className="h-12 w-auto" />
       </div>
       <ul className="flex items-center gap-7">
         {NavbarLinks.map((link) => (

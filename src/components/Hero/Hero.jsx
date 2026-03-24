@@ -129,7 +129,7 @@ const Hero = () => {
           <div className="grid gap-5 lg:justify-self-end">
             <form
               data-aos="fade-left"
-              className="surface-panel w-full max-w-xl overflow-hidden bg-warm-white/95 p-6 sm:p-8"
+              className="surface-panel w-full max-w-xl overflow-hidden bg-warm-white/95 p-6 dark:border-white/10 dark:bg-[#18211E]/95 sm:p-8"
               onSubmit={handleSearch}
             >
               <div className="mb-6 flex items-center justify-between">
@@ -137,18 +137,18 @@ const Hero = () => {
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-clay">
                     {HOME_STRINGS.showcaseBadge}
                   </p>
-                  <h2 className="mt-2 text-3xl font-semibold text-forest">
+                  <h2 className="mt-2 text-3xl font-semibold text-forest dark:text-cream">
                     {HOME_STRINGS.searchButton}
                   </h2>
                 </div>
-                <div className="hidden h-14 w-14 items-center justify-center rounded-full bg-sand text-forest sm:flex">
+                <div className="hidden h-14 w-14 items-center justify-center rounded-full bg-sand text-forest dark:bg-white/10 dark:text-sand sm:flex">
                   <FiSearch size={20} />
                 </div>
               </div>
 
               <div className="grid gap-4">
-                <label className="rounded-[22px] border border-sand-dark bg-white px-4 py-4">
-                  <span className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-mist">
+                <label className="rounded-[22px] border border-sand-dark bg-white px-4 py-4 dark:border-white/10 dark:bg-[#101714]">
+                  <span className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-mist dark:text-sand/50">
                     <HiOutlineMapPin />
                     {HOME_STRINGS.destinationLabel}
                   </span>
@@ -159,13 +159,13 @@ const Hero = () => {
                     name="destination"
                     id="destination"
                     placeholder={HOME_STRINGS.destinationPlaceholder}
-                    className="w-full bg-transparent text-base font-medium text-ink outline-none placeholder:text-mist"
+                    className="w-full bg-transparent text-base font-medium text-ink outline-none placeholder:text-mist dark:text-cream dark:placeholder:text-sand/45"
                   />
                 </label>
 
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <label className="rounded-[22px] border border-sand-dark bg-white px-4 py-4">
-                    <span className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-mist">
+                  <label className="rounded-[22px] border border-sand-dark bg-white px-4 py-4 dark:border-white/10 dark:bg-[#101714]">
+                    <span className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-mist dark:text-sand/50">
                       <FiCalendar />
                       {HOME_STRINGS.startDateLabel}
                     </span>
@@ -176,13 +176,13 @@ const Hero = () => {
                       startDate={startDate}
                       endDate={endDate}
                       placeholderText="Choose date"
-                      className="w-full bg-transparent text-base font-medium text-ink outline-none placeholder:text-mist"
+                      className="w-full bg-transparent text-base font-medium text-ink outline-none placeholder:text-mist dark:text-cream dark:placeholder:text-sand/45"
                       minDate={new Date()}
                     />
                   </label>
 
-                  <label className="rounded-[22px] border border-sand-dark bg-white px-4 py-4">
-                    <span className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-mist">
+                  <label className="rounded-[22px] border border-sand-dark bg-white px-4 py-4 dark:border-white/10 dark:bg-[#101714]">
+                    <span className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-mist dark:text-sand/50">
                       <FiCalendar />
                       {HOME_STRINGS.endDateLabel}
                     </span>
@@ -194,17 +194,17 @@ const Hero = () => {
                       endDate={endDate}
                       minDate={startDate || new Date()}
                       placeholderText="Choose date"
-                      className="w-full bg-transparent text-base font-medium text-ink outline-none placeholder:text-mist"
+                      className="w-full bg-transparent text-base font-medium text-ink outline-none placeholder:text-mist dark:text-cream dark:placeholder:text-sand/45"
                     />
                   </label>
                 </div>
 
-                <div className="rounded-[22px] border border-sand-dark bg-white px-4 py-4">
+                <div className="rounded-[22px] border border-sand-dark bg-white px-4 py-4 dark:border-white/10 dark:bg-[#101714]">
                   <div className="mb-3 flex items-center justify-between">
-                    <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-mist">
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-mist dark:text-sand/50">
                       {HOME_STRINGS.priceLabel}
                     </span>
-                    <span className="text-sm font-semibold text-forest">${priceValue}</span>
+                    <span className="text-sm font-semibold text-forest dark:text-sand">${priceValue}</span>
                   </div>
                   <input
                     type="range"
@@ -254,13 +254,13 @@ const Hero = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 rounded-full border border-white/15 bg-warm-white px-3 py-3 shadow-soft">
+              <div className="flex items-center gap-3 rounded-full border border-white/15 bg-warm-white px-3 py-3 shadow-soft dark:bg-[#18211E]">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[linear-gradient(135deg,#3D6B5A,#2C4A3E)] text-sm font-semibold text-sand">
                   AS
                 </div>
                 <div className="pr-4">
-                  <p className="text-sm font-semibold text-ink">{HOME_STRINGS.guidePillName}</p>
-                  <p className="text-xs text-mist">{HOME_STRINGS.guidePillLocation}</p>
+                  <p className="text-sm font-semibold text-ink dark:text-cream">{HOME_STRINGS.guidePillName}</p>
+                  <p className="text-xs text-mist dark:text-sand/50">{HOME_STRINGS.guidePillLocation}</p>
                 </div>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import Logo from "../../assets/logo.png";
+import Logo from "../../assets/lokalway-logo.svg";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import { FaCaretDown } from "react-icons/fa";
 import ResponsiveMenu from "./ResponsiveMenu";
@@ -9,16 +9,20 @@ import UserMenu from "./Usermenu";
 import QueryModal from "./QueryModel";
 import DarkModeToggle from "../others/DarkMode";
 import { APP_STRINGS, NAV_STRINGS } from "../../shared/constants/strings";
-import { APP_ROUTES } from "../../shared/constants/routes";
+import { APP_ROUTES, getGuideEntryRoute } from "../../shared/constants/routes";
 import { createLogger } from "../../shared/lib/logger";
 
+//for the logging purpose
 const navLogger = createLogger("navbar");
 
-export const NavbarLinks = [
+export const getNavbarLinks = (isLoggedIn) => [
   { name: NAV_STRINGS.home, link: APP_ROUTES.home },
   { name: NAV_STRINGS.about, link: APP_ROUTES.about },
   { name: NAV_STRINGS.blogs, link: APP_ROUTES.blogs },
-  { name: NAV_STRINGS.guides, link: APP_ROUTES.localGuide },
+  {
+    name: NAV_STRINGS.guideHome,
+    link: getGuideEntryRoute(isLoggedIn),
+  },
 ];
 
 const DropdownLinks = [
@@ -42,6 +46,7 @@ const Navbar = () => {
     pathname === APP_ROUTES.dashboard || pathname === APP_ROUTES.tourPackage;
   const showQuickLinks = !isGuideWorkspace;
   const showQueryAction = !isGuideWorkspace && !isAuthPage;
+  const navbarLinks = useMemo(() => getNavbarLinks(Boolean(status)), [status]);
 
   const primaryAction = useMemo(() => {
     if (isGuideWorkspace) {
@@ -84,11 +89,7 @@ const Navbar = () => {
       };
     }
 
-    return {
-      label: NAV_STRINGS.becomeGuide,
-      link: APP_ROUTES.dashboard,
-      style: "primary",
-    };
+    return null;
   }, [guideData, isAuthPage, isGuideWorkspace, pathname, status]);
 
   navLogger.debug("render", { status, userData, guideData, pathname });
@@ -102,19 +103,16 @@ const Navbar = () => {
             onClick={() => window.scrollTo(0, 0)}
             className="flex items-center gap-3"
           >
-            <img src={Logo} alt={APP_STRINGS.brandName} className="h-11 w-11 rounded-full object-cover" />
+            <img src={Logo} alt={APP_STRINGS.brandName} className="h-10 w-auto sm:h-12" />
             <div className="hidden sm:block">
-              <p className="font-display text-xl font-bold text-forest dark:text-cream">
-                {APP_STRINGS.brandName}
-              </p>
               <p className="text-[11px] uppercase tracking-[0.24em] text-mist dark:text-sand/55">
-                {isGuideWorkspace ? NAV_STRINGS.workspaceLabel : "Curated travel"}
+                {isGuideWorkspace ? NAV_STRINGS.workspaceLabel : APP_STRINGS.tagline}
               </p>
             </div>
           </Link>
 
           <div className="hidden items-center gap-8 lg:flex">
-            {NavbarLinks.map((link) => (
+            {navbarLinks.map((link) => (
               <NavLink
                 key={link.name}
                 to={link.link}
@@ -223,6 +221,7 @@ const Navbar = () => {
           primaryAction={primaryAction}
           showQueryAction={showQueryAction}
           isGuideWorkspace={isGuideWorkspace}
+          navbarLinks={navbarLinks}
         />
       </nav>
 
